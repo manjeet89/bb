@@ -1,5 +1,7 @@
 import 'package:bb/AnimalCategory/Model/AnimalCategoryModel.dart';
 import 'package:bb/AnimalCategory/widget/animal_category_card.dart';
+import 'package:bb/main.dart';
+import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class AnimalCategoryScreen extends StatelessWidget {
@@ -27,7 +29,14 @@ class AnimalCategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Animal Categories")),
+      appBar: AppBar(
+        backgroundColor: AppColors.primarycolor,
+        title: const Text(
+          "Animal Category 🐾",
+          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
@@ -42,6 +51,7 @@ class AnimalCategoryScreen extends StatelessWidget {
               category: categories[index],
               // category: categories[index], // ✅ FIXED
               onTap: () {
+                navigatorKey.currentState?.pushNamed('/petRegistration');
                 print("Selected: ${categories[index].name}");
               },
             );

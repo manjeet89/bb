@@ -4,18 +4,20 @@ import 'package:bb/main.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class PetListScreen extends StatefulWidget {
-  const PetListScreen({super.key});
+class Sosscreen extends StatefulWidget {
+  const Sosscreen({super.key});
 
   @override
-  State<PetListScreen> createState() => _PetListScreenState();
+  State<Sosscreen> createState() => _SosscreenState();
 }
 
-class _PetListScreenState extends State<PetListScreen> {
+class _SosscreenState extends State<Sosscreen> {
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     return Scaffold(
-      backgroundColor: AppColors.backgrounLightGrey,
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primarycolor,
         title: const Text(
@@ -23,19 +25,6 @@ class _PetListScreenState extends State<PetListScreen> {
           style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-      ),
-
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: AppColors.primarycolor,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          setState(() {
-            // navigatorKey.currentState?.pushNamed('/petRegistration');
-            navigatorKey.currentState?.pushNamed('/petCategoryScreen');
-          });
-        },
       ),
 
       body: FutureBuilder<List<Petlistmodel>>(
@@ -60,7 +49,6 @@ class _PetListScreenState extends State<PetListScreen> {
               String req = reqnumber[0];
 
               return Container(
-                // color: AppColors.backgrounLightGrey,
                 margin: const EdgeInsets.symmetric(vertical: 10),
 
                 // decoration: BoxDecoration(
@@ -82,8 +70,7 @@ class _PetListScreenState extends State<PetListScreen> {
                 //   ],
                 // ),
                 decoration: BoxDecoration(
-                  color: AppColors.border,
-
+                  color: AppColors.backgrounLightGrey,
                   // gradient: const LinearGradient(
                   //   colors: [
                   //     Color(0xff7A0000), // Dark blood red (LEFT)
@@ -96,9 +83,7 @@ class _PetListScreenState extends State<PetListScreen> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.secondrycolor,
-
-                      // color: Colors.redAccent.withOpacity(0.4),
+                      color: AppColors.fontGrey.withOpacity(0.4),
                       blurRadius: 10,
                       offset: const Offset(0, 6),
                     ),
@@ -140,7 +125,6 @@ class _PetListScreenState extends State<PetListScreen> {
                                   pet.petName.toString(),
                                   style: const TextStyle(
                                     color: AppColors.primarycolor,
-
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -154,7 +138,6 @@ class _PetListScreenState extends State<PetListScreen> {
                               "Pet ID    : ${req.replaceAll("-", "")}${pet.petId}",
                               style: const TextStyle(
                                 color: AppColors.fontGrey,
-
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -162,7 +145,6 @@ class _PetListScreenState extends State<PetListScreen> {
                               "Gender  : ${pet.petGender.toString() == "1" ? "Male" : "Female"}",
                               style: const TextStyle(
                                 color: AppColors.fontGrey,
-
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -170,7 +152,6 @@ class _PetListScreenState extends State<PetListScreen> {
                               "Country : ${pet.countryBredIn}",
                               style: const TextStyle(
                                 color: AppColors.fontGrey,
-
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -181,7 +162,14 @@ class _PetListScreenState extends State<PetListScreen> {
                       // ➡️ Action Icon
                       GestureDetector(
                         onTap: () {
-                          navigatorKey.currentState?.pushNamed('/petDetails', arguments: pet);
+                          scaffoldMessenger.showSnackBar(
+                            SnackBar(
+                              content: Text('Calling for SOS'),
+                              backgroundColor: Colors.redAccent, // Red for errors
+                              behavior: SnackBarBehavior.floating, // Modern floating look
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(8),

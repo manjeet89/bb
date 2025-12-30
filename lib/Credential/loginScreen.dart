@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/main.dart';
+import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,6 +36,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
       // Navigator.pushNamed(context, '/otp', arguments: userId);
       // Instead of Navigator.pushReplacementNamed(context, '/home');
       navigatorKey.currentState?.pushNamed('/otp', arguments: userId);
+      navigatorKey.currentState?.pushNamed('/sos');
     } else {
       // Handle error (e.g., show a snackbar)
       print('Login failed: ${response.body}');
@@ -87,7 +89,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
                 controller: __mobilenumberController,
                 keyboardType: TextInputType.number, // Shows the numeric keyboard
 
-                maxLength: 10, // Also limits the length and optionally shows a counter
+                maxLength: 11, // Also limits the length and optionally shows a counter
 
                 decoration: InputDecoration(
                   counterText: "",
@@ -115,7 +117,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
                       scaffoldMessenger.showSnackBar(
                         SnackBar(
                           content: Text('Enter mobile number.'),
-                          backgroundColor: Colors.redAccent, // Red for errors
+                          backgroundColor: AppColors.warningOrange, // Red for errors
                           behavior: SnackBarBehavior.floating, // Modern floating look
                           duration: Duration(seconds: 3),
                           action: SnackBarAction(
@@ -130,7 +132,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFC62828), // Primary red
+                    backgroundColor: AppColors.primarycolor, // Primary red
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text('SUBMIT', style: TextStyle(fontSize: 18, color: Colors.white)),

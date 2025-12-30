@@ -12,4 +12,21 @@ class AppColors {
 
   // 🖤 Text
   static const Color textDark = Color(0xff212121);
+
+  ///Border
+  static const Color border = Color(0xFFE0E0E0);
+
+  //Primary color
+  static const Color primarycolor = Color(0xFF0F1F3A);
+  static const Color secondrycolor = Color(0xFF0B7D82);
+  static const Color accent = Color(0xFFFFBB00);
+  static const Color backgrounLightGrey = Color(0xFFF5F5F7);
+  static const Color cardBackgroundWhite = Color(0xFFF5F5F7);
+  static const Color dividerGrey = Color(0xFFD6DBE1);
+  static const Color fontGrey = Color(0xFF4A4F55);
+
+  //Status Colors
+  static const Color successGreen = Color(0xFF1FA87A);
+  static const Color warningOrange = Color(0xFFFFA726);
+  static const Color errorRed = Color(0xFFD32F2F);
 }

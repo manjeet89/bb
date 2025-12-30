@@ -4,7 +4,10 @@ import 'package:bb/Credential/loginScreen.dart';
 import 'package:bb/Credential/otpScreen.dart';
 import 'package:bb/Navigation/navigationScreen.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
+import 'package:bb/PetInfo/petCategoryScreen.dart';
 import 'package:bb/PetInfo/petDetails.dart';
+import 'package:bb/PetInfo/petMicroChipForm.dart';
+import 'package:bb/SosSCreen.dart';
 import 'package:bb/UpdateProfile.dart';
 import 'package:bb/UserProfile.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +38,9 @@ void main() async {
         '/userRegistration': (context) => Updateprofile(),
         '/petDetails': (context) => PetDetailScreen(),
         '/petCategory': (context) => AnimalCategoryScreen(),
+        '/petmicrochip': (context) => MicrochipForm(),
+        '/sos': (context) => Sosscreen(),
+        '/petCategoryScreen': (context) => Petcategoryscreen(),
       },
       debugShowCheckedModeBanner: false,
     ),

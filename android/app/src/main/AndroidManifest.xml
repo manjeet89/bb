@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+<uses-permission android:name="android.permission.CAMERA"/>
+<uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
+
+
     <application
         android:label="bb"
         android:name="${applicationName}"
@@ -30,6 +35,15 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+             <activity
+    android:name="com.yalantis.ucrop.UCropActivity"
+    android:theme="@style/UCropActivityTheme"
+    android:exported="false"
+    android:resizeableActivity="false"
+    android:screenOrientation="portrait"
+    android:windowSoftInputMode="stateHidden|adjustResize" />
+
             <meta-data
     android:name="com.phonepe.android.sdk.isUAT"
     android:value="true"/>

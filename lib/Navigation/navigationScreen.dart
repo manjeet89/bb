@@ -1,6 +1,7 @@
 import 'package:bb/HomeScreen.dart';
 import 'package:bb/MoreScreen.dart';
 import 'package:bb/PetInfo/petListScreen.dart';
+import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -51,7 +52,7 @@ class _NavigationExampleState extends State<NavigationExample> {
               currentPageIndex = index;
             });
           },
-          indicatorColor: Colors.red,
+          indicatorColor: AppColors.secondrycolor,
           backgroundColor: Colors.white,
           selectedIndex: currentPageIndex,
 

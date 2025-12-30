@@ -1,3 +1,5 @@
+import 'package:bb/main.dart';
+import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class BloodBankHome extends StatelessWidget {
@@ -15,15 +17,20 @@ class BloodBankHome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset("assest/bblogo.png", scale: 3),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            InkWell(
+              onTap: () {
+                navigatorKey.currentState?.pushNamed('/sos');
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
 
-                children: [
-                  Icon(Icons.notifications_active_sharp, color: Colors.red),
-                  Icon(Icons.sos_sharp, color: Colors.red),
-                ],
+                  children: [
+                    Icon(Icons.notifications_active_sharp, color: AppColors.primarycolor),
+                    Icon(Icons.sos_sharp, color: AppColors.primarycolor),
+                  ],
+                ),
               ),
             ),
             // const Text(
@@ -81,19 +88,20 @@ class BloodBankHome extends StatelessWidget {
       // color: const Color(0xFFA41214),
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xff7A0000), // Dark blood red (LEFT)
-              Color(0xffC62828), // Medium red
-              Color(0xffFF6F6F), // Light red (RIGHT)
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
+          color: AppColors.cardBackgroundWhite,
+          // gradient: const LinearGradient(
+          //   colors: [
+          //     Color(0xff7A0000), // Dark blood red (LEFT)
+          //     Color(0xffC62828), // Medium red
+          //     Color(0xffFF6F6F), // Light red (RIGHT)
+          //   ],
+          //   begin: Alignment.centerLeft,
+          //   end: Alignment.centerRight,
+          // ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Colors.redAccent.withOpacity(0.4),
+              color: AppColors.secondrycolor.withOpacity(0.4),
               blurRadius: 10,
               offset: const Offset(0, 6),
             ),
@@ -103,19 +111,23 @@ class BloodBankHome extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Container(
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xff7A0000), // Dark blood red (LEFT)
-                  Color(0xffC62828), // Medium red
-                  Color(0xffFF6F6F), // Light red (RIGHT)
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
+              color: AppColors.bgGrey,
+
+              // gradient: const LinearGradient(
+              //   colors: [
+              //     Color(0xff7A0000), // Dark blood red (LEFT)
+              //     Color(0xffC62828), // Medium red
+              //     Color(0xffFF6F6F), // Light red (RIGHT)
+              //   ],
+              //   begin: Alignment.centerLeft,
+              //   end: Alignment.centerRight,
+              // ),
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.redAccent.withOpacity(0.4),
+                  color: AppColors.cardBackgroundWhite,
+
+                  // color: Colors.redAccent.withOpacity(0.4),
                   blurRadius: 10,
                   offset: const Offset(0, 6),
                 ),
@@ -128,14 +140,19 @@ class BloodBankHome extends StatelessWidget {
                 const Text(
                   textAlign: TextAlign.center,
                   'Every Drop Counts. ',
-                  style: TextStyle(color: Colors.blue, fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: AppColors.primarycolor,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 5),
                 const Text(
                   textAlign: TextAlign.center,
                   'Save a Life Today. ',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
+                    color: AppColors.secondrycolor,
+
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -145,7 +162,8 @@ class BloodBankHome extends StatelessWidget {
                   textAlign: TextAlign.center,
                   'Join thousand of heroa who donate blood regularly.Your contribution can make the different between life and death ',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 170, 167, 167),
+                    color: AppColors.fontGrey,
+
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),

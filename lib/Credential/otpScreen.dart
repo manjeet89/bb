@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/main.dart';
+import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +46,8 @@ class _OtpscreenState extends State<Otpscreen> {
               // Email Field
               TextField(
                 controller: __otpController,
+                keyboardType: TextInputType.number, // Shows the numeric keyboard
+
                 maxLength: 4,
                 decoration: InputDecoration(
                   labelText: 'Enter Your OTP',
@@ -69,7 +72,7 @@ class _OtpscreenState extends State<Otpscreen> {
                       scaffoldMessenger.showSnackBar(
                         SnackBar(
                           content: Text('Enter mobile number.'),
-                          backgroundColor: Colors.redAccent, // Red for errors
+                          backgroundColor: AppColors.warningOrange, // Red for errors
                           behavior: SnackBarBehavior.floating, // Modern floating look
                           duration: Duration(seconds: 3),
                           action: SnackBarAction(
@@ -87,7 +90,7 @@ class _OtpscreenState extends State<Otpscreen> {
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => Userprofile()));
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFC62828), // Primary red
+                    backgroundColor: AppColors.primarycolor, // Primary red
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
                   child: Text('LOGIN', style: TextStyle(fontSize: 18, color: Colors.white)),
@@ -118,7 +121,7 @@ class _OtpscreenState extends State<Otpscreen> {
         scaffoldMessenger.showSnackBar(
           SnackBar(
             content: Text(data['message'].toString()),
-            backgroundColor: Colors.redAccent, // Red for errors
+            backgroundColor: AppColors.warningOrange, // Red for errors
             behavior: SnackBarBehavior.floating, // Modern floating look
             duration: Duration(seconds: 3),
             action: SnackBarAction(
