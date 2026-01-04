@@ -50,154 +50,160 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
         centerTitle: true,
       ),
 
-      body: FutureBuilder<List<Petcategorymodel>>(
-        future: Petcategorycontroller.fetchPetsCategory() as Future<List<Petcategorymodel>>?,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await Petcategorycontroller.fetchPetsCategory(); // Reload data when user performs swipe gesture
+          setState(() {});
+        },
+        child: FutureBuilder<List<Petcategorymodel>>(
+          future: Petcategorycontroller.fetchPetsCategory(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("Categorys not found"));
-          }
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text("Categorys not found"));
+            }
 
-          final pets = snapshot.data!;
+            final pets = snapshot.data!;
 
-          return GridView.builder(
-            shrinkWrap: true,
-            // physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 5,
-              mainAxisSpacing: 5,
-            ),
-            padding: const EdgeInsets.all(12),
-            itemCount: pets.length,
-            itemBuilder: (context, index) {
-              final pet = pets[index];
-              final categoryName = pet.categoryName;
+            return GridView.builder(
+              shrinkWrap: true,
+              // physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+              ),
+              padding: const EdgeInsets.all(12),
+              itemCount: pets.length,
+              itemBuilder: (context, index) {
+                final pet = pets[index];
+                final categoryName = pet.categoryName;
 
-              return GestureDetector(
-                onTap: () {
-                  navigatorKey.currentState?.pushNamed(
-                    '/petRegistration',
-                    arguments: pet.categoryId,
-                  );
-                },
-                child: Container(
-                  // color: AppColors.backgrounLightGrey,
-                  margin: const EdgeInsets.symmetric(vertical: 5),
+                return GestureDetector(
+                  onTap: () {
+                    navigatorKey.currentState?.pushNamed(
+                      '/petRegistration',
+                      arguments: pet.categoryId,
+                    );
+                  },
+                  child: Container(
+                    // color: AppColors.backgrounLightGrey,
+                    margin: const EdgeInsets.symmetric(vertical: 5),
 
-                  decoration: BoxDecoration(
-                    color: AppColors.cardBackgroundWhite,
+                    decoration: BoxDecoration(
+                      color: AppColors.cardBackgroundWhite,
 
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.secondrycolor,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.secondrycolor,
 
-                        // color: Colors.redAccent.withOpacity(0.4),
-                        blurRadius: 14,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
-                  ),
-
-                  child: Padding(
-                    padding: const EdgeInsets.all(14),
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: AppColors.cardBackgroundWhite,
-                          radius: 52,
-                          backgroundImage: AssetImage(getCategoryImage(categoryName.toString())),
-                        ),
-                        Text(
-                          categoryName.toString().replaceAll(RegExp(r'\s+'), ' ').trim(),
-                          style: const TextStyle(
-                            color: AppColors.primarycolor,
-
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          // color: Colors.redAccent.withOpacity(0.4),
+                          blurRadius: 14,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
 
-                    // ListTile(
-                    //   leading: CircleAvatar(
-                    //     radius: 22,
-                    //     backgroundImage: AssetImage(getCategoryImage(categoryName.toString())),
-                    //   ),
-                    //   title: Text(categoryName.toString().replaceAll(RegExp(r'\s+'), ' ').trim()),
-                    // ),
-                    //  Row(
-                    //   children: [
-                    //     // 🐶 Pet Image
-                    //     // const SizedBox(width: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: AppColors.cardBackgroundWhite,
+                            radius: 52,
+                            backgroundImage: AssetImage(getCategoryImage(categoryName.toString())),
+                          ),
+                          Text(
+                            categoryName.toString().replaceAll(RegExp(r'\s+'), ' ').trim(),
+                            style: const TextStyle(
+                              color: AppColors.primarycolor,
 
-                    //     // 📄 Pet Info
-                    //     Expanded(
-                    //       child: Column(
-                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Row(
-                    //             crossAxisAlignment: CrossAxisAlignment.center,
-                    //             mainAxisAlignment: MainAxisAlignment.center,
-                    //             children: [
-                    //               const Icon(
-                    //                 Icons.bloodtype,
-                    //                 color: AppColors.secondrycolor,
-                    //                 size: 18,
-                    //               ),
-                    //               const SizedBox(width: 6),
-                    //               Text(
-                    //                 pet.categoryName
-                    //                     .toString()
-                    //                     .replaceAll(RegExp(r'\s+'), ' ')
-                    //                     .trim(),
-                    //                 style: const TextStyle(
-                    //                   color: AppColors.primarycolor,
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
 
-                    //                   fontSize: 15,
-                    //                   fontWeight: FontWeight.bold,
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           ),
+                      // ListTile(
+                      //   leading: CircleAvatar(
+                      //     radius: 22,
+                      //     backgroundImage: AssetImage(getCategoryImage(categoryName.toString())),
+                      //   ),
+                      //   title: Text(categoryName.toString().replaceAll(RegExp(r'\s+'), ' ').trim()),
+                      // ),
+                      //  Row(
+                      //   children: [
+                      //     // 🐶 Pet Image
+                      //     // const SizedBox(width: 10),
 
-                    //           const SizedBox(height: 6),
-                    //         ],
-                    //       ),
-                    //     ),
+                      //     // 📄 Pet Info
+                      //     Expanded(
+                      //       child: Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.center,
+                      //         mainAxisAlignment: MainAxisAlignment.center,
+                      //         children: [
+                      //           Row(
+                      //             crossAxisAlignment: CrossAxisAlignment.center,
+                      //             mainAxisAlignment: MainAxisAlignment.center,
+                      //             children: [
+                      //               const Icon(
+                      //                 Icons.bloodtype,
+                      //                 color: AppColors.secondrycolor,
+                      //                 size: 18,
+                      //               ),
+                      //               const SizedBox(width: 6),
+                      //               Text(
+                      //                 pet.categoryName
+                      //                     .toString()
+                      //                     .replaceAll(RegExp(r'\s+'), ' ')
+                      //                     .trim(),
+                      //                 style: const TextStyle(
+                      //                   color: AppColors.primarycolor,
 
-                    //     // ➡️ Action Icon
-                    //     // GestureDetector(
-                    //     //   onTap: () {
-                    //     //     navigatorKey.currentState?.pushNamed('/petDetails', arguments: pet);
-                    //     //   },
-                    //     //   child: Container(
-                    //     //     padding: const EdgeInsets.all(8),
-                    //     //     decoration: BoxDecoration(
-                    //     //       color: Colors.white.withOpacity(0.15),
-                    //     //       shape: BoxShape.circle,
-                    //     //     ),
-                    //     //     child: const Icon(
-                    //     //       Icons.arrow_forward_ios,
-                    //     //       color: AppColors.primarycolor,
-                    //     //       size: 16,
-                    //     //     ),
-                    //     //   ),
-                    //     // ),
-                    //   ],
-                    // ),
+                      //                   fontSize: 15,
+                      //                   fontWeight: FontWeight.bold,
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+
+                      //           const SizedBox(height: 6),
+                      //         ],
+                      //       ),
+                      //     ),
+
+                      //     // ➡️ Action Icon
+                      //     // GestureDetector(
+                      //     //   onTap: () {
+                      //     //     navigatorKey.currentState?.pushNamed('/petDetails', arguments: pet);
+                      //     //   },
+                      //     //   child: Container(
+                      //     //     padding: const EdgeInsets.all(8),
+                      //     //     decoration: BoxDecoration(
+                      //     //       color: Colors.white.withOpacity(0.15),
+                      //     //       shape: BoxShape.circle,
+                      //     //     ),
+                      //     //     child: const Icon(
+                      //     //       Icons.arrow_forward_ios,
+                      //     //       color: AppColors.primarycolor,
+                      //     //       size: 16,
+                      //     //     ),
+                      //     //   ),
+                      //     // ),
+                      //   ],
+                      // ),
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

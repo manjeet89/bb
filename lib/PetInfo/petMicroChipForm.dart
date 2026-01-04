@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class MicrochipForm extends StatefulWidget {
   const MicrochipForm({super.key});
@@ -28,6 +29,46 @@ class _MicrochipFormState extends State<MicrochipForm> {
 
   final List<String> implementedByList = ['Veterinarian', 'Different Feline Club', 'Other'];
 
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final Petlistmodel pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
+
+      setState(() {
+        microchipNumberCtrl.text = pet.microchipNumber ?? "";
+        implementerNameCtrl.text = pet.microchipImplementorName ?? "";
+        mobileCtrl.text = pet.microchipImplementorMobileNumber ?? "";
+        dateCtrl.text = pet.microchipImplementedDate ?? "";
+        implementedBy = pet.microchipImplementedBy;
+      });
+    });
+  }
+
+  Future<void> scanAndFetchStock() async {
+    String barcodescanerres;
+    String? qrCode = await SimpleBarcodeScanner.scanBarcode(
+      context,
+      barcodeAppBar: const BarcodeAppBar(
+        appBarTitle: 'Test',
+        centerTitle: false,
+        enableBackButton: true,
+        backButtonIcon: Icon(Icons.arrow_back_ios),
+      ),
+      isShowFlashIcon: true,
+      delayMillis: 500,
+      cameraFace: CameraFace.back,
+      scanFormat: ScanFormat.ALL_FORMATS,
+    );
+    barcodescanerres = qrCode as String;
+    if (qrCode != '-1') {
+      setState(() {
+        microchipNumberCtrl.text = barcodescanerres;
+      });
+    }
+  }
+
   /// 📂 Pick document/image/pdf
   Future<void> pickCertificate() async {
     final result = await FilePicker.platform.pickFiles(
@@ -48,7 +89,7 @@ class _MicrochipFormState extends State<MicrochipForm> {
   Future<void> pickDate() async {
     final picked = await showDatePicker(
       context: context,
-      firstDate: DateTime(2000),
+      firstDate: DateTime(1900),
       lastDate: DateTime.now(),
       initialDate: DateTime.now(),
     );
@@ -168,7 +209,11 @@ class _MicrochipFormState extends State<MicrochipForm> {
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
-                      BoxShadow(color: AppColors.secondrycolor, blurRadius: 8, offset: Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.secondrycolor,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Column(
@@ -190,14 +235,35 @@ class _MicrochipFormState extends State<MicrochipForm> {
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
-                      BoxShadow(color: AppColors.secondrycolor, blurRadius: 8, offset: Offset(0, 4)),
+                      BoxShadow(
+                        color: AppColors.secondrycolor,
+                        blurRadius: 8,
+                        offset: Offset(0, 4),
+                      ),
                     ],
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _label("MicroChip Number "),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _label("Microchip Number "),
+                          InkWell(
+                            onTap: () async {
+                              // scanBarCode();
+                              scanAndFetchStock();
+                            },
+                            child: const Icon(
+                              Icons.qr_code_scanner_outlined,
+                              color: Color(0xFF035d79),
+                              size: 25,
+                            ),
+                          ),
+                        ],
+                      ),
                       _buildTextField(controller: microchipNumberCtrl),
 
                       _label("Implemented By *"),

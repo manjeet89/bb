@@ -90,90 +90,105 @@ class _UserprofileState extends State<Userprofile> {
         centerTitle: true,
       ),
       backgroundColor: AppColors.white,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 600), // Limits width on Web/Desktop
-            child: Column(
-              children: [
-                // Header section
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: ImageGet == "null"
-                      ? Image.asset('assest/petbird.png')
-                      : CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.grey.shade300,
-                          backgroundImage: NetworkImage(
-                            allapiscreen.imageapi.toString() + ImageGet,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await FetchData(); // Reload data when user performs swipe gesture
+          setState(() {});
+        },
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 600), // Limits width on Web/Desktop
+              child: Column(
+                children: [
+                  // Header section
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    child: ImageGet == "null"
+                        ? Image.asset('assest/petbird.png')
+                        : CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.grey.shade300,
+                            backgroundImage: NetworkImage(
+                              allapiscreen.imageapi.toString() + ImageGet,
+                            ),
                           ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    FirstName + ' ' + LastName,
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  // const Text('User ID: 2', style: TextStyle(color: Colors.grey)),
+                  const SizedBox(height: 10),
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primarycolor, // Primary red
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  FirstName + ' ' + LastName,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                // const Text('User ID: 2', style: TextStyle(color: Colors.grey)),
-                const SizedBox(height: 10),
-
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primarycolor, // Primary red
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        onPressed: () async {
+                          final result = await navigatorKey.currentState?.pushNamed(
+                            '/userRegistration',
+                          );
+                          if (result == true) {
+                            FetchData(); // Reload data when returning from UpdateProfile
+                          }
+                        },
+                        child: const Text('Update Profile', style: TextStyle(color: Colors.white)),
                       ),
-                      onPressed: () {
-                        navigatorKey.currentState?.pushNamed('/userRegistration');
+                    ),
+                  ),
+
+                  // Profile Fields
+                  _buildInfoCard([
+                    _infoTile(Icons.phone, 'Mobile Number', Number),
+                    _infoTile(Icons.email, 'Email', Email),
+                    _infoTile(
+                      Icons.cake,
+                      "Date of Birth",
+                      Dateofbirth == "null" ? "" : Dateofbirth,
+                    ),
+                    _infoTile(Icons.person_outline, 'Gender', Gender == "0" ? "Female" : "Male"),
+                    _infoTile(Icons.bloodtype, 'Blood Group', Bloodname),
+                    _infoTile(
+                      Icons.location_on,
+                      'Postal Address',
+                      UserAddress + " " + City + " " + Country + " " + State + " " + District,
+                    ),
+                    _infoTile(Icons.pin_drop, 'Pin Code / Zip Code', Pincode),
+                  ]),
+
+                  const SizedBox(height: 10),
+
+                  // Affiliate Section
+                  _buildInfoCard([
+                    ListTile(
+                      leading: const Icon(Icons.share, color: AppColors.secondrycolor),
+                      title: const Text(
+                        'Affiliate Link',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: const Text('Become an Affiliate'),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => BloodBankHome()),
+                        );
+
+                        // Add affiliate link logic here
                       },
-                      child: const Text('Update Profile', style: TextStyle(color: Colors.white)),
                     ),
-                  ),
-                ),
-
-                // Profile Fields
-                _buildInfoCard([
-                  _infoTile(Icons.phone, 'Mobile Number', Number),
-                  _infoTile(Icons.email, 'Email', Email),
-                  _infoTile(Icons.cake, "Date of Birth", Dateofbirth == "null" ? "" : Dateofbirth),
-                  _infoTile(Icons.person_outline, 'Gender', Gender == "0" ? "Female" : "Male"),
-                  _infoTile(Icons.bloodtype, 'Blood Group', Bloodname),
-                  _infoTile(
-                    Icons.location_on,
-                    'Postal Address',
-                    UserAddress + " " + City + " " + Country + " " + State + " " + District,
-                  ),
-                  _infoTile(Icons.pin_drop, 'Pin Code / Zip Code', Pincode),
-                ]),
-
-                const SizedBox(height: 10),
-
-                // Affiliate Section
-                _buildInfoCard([
-                  ListTile(
-                    leading: const Icon(Icons.share, color: AppColors.secondrycolor),
-                    title: const Text(
-                      'Affiliate Link',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: const Text('Become an Affiliate'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => BloodBankHome()),
-                      );
-
-                      // Add affiliate link logic here
-                    },
-                  ),
-                ]),
-              ],
+                  ]),
+                ],
+              ),
             ),
           ),
         ),

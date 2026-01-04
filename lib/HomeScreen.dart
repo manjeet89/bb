@@ -7,77 +7,93 @@ class BloodBankHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldExit = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Exit App'),
+            content: Text('Are you sure you want to exit?'),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+              TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text('Exit')),
+            ],
+          ),
+        );
+        return shouldExit ?? false;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
 
-      appBar: AppBar(
-        backgroundColor: Color(0XFFFFFFFF),
-        // foregroundColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset("assest/bblogo.png", scale: 3),
-            InkWell(
-              onTap: () {
-                navigatorKey.currentState?.pushNamed('/sos');
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        appBar: AppBar(
+          backgroundColor: Color(0XFFFFFFFF),
+          // foregroundColor: Colors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset("assest/bblogo.png", scale: 3),
+              InkWell(
+                onTap: () {
+                  navigatorKey.currentState?.pushNamed('/sos');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
 
-                  children: [
-                    Icon(Icons.notifications_active_sharp, color: AppColors.primarycolor),
-                    Icon(Icons.sos_sharp, color: AppColors.primarycolor),
-                  ],
+                    children: [
+                      Icon(Icons.notifications_active_sharp, color: AppColors.errorRed),
+                      Icon(Icons.sos_sharp, color: AppColors.errorRed),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            // const Text(
-            //   'PashuRaktKosh',
-            //   style: const TextStyle(
-            //     fontSize: 16,
-            //     color: Colors.black87,
-            //     fontWeight: FontWeight.w500,
-            //   ),
-            // ),
-          ],
-        ),
-        actions: [Column(children: [
-              
+              // const Text(
+              //   'PashuRaktKosh',
+              //   style: const TextStyle(
+              //     fontSize: 16,
+              //     color: Colors.black87,
+              //     fontWeight: FontWeight.w500,
+              //   ),
+              // ),
             ],
-          )],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // const SizedBox(height: 24),
-            // 1. Hero Card
-            Center(child: _buildHeroCard()),
-            const SizedBox(height: 24),
+          ),
+          actions: [Column(children: [
+                
+              ],
+            )],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // const SizedBox(height: 24),
+              // 1. Hero Card
+              Center(child: _buildHeroCard()),
+              const SizedBox(height: 24),
 
-            // 2. Blood Groups Section
-            Center(
-              child: const Text(
-                textAlign: TextAlign.center,
-                'Current Blood \nAvailablity',
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              // 2. Blood Groups Section
+              Center(
+                child: const Text(
+                  textAlign: TextAlign.center,
+                  'Current Blood \nAvailablity',
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            _buildBloodGrid(),
-            const SizedBox(height: 24),
+              const SizedBox(height: 12),
+              _buildBloodGrid(),
+              const SizedBox(height: 24),
 
-            // 3. How it Works (Registration Workflow)
-            // const Text(
-            //   'How Registration Works',
-            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            // ),
-            // const SizedBox(height: 12),
-            // _buildWorkflowSteps(),
-          ],
+              // 3. How it Works (Registration Workflow)
+              // const Text(
+              //   'How Registration Works',
+              //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              // ),
+              // const SizedBox(height: 12),
+              // _buildWorkflowSteps(),
+            ],
+          ),
         ),
       ),
     );

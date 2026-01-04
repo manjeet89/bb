@@ -2,6 +2,7 @@ import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/main.dart';
 import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
+import 'package:intl/intl.dart';
 
 class PetDetailScreen extends StatelessWidget {
   const PetDetailScreen({super.key});
@@ -110,7 +111,12 @@ class PetDetailScreen extends StatelessWidget {
                       pet.petBirthDate.toString().replaceAll("-", "") + pet.petId.toString(),
                     ),
                     _detailRow("Gender", pet.petGender.toString() == "1" ? "Male" : "Female"),
-                    _detailRow("Date of Birth", pet.petBirthDate.toString()),
+                    _detailRow("Date of Birth", 
+                    
+                    DateFormat(
+                                      'dd-MMMM-yyyy',
+                                    ).format(DateTime.parse(pet.petBirthDate.toString()!)).toString(),
+                                    ),
                     _detailRow("Country", pet.countryBredIn.toString()),
                   ],
                 ),

@@ -36,7 +36,6 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
       // Navigator.pushNamed(context, '/otp', arguments: userId);
       // Instead of Navigator.pushReplacementNamed(context, '/home');
       navigatorKey.currentState?.pushNamed('/otp', arguments: userId);
-      navigatorKey.currentState?.pushNamed('/sos');
     } else {
       // Handle error (e.g., show a snackbar)
       print('Login failed: ${response.body}');
@@ -48,8 +47,8 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     // Use MediaQuery to get screen size for responsiveness
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    // final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF), // White background

@@ -305,8 +305,8 @@ class _UpdateprofileState extends State<Updateprofile> {
       // print(data['data']);
       scaffoldMessenger.showSnackBar(
         SnackBar(
-          content: Text("Uploaded"),
-          backgroundColor: Colors.redAccent, // Red for errors
+          content: Text("User profile update successfully"),
+          backgroundColor: AppColors.successGreen, // Red for errors
           behavior: SnackBarBehavior.floating, // Modern floating look
           duration: Duration(seconds: 2),
           // action: SnackBarAction(
@@ -316,7 +316,7 @@ class _UpdateprofileState extends State<Updateprofile> {
           // ),
         ),
       );
-      Navigator.pop(context);
+      Navigator.pop(context, true); // Return true to indicate success
     }
   }
 
@@ -351,7 +351,7 @@ class _UpdateprofileState extends State<Updateprofile> {
             //   end: Alignment.centerRight,
             // ),
             borderRadius: BorderRadius.circular(24),
-             boxShadow: const [
+            boxShadow: const [
               BoxShadow(color: AppColors.secondrycolor, blurRadius: 8, offset: Offset(0, 4)),
             ],
           ),
@@ -455,7 +455,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                     DateTime? picked = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
+                      firstDate: DateTime(1900),
                       lastDate: DateTime.now(),
                     );
 
