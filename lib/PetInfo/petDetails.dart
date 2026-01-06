@@ -11,6 +11,14 @@ class PetDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Petlistmodel pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
 
+    final inputFormat = DateFormat('yyyy-MM-d');
+    final outputFormat = DateFormat('dd-MMMM-yyyy');
+
+    DateTime date = inputFormat.parse(pet.petBirthDate.toString());
+    String formattedDate = outputFormat.format(date);
+
+    print(formattedDate); // 05-October-2021
+
     return Scaffold(
       backgroundColor: AppColors.bgGrey,
       // appBar: AppBar(title: Text(pet.petName.toString()), backgroundColor: AppColors.darkRed),
@@ -111,12 +119,15 @@ class PetDetailScreen extends StatelessWidget {
                       pet.petBirthDate.toString().replaceAll("-", "") + pet.petId.toString(),
                     ),
                     _detailRow("Gender", pet.petGender.toString() == "1" ? "Male" : "Female"),
-                    _detailRow("Date of Birth", 
-                    
-                    DateFormat(
-                                      'dd-MMMM-yyyy',
-                                    ).format(DateTime.parse(pet.petBirthDate.toString()!)).toString(),
-                                    ),
+                    _detailRow(
+                      "Date of Birth",
+                      formattedDate,
+
+                      // days + "-" + month + "-" + year
+                      // DateFormat(
+                      //   'dd-MMMM-yyyy',
+                      // ).format(DateTime.parse(pet.petBirthDate.toString())).toString(),
+                    ),
                     _detailRow("Country", pet.countryBredIn.toString()),
                   ],
                 ),

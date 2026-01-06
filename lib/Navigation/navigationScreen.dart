@@ -55,23 +55,34 @@ class _NavigationExampleState extends State<NavigationExample> {
           indicatorColor: AppColors.secondrycolor,
           backgroundColor: Colors.white,
           selectedIndex: currentPageIndex,
-
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(
+              color: AppColors.primarycolor,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           destinations: const <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.home),
-              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home_outlined, color: AppColors.white),
+              icon: Icon(Icons.home, color: AppColors.primarycolor),
               label: 'Home',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.pets),
-              icon: Icon(Icons.pets_outlined),
+              selectedIcon: Icon(Icons.pets, color: AppColors.white),
+              icon: Icon(Icons.pets_outlined, color: AppColors.primarycolor),
               label: 'My Pets',
             ),
             // NavigationDestination(
             //   icon: Badge(child: Icon(Icons.pets)),
             //   label: 'My Pets',
             // ),
-            NavigationDestination(icon: Icon(Icons.more_horiz_outlined), label: 'More'),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.more_horiz_outlined, color: AppColors.white),
+
+              icon: Icon(Icons.more_horiz_outlined, color: AppColors.primarycolor),
+              label: 'More',
+            ),
             // NavigationDestination(
             //   icon: Badge(label: Text('2'), child: Icon(Icons.messenger_sharp)),
             //   label: 'Messages',

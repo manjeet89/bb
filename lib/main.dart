@@ -8,6 +8,7 @@ import 'package:bb/PetInfo/petCategoryScreen.dart';
 import 'package:bb/PetInfo/petDetails.dart';
 import 'package:bb/PetInfo/petMicroChipForm.dart';
 import 'package:bb/SosSCreen.dart';
+import 'package:bb/Splash/splashScreen.dart';
 import 'package:bb/UpdateProfile.dart';
 import 'package:bb/UserProfile.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ void main() async {
   runApp(
     MaterialApp(
       navigatorKey: navigatorKey, // <--- Add this
-      home: isLoggedIn ? NavigationBarApp() : BloodBankLoginPage(),
+      home: Splashscreen(),
+      // home: isLoggedIn ? NavigationBarApp() : BloodBankLoginPage(),
       // 2. Define all routes consistently
       routes: {
         '/login': (context) => BloodBankLoginPage(),
@@ -49,8 +51,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp(bool isLoggedIn, {super.key});
-
+  MyApp({super.key});
+  //bool isLoggedIn,
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

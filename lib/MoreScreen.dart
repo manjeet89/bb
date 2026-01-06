@@ -24,7 +24,23 @@ class _MorescreenState extends State<Morescreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    LoginCheck();
+
     FetchData();
+  }
+
+  LoginCheck() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    print(isLoggedIn.toString());
+    if (isLoggedIn.toString() == "false") {
+      setState(() {
+        FirstName = "False";
+      });
+    }
+    // setState(() {
+
+    // });
   }
 
   FetchData() async {
@@ -88,63 +104,44 @@ class _MorescreenState extends State<Morescreen> {
             await FetchData(); // Reload data when user performs swipe gesture
             setState(() {});
           },
-          child: Container(
-            color: AppColors.cardBackgroundWhite,
+          child: FirstName == "False"
+              ? Container(
+                  color: AppColors.cardBackgroundWhite,
 
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // Breakpoint for Desktop/Tablet
-                double padding = constraints.maxWidth > 600 ? 50.0 : 20.0;
-                return FirstName.toString() == ""
-                    ? Center(child: CircularProgressIndicator())
-                    : SingleChildScrollView(
-                        padding: EdgeInsets.all(padding),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              maxWidth: 600,
-                            ), // Limits width on Web/Desktop
-                            child: Container(
-                              // color: AppColors.backgrounLightGrey,
-                              child: Column(
-                                children: [
-                                  Visibility(
-                                    visible: FirstName == "null" ? false : true,
-                                    child: // Header section
-                                    CircleAvatar(
-                                      radius: 50,
-                                      backgroundColor: Colors.white,
-                                      child: ImageGet == "null"
-                                          ? Image.asset('assest/petbird.png')
-                                          : CircleAvatar(
-                                              radius: 50,
-                                              backgroundColor: Colors.grey.shade300,
-                                              backgroundImage: NetworkImage(
-                                                allapiscreen.imageapi.toString() + ImageGet,
-                                              ),
-                                            ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  Visibility(
-                                    visible: FirstName == "null" ? false : true,
-                                    child: Text(
-                                      FirstName + " " + LastName,
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.primarycolor,
-                                      ),
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: FirstName == "null" ? false : true,
-                                    child: Text(email, style: TextStyle(color: AppColors.fontGrey)),
-                                  ),
-                                  const SizedBox(height: 20),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Breakpoint for Desktop/Tablet
+                      double padding = constraints.maxWidth > 600 ? 50.0 : 20.0;
+                      return FirstName.toString() == ""
+                          ? Center(child: CircularProgressIndicator())
+                          : SingleChildScrollView(
+                              padding: EdgeInsets.all(padding),
+                              child: Center(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 600,
+                                  ), // Limits width on Web/Desktop
+                                  child: Container(
+                                    // color: AppColors.backgrounLightGrey,
+                                    child: Column(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 50,
+                                          backgroundColor: Colors.white,
+                                          child: Image.asset('assest/petbird.png'),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Text(
+                                          "Welcome to pashuRaktKosh.",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.secondrycolor,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
 
-                                  FirstName == "null"
-                                      ? ElevatedButton(
+                                        ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor: AppColors.primarycolor,
                                             // Primary red
@@ -154,52 +151,156 @@ class _MorescreenState extends State<Morescreen> {
                                           ),
                                           onPressed: () async {
                                             final result = await navigatorKey.currentState
-                                                ?.pushNamed('/userRegistration');
+                                                ?.pushNamed('/login');
                                             if (result == null) {
                                               FetchData(); // Reload data when returning from UpdateProfile
                                             }
                                             // navigatorKey.currentState?.pushNamed('/userRegistration');
                                           },
                                           child: const Text(
-                                            'Update Profile',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        )
-                                      : ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColors.primarycolor,
-                                            // Primary red
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          onPressed: () async {
-                                            final result = await navigatorKey.currentState
-                                                ?.pushNamed('/profile');
-                                            print(result);
-                                            if (result == null) {
-                                              FetchData(); // Reload data when returning from UpdateProfile
-                                            }
-                                            // navigatorKey.currentState?.pushNamed('/profile');
-                                          },
-                                          child: const Text(
-                                            'Profile',
+                                            'Go to Login',
                                             style: TextStyle(color: Colors.white),
                                           ),
                                         ),
-                                  const Divider(height: 40),
-                                  _buildProfileItem(Icons.policy, 'Privacy & Policy'),
-                                  _buildProfileItem(Icons.perm_contact_cal, 'Contact'),
-                                  _buildProfileforlogout(Icons.logout, 'Logout', color: Colors.red),
-                                ],
+
+                                        const Divider(height: 40),
+                                        _buildProfileItem(Icons.policy, 'Privacy & Policy'),
+                                        _buildProfileItem(Icons.perm_contact_cal, 'Contact'),
+                                        FirstName != "False"
+                                            ? _buildProfileforlogout(
+                                                Icons.logout,
+                                                'Logout',
+                                                color: Colors.red,
+                                              )
+                                            : Text(""),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      );
-              },
-            ),
-          ),
+                            );
+                    },
+                  ),
+                )
+              : Container(
+                  color: AppColors.cardBackgroundWhite,
+
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Breakpoint for Desktop/Tablet
+                      double padding = constraints.maxWidth > 600 ? 50.0 : 20.0;
+                      return FirstName.toString() == ""
+                          ? Center(child: CircularProgressIndicator())
+                          : SingleChildScrollView(
+                              padding: EdgeInsets.all(padding),
+                              child: Center(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 600,
+                                  ), // Limits width on Web/Desktop
+                                  child: Container(
+                                    // color: AppColors.backgrounLightGrey,
+                                    child: Column(
+                                      children: [
+                                        Visibility(
+                                          visible: FirstName == "null" ? false : true,
+                                          child: // Header section
+                                          CircleAvatar(
+                                            radius: 50,
+                                            backgroundColor: Colors.white,
+                                            child: ImageGet == "null"
+                                                ? Image.asset('assest/petbird.png')
+                                                : CircleAvatar(
+                                                    radius: 50,
+                                                    backgroundColor: Colors.grey.shade300,
+                                                    backgroundImage: NetworkImage(
+                                                      allapiscreen.imageapi.toString() + ImageGet,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Visibility(
+                                          visible: FirstName == "null" ? false : true,
+                                          child: Text(
+                                            FirstName + " " + LastName,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.primarycolor,
+                                            ),
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible: FirstName == "null" ? false : true,
+                                          child: Text(
+                                            email,
+                                            style: TextStyle(color: AppColors.fontGrey),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 20),
+
+                                        FirstName == "null"
+                                            ? ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: AppColors.primarycolor,
+                                                  // Primary red
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  final result = await navigatorKey.currentState
+                                                      ?.pushNamed('/userRegistration');
+                                                  if (result == null) {
+                                                    FetchData(); // Reload data when returning from UpdateProfile
+                                                  }
+                                                  // navigatorKey.currentState?.pushNamed('/userRegistration');
+                                                },
+                                                child: const Text(
+                                                  'Update Profile',
+                                                  style: TextStyle(color: Colors.white),
+                                                ),
+                                              )
+                                            : ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: AppColors.primarycolor,
+                                                  // Primary red
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                ),
+                                                onPressed: () async {
+                                                  final result = await navigatorKey.currentState
+                                                      ?.pushNamed('/profile');
+                                                  print(result);
+                                                  if (result == null) {
+                                                    FetchData(); // Reload data when returning from UpdateProfile
+                                                  }
+                                                  // navigatorKey.currentState?.pushNamed('/profile');
+                                                },
+                                                child: const Text(
+                                                  'Profile',
+                                                  style: TextStyle(color: Colors.white),
+                                                ),
+                                              ),
+                                        const Divider(height: 40),
+                                        _buildProfileItem(Icons.policy, 'Privacy & Policy'),
+                                        _buildProfileItem(Icons.perm_contact_cal, 'Contact'),
+                                        _buildProfileforlogout(
+                                          Icons.logout,
+                                          'Logout',
+                                          color: Colors.red,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                    },
+                  ),
+                ),
         ),
       ),
     );
