@@ -288,6 +288,7 @@ import 'package:bb/main.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class BloodBankHome extends StatefulWidget {
   const BloodBankHome({super.key});
@@ -304,6 +305,21 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
     super.initState();
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))
       ..forward();
+    getFCMToken();
+  }
+
+  Future<String?> getFCMToken() async {
+    // Request permission for Apple platforms/Web
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      provisional: true, // Allows user to choose permissions later
+    );
+
+    // Get the token
+    String? token = await FirebaseMessaging.instance.getToken();
+    print("FCM Token: $token");
+
+    // You should send this token to your backend server and store it
+    return token;
   }
 
   @override

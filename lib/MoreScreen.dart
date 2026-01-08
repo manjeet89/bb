@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/main.dart';
@@ -250,6 +251,14 @@ class _MorescreenState extends State<Morescreen> {
                                                   ),
                                                 ),
                                                 onPressed: () async {
+                                                  await FirebaseAnalytics.instance.logEvent(
+                                                    name: 'profile',
+                                                    parameters: {
+                                                      'button_id': 'profile_button',
+                                                      'location': 'profilePage',
+                                                    },
+                                                  );
+
                                                   final result = await navigatorKey.currentState
                                                       ?.pushNamed('/userRegistration');
                                                   if (result == null) {
@@ -330,7 +339,7 @@ Widget _buildProfileforlogout(IconData icon, String title, {Color? color}) {
     onTap: () async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.clear(); // Or use prefs.remove('auth_token')
-      navigatorKey.currentState?.pushReplacementNamed('/login');
+      navigatorKey.currentState?.pushReplacementNamed('/home');
     },
   );
 }

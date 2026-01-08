@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "947639494240",
+    "project_id": "pashuraktkosh",
+    "storage_bucket": "pashuraktkosh.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:947639494240:android:2e2770189f554d56fd0505",
+        "android_client_info": {
+          "package_name": "com.pashuraktkosh.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBq5dHLpkYnRvP9MwGgN_le0zaw-Ia33g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -368,23 +368,15 @@ class _UpdateprofileState extends State<Updateprofile> {
                     child: Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        ImageGet == "null"
-                            ? CircleAvatar(
+                        ImageGet == "null" && _croppedImage == null
+                            ? const Icon(Icons.person, size: 50, color: Colors.white)
+                            : CircleAvatar(
                                 radius: 50,
                                 backgroundColor: Colors.grey.shade300,
                                 backgroundImage: _croppedImage != null
                                     ? FileImage(_croppedImage!)
-                                    : null,
-                                child: _croppedImage == null
-                                    ? const Icon(Icons.person, size: 50, color: Colors.white)
-                                    : null,
-                              )
-                            : CircleAvatar(
-                                radius: 50,
-                                backgroundColor: Colors.grey.shade300,
-                                backgroundImage: NetworkImage(
-                                  allapiscreen.imageapi.toString() + ImageGet,
-                                ),
+                                    : NetworkImage(allapiscreen.imageapi.toString() + ImageGet)
+                                          as ImageProvider,
                               ),
 
                         // Edit icon

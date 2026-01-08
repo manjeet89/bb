@@ -1,4 +1,4 @@
-package com.example.bb
+package com.pashuraktkosh.app
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 class MainActivity : FlutterFragmentActivity()

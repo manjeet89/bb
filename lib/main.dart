@@ -11,18 +11,27 @@ import 'package:bb/SosSCreen.dart';
 import 'package:bb/Splash/splashScreen.dart';
 import 'package:bb/UpdateProfile.dart';
 import 'package:bb/UserProfile.dart';
+import 'package:bb/firebase_options.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:phonepe_payment_sdk/phonepe_payment_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_core/firebase_core.dart';
 
 // At the top of your main.dart file
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase using the default options for the current platform
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
   runApp(
@@ -45,6 +54,7 @@ void main() async {
         '/petCategoryScreen': (context) => Petcategoryscreen(),
       },
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [observer],
     ),
   );
   // runApp( MyApp(isLoggedIn));
@@ -54,12 +64,15 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
   //bool isLoggedIn,
   // This widget is the root of your application.
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      navigatorObservers: [observer],
       // initialRoute: '/login',
       // routes: {
       //   '/login': (context) => BloodBankLoginPage(),
@@ -97,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final String callbackUrl = "https://affcats.com/";
   final String apiEndPoint = "/pg/v1/pay";
   final bool enableLogging = true;
-  final String appId = "com.example.bb";
+  final String appId = "com.pashuraktkosh.app";
   // =====================================================
 
   final uuid = const Uuid();
