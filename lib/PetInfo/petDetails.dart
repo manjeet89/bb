@@ -4,8 +4,22 @@ import 'package:flutter/material.dart';
 import '../utils/app_colors.dart';
 import 'package:intl/intl.dart';
 
-class PetDetailScreen extends StatelessWidget {
+class PetDetailScreen extends StatefulWidget {
   const PetDetailScreen({super.key});
+
+  @override
+  State<PetDetailScreen> createState() => _PetDetailScreenState();
+}
+
+class _PetDetailScreenState extends State<PetDetailScreen> {
+  bool showOptions = false;
+  String petinfo = "Pet Info";
+
+  void toggleOptions() {
+    setState(() {
+      showOptions = !showOptions; // Toggling the visibility of additional options
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,47 +35,207 @@ class PetDetailScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.bgGrey,
+
       // appBar: AppBar(title: Text(pet.petName.toString()), backgroundColor: AppColors.darkRed),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            onPressed: () {
+              // When the main FAB is pressed,
+              // toggleOptions is called
+              toggleOptions();
+
+              showOptions != true ? petinfo = "Pet Info" : petinfo = "Back";
+            },
+            label: Text(petinfo, style: TextStyle(color: Colors.white)),
+            // icon: Icon(Icons.add, color: Colors.white),
+            backgroundColor: showOptions != true ? AppColors.primarycolor : AppColors.darkRed,
+          ),
+          SizedBox(height: 16.0),
+          Visibility(
+            visible: showOptions, // Show the options only if showOptions is true
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton.extended(
+                      backgroundColor: AppColors.primarycolor,
+                      onPressed: () {
+                        navigatorKey.currentState?.pushNamed('/petmicrochip', arguments: pet);
+                        // Add your action for Option 1
+                      },
+                      tooltip: 'Mircrochip Details',
+                      label: Row(
+                        children: [
+                          Text("Mircrochip Details", style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 16.0),
+                    FloatingActionButton.extended(
+                      backgroundColor: AppColors.primarycolor,
+                      onPressed: () {
+                        navigatorKey.currentState?.pushNamed('/petHealthinfo', arguments: pet);
+                        // Add your action for Option 1
+                      },
+                      tooltip: 'Health Information',
+                      label: Row(
+                        children: [
+                          Text("Health Information", style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 16.0),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton.extended(
+                      backgroundColor: AppColors.primarycolor,
+                      onPressed: () {
+                        navigatorKey.currentState?.pushNamed(
+                          '/petvaccinationdetails',
+                          arguments: pet,
+                        );
+                        // Add your action for Option 1
+                      },
+                      tooltip: 'Vaccination Details',
+                      label: Row(
+                        children: [
+                          Text("Vaccination Details", style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(width: 16.0),
+                    FloatingActionButton.extended(
+                      backgroundColor: AppColors.primarycolor,
+                      onPressed: () {
+                        navigatorKey.currentState?.pushNamed('/petmedications', arguments: pet);
+                        // Add your action for Option 1
+                      },
+                      tooltip: 'Medications',
+                      label: Row(
+                        children: [Text("Medications", style: TextStyle(color: Colors.white))],
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 16.0),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FloatingActionButton.extended(
+                      backgroundColor: AppColors.primarycolor,
+                      onPressed: () {
+                        navigatorKey.currentState?.pushNamed(
+                          '/petveterinarianinfo',
+                          arguments: pet,
+                        );
+                        // Add your action for Option 1
+                      },
+                      tooltip: 'Veterinarian Details',
+                      label: Row(
+                        children: [
+                          Text("Veterinarian Details", style: TextStyle(color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+              ],
+            ),
+          ),
+        ],
+      ),
 
       /// ⬇️ ACTION BUTTONS
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            // Expanded(
-            //   child: _actionButton(
-            //     text: "Update Cat Details",
-            //     icon: Icons.edit,
-            //     onTap: () {
-            //       // TODO: Navigate to update screen
-            //       print("Update ${pet.petId}");
-            //     },
-            //   ),
-            // ),
-            // const SizedBox(width: 12),
-            Expanded(
-              child: _actionButton(
-                text: "Mircrochip Details",
-                icon: Icons.comment,
-                onTap: () {
-                  navigatorKey.currentState?.pushNamed('/petmicrochip', arguments: pet);
+      // bottomNavigationBar: Padding(
+      //   padding: const EdgeInsets.all(14),
+      //   child: Row(
+      //     children: [
+      //       Expanded(
+      //         child: _actionButton(
+      //           text: "Health Information",
+      //           icon: Icons.edit,
+      //           onTap: () {
+      //             // TODO: Navigate to update screen
+      //             navigatorKey.currentState?.pushNamed('/petHealthinfo', arguments: pet);
+      //           },
+      //         ),
+      //       ),
+      //       const SizedBox(width: 12),
+      //       Expanded(
+      //         child: _actionButton(
+      //           text: "Mircrochip Details",
+      //           icon: Icons.comment,
+      //           onTap: () {
+      //             navigatorKey.currentState?.pushNamed('/petmicrochip', arguments: pet);
 
-                  // _showCommentSheet(context);
-                },
-              ),
-            ),
-            // Expanded(
-            //   child: _actionButton(
-            //     text: "Add Comment",
-            //     icon: Icons.comment,
-            //     onTap: () {
-            //       _showCommentSheet(context);
-            //     },
-            //   ),
-            // ),
-          ],
-        ),
-      ),
+      //             // _showCommentSheet(context);
+      //           },
+      //         ),
+      //       ),
+      //       const SizedBox(width: 12),
+      //       Expanded(
+      //         child: _actionButton(
+      //           text: "Vaccination Details",
+      //           icon: Icons.comment,
+      //           onTap: () {
+      //             navigatorKey.currentState?.pushNamed('/petvaccinationdetails', arguments: pet);
+
+      //             // _showCommentSheet(context);
+      //           },
+      //         ),
+      //       ),
+      //       const SizedBox(width: 12),
+      //       Expanded(
+      //         child: _actionButton(
+      //           text: "Medications",
+      //           icon: Icons.comment,
+      //           onTap: () {
+      //             navigatorKey.currentState?.pushNamed('/petmedications', arguments: pet);
+
+      //             // _showCommentSheet(context);
+      //           },
+      //         ),
+      //       ),
+      //       const SizedBox(width: 12),
+      //       Expanded(
+      //         child: _actionButton(
+      //           text: "Veterinarian Details",
+      //           icon: Icons.comment,
+      //           onTap: () {
+      //             navigatorKey.currentState?.pushNamed('/petveterinarianinfo', arguments: pet);
+
+      //             // _showCommentSheet(context);
+      //           },
+      //         ),
+      //       ),
+      //       // Expanded(
+      //       //   child: _actionButton(
+      //       //     text: "Add Comment",
+      //       //     icon: Icons.comment,
+      //       //     onTap: () {
+      //       //       _showCommentSheet(context);
+      //       //     },
+      //       //   ),
+      //       // ),
+      //     ],
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -7,10 +7,11 @@ import 'package:http/http.dart' as http;
 class PetService {
   static Future<List<Petlistmodel>> fetchPets() async {
     var url = allapiscreen.mypetlist.toString();
-    var Header = await allapiscreen.headerFunction();
+    // var categoryurl = allapiscreen.petcategory.toString();
 
-    print(Header.toString());
+    var Header = await allapiscreen.headerFunction();
     final response = await http.post(Uri.parse(url), headers: Header);
+    // final categoryresponse = await http.post(Uri.parse(categoryurl), headers: Header);
 
     if (response.statusCode == 200) {
       final decoded = json.decode(response.body);

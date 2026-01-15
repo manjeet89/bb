@@ -32,6 +32,9 @@ class _PetFormScreenState extends State<PetFormScreen> {
 
   File? _croppedImage;
 
+  bool isCheckboxChecked = false; // Track checkbox state
+  bool isCheckboxCheckedsecond = false; // Track checkbox state
+
   Future<void> _pickAndCropcamera(ImageSource source) async {
     final _picker = ImagePicker();
     final picked = await _picker.pickImage(source: source);
@@ -181,7 +184,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
                     );
 
                     if (picked != null) {
-                      dobController.text = "${picked.year}-${picked.month}-${picked.day}";
+                      dobController.text = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
                     }
                   },
                 ),
@@ -228,6 +231,38 @@ class _PetFormScreenState extends State<PetFormScreen> {
                   // ),
                 ),
 
+                const SizedBox(height: 18),
+
+                /// Checkbox with text
+                CheckboxListTile(
+                  value: isCheckboxChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      isCheckboxChecked = value ?? false;
+                    });
+                  },
+                  title: const Text(
+                    "By submitting this form, you agree to indemnify and hold harmless PashuRaktkosh, its officers, directors, employees, and agents from and against any and all claims, liabilities, damages, losses, and expenses, including but not limited to legal fees, arising out of or in connection with your participation in the activities of the Absolute Feline Fanciers.",
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                /// Checkbox with text
+                CheckboxListTile(
+                  value: isCheckboxCheckedsecond,
+                  onChanged: (value) {
+                    setState(() {
+                      isCheckboxCheckedsecond = value ?? false;
+                    });
+                  },
+                  title: const Text(
+                    "I certify that the information provided in this form is true, accurate, and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of this application or termination of membership.",
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+
                 const SizedBox(height: 30),
 
                 /// 🩸 SUBMIT BUTTON
@@ -240,58 +275,55 @@ class _PetFormScreenState extends State<PetFormScreen> {
                       foregroundColor: AppColors.darkRed,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     ),
-                    onPressed: () {
-                      print("Pet Name: ${petNameController.text}");
-                      print("Gender: $selectedGender");
-                      print("DOB: ${dobController.text}");
-                      print("Country: $selectedCountry");
+                    onPressed: isCheckboxChecked && isCheckboxCheckedsecond
+                        ? () {
+                            print("Pet Name: ${petNameController.text}");
+                            print("Gender: $selectedGender");
+                            print("DOB: ${dobController.text}");
+                            print("Country: $selectedCountry");
 
-                      if (petNameController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('pet name enter'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => petNameController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (dobController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Selecty dob'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => petNameController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (selectCountryId.toString() == "null") {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Select country'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            // action: SnackBarAction(
-                            //   label: 'RETRY',
-                            //   textColor: Colors.white,
-                            //   onPressed: () => firstnameController.clear(),
-                            // ),
-                          ),
-                        );
-                      } else {
-                        PetRegistration(context);
-                      }
-                    },
+                            if (petNameController.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('pet name enter'),
+                                  backgroundColor: Colors.redAccent, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => petNameController.clear(),
+                                  ),
+                                ),
+                              );
+                            } else if (dobController.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Selecty dob'),
+                                  backgroundColor: Colors.redAccent, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => petNameController.clear(),
+                                  ),
+                                ),
+                              );
+                            } else if (selectCountryId.toString() == "null") {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Select country'),
+                                  backgroundColor: Colors.redAccent, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            } else {
+                              PetRegistration(context);
+                            }
+                          }
+                        : null,
                     child: const Text(
                       "Register Pet",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

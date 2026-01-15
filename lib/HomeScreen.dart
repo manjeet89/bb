@@ -464,44 +464,50 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
       children: [
         _actionCard(Icons.search, 'Find Donor'),
         _actionCard(Icons.bloodtype, 'Request Blood'),
-        GestureDetector(
-          onTap: () {
-            navigatorKey.currentState?.pushNamed('/petCategoryScreen');
-          },
-          child: _actionCard(Icons.pets, 'Register Pet'),
-        ),
+        // GestureDetector(
+        //   onTap: () {
+        //     navigatorKey.currentState?.pushNamed('/petCategoryScreen');
+        //   },
+        //   child:
+        _actionCard(Icons.pets, 'Register Pet'),
+        // ),
       ],
     );
   }
 
   Widget _actionCard(IconData icon, String title) {
     return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 6),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.secondrycolor.withOpacity(0.4),
-              blurRadius: 10,
-              offset: const Offset(0, 6),
-            ),
-          ],
-          // boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
-        ),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 22,
-              backgroundColor: AppColors.dividerGrey,
+      child: InkWell(
+        onTap: () {
+          navigatorKey.currentState?.pushNamed('/petCategoryScreen');
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.secondrycolor.withOpacity(0.4),
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+            // boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4))],
+          ),
+          child: Column(
+            children: [
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: AppColors.dividerGrey,
 
-              child: Icon(icon, color: AppColors.primarycolor),
-            ),
-            const SizedBox(height: 10),
-            Text(title, textAlign: TextAlign.center),
-          ],
+                child: Icon(icon, color: AppColors.primarycolor),
+              ),
+              const SizedBox(height: 10),
+              Text(title, textAlign: TextAlign.center),
+            ],
+          ),
         ),
       ),
     );

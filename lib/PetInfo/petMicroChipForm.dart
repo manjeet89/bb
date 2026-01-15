@@ -27,6 +27,10 @@ class _MicrochipFormState extends State<MicrochipForm> {
   String? implementedBy;
   File? certificateFile;
 
+  
+  bool isCheckboxChecked = true; // Track checkbox state
+  bool isCheckboxCheckedsecond = true; // Track checkbox state
+
   final List<String> implementedByList = ['Veterinarian', 'Different Feline Club', 'Other'];
 
   @override
@@ -252,6 +256,7 @@ class _MicrochipFormState extends State<MicrochipForm> {
                         children: [
                           _label("Microchip Number "),
                           InkWell(
+                            
                             onTap: () async {
                               // scanBarCode();
                               scanAndFetchStock();
@@ -281,119 +286,159 @@ class _MicrochipFormState extends State<MicrochipForm> {
                       _label("Microchip Insertion Certificate *"),
                       _buildFilePicker(),
 
+                      const SizedBox(height: 18),
+
+                      /// Checkbox with text
+                      CheckboxListTile(
+                        value: isCheckboxChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            isCheckboxChecked = value ?? false;
+                          });
+                        },
+                        title: const Text(
+                          "By submitting this form, you agree to indemnify and hold harmless PashuRaktkosh, its officers, directors, employees, and agents from and against any and all claims, liabilities, damages, losses, and expenses, including but not limited to legal fees, arising out of or in connection with your participation in the activities of the Absolute Feline Fanciers.",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      /// Checkbox with text
+                      CheckboxListTile(
+                        value: isCheckboxCheckedsecond,
+                        onChanged: (value) {
+                          setState(() {
+                            isCheckboxCheckedsecond = value ?? false;
+                          });
+                        },
+                        title: const Text(
+                          "I certify that the information provided in this form is true, accurate, and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of this application or termination of membership.",
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ),
+
+                      const SizedBox(height: 30),
+
                       const SizedBox(height: 24),
 
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primarycolor,
-                          foregroundColor: AppColors.white,
-                          // padding: const EdgeInsets.symmetric(vertical: 14),
-                        ),
-                        onPressed: () {
-                          if (microchipNumberCtrl.text.isEmpty) {
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text('MicroChip number enter'),
-                                backgroundColor: AppColors.warningOrange, // Red for errors
-                                behavior: SnackBarBehavior.floating, // Modern floating look
-                                duration: Duration(seconds: 3),
-                                action: SnackBarAction(
-                                  label: 'RETRY',
-                                  textColor: Colors.white,
-                                  onPressed: () => microchipNumberCtrl.clear(),
+                      SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primarycolor,
+                            foregroundColor: AppColors.white,
+                            // padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: isCheckboxChecked && isCheckboxCheckedsecond
+                        ? () {
+                            if (microchipNumberCtrl.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('MicroChip number enter'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => microchipNumberCtrl.clear(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          } else if (implementedBy == "null") {
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text('Select Implemented By'),
-                                backgroundColor: AppColors.warningOrange, // Red for errors
-                                behavior: SnackBarBehavior.floating, // Modern floating look
-                                duration: Duration(seconds: 3),
-                                // action: SnackBarAction(
-                                //   label: 'RETRY',
-                                //   textColor: Colors.white,
-                                //   onPressed: () => petNameController.clear(),
-                                // ),
-                              ),
-                            );
-                          } else if (implementerNameCtrl.text.isEmpty) {
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text('Implemented name enter'),
-                                backgroundColor: AppColors.warningOrange, // Red for errors
-                                behavior: SnackBarBehavior.floating, // Modern floating look
-                                duration: Duration(seconds: 3),
-                                action: SnackBarAction(
-                                  label: 'RETRY',
-                                  textColor: Colors.white,
-                                  onPressed: () => implementerNameCtrl.clear(),
+                              );
+                            } else if (implementedBy == "null") {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Select Implemented By'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  // action: SnackBarAction(
+                                  //   label: 'RETRY',
+                                  //   textColor: Colors.white,
+                                  //   onPressed: () => petNameController.clear(),
+                                  // ),
                                 ),
-                              ),
-                            );
-                          } else if (mobileCtrl.text.isEmpty) {
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text('Number enter'),
-                                backgroundColor: AppColors.warningOrange, // Red for errors
-                                behavior: SnackBarBehavior.floating, // Modern floating look
-                                duration: Duration(seconds: 3),
-                                action: SnackBarAction(
-                                  label: 'RETRY',
-                                  textColor: Colors.white,
-                                  onPressed: () => mobileCtrl.clear(),
+                              );
+                            } else if (implementerNameCtrl.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Implemented name enter'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => implementerNameCtrl.clear(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          } else if (dateCtrl.text.isEmpty) {
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text('Implemented date enter'),
-                                backgroundColor: AppColors.warningOrange, // Red for errors
-                                behavior: SnackBarBehavior.floating, // Modern floating look
-                                duration: Duration(seconds: 3),
-                                action: SnackBarAction(
-                                  label: 'RETRY',
-                                  textColor: Colors.white,
-                                  onPressed: () => dateCtrl.clear(),
+                              );
+                            } else if (mobileCtrl.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Number enter'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => mobileCtrl.clear(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          } else if (certificateFile.toString() == "null") {
-                            scaffoldMessenger.showSnackBar(
-                              SnackBar(
-                                content: Text('Select doc'),
-                                backgroundColor: AppColors.warningOrange, // Red for errors
-                                behavior: SnackBarBehavior.floating, // Modern floating look
-                                duration: Duration(seconds: 3),
-                                // action: SnackBarAction(
-                                //   label: 'RETRY',
-                                //   textColor: Colors.white,
-                                //   onPressed: () => petNameController.clear(),
-                                // ),
-                              ),
-                            );
-                          } else {
-                            // scaffoldMessenger.showSnackBar(
-                            //   SnackBar(
-                            //     content: Text(
-                            //       'Unhandled Exception: type MultipartFile is not a subtype of type String in type cast',
-                            //     ),
-                            //     backgroundColor: AppColors.warningOrange, // Red for errors
-                            //     behavior: SnackBarBehavior.floating, // Modern floating look
-                            //     duration: Duration(seconds: 3),
-                            //     // action: SnackBarAction(
-                            //     //   label: 'RETRY',
-                            //     //   textColor: Colors.white,
-                            //     //   onPressed: () => petNameController.clear(),
-                            //     // ),
-                            //   ),
-                            // );
-                            submitForm();
+                              );
+                            } else if (dateCtrl.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Implemented date enter'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => dateCtrl.clear(),
+                                  ),
+                                ),
+                              );
+                            } else if (certificateFile.toString() == "null") {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Select doc'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  // action: SnackBarAction(
+                                  //   label: 'RETRY',
+                                  //   textColor: Colors.white,
+                                  //   onPressed: () => petNameController.clear(),
+                                  // ),
+                                ),
+                              );
+                            } else {
+                              // scaffoldMessenger.showSnackBar(
+                              //   SnackBar(
+                              //     content: Text(
+                              //       'Unhandled Exception: type MultipartFile is not a subtype of type String in type cast',
+                              //     ),
+                              //     backgroundColor: AppColors.warningOrange, // Red for errors
+                              //     behavior: SnackBarBehavior.floating, // Modern floating look
+                              //     duration: Duration(seconds: 3),
+                              //     // action: SnackBarAction(
+                              //     //   label: 'RETRY',
+                              //     //   textColor: Colors.white,
+                              //     //   onPressed: () => petNameController.clear(),
+                              //     // ),
+                              //   ),
+                              // );
+                              submitForm();
+                            }
                           }
-                        },
-                        child: const Text("SUBMIT", style: TextStyle(fontWeight: FontWeight.bold)),
+                       : null,
+                          child: const Text("SUBMIT", style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
                       ),
                     ],
                   ),

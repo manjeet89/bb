@@ -6,7 +6,11 @@ import 'package:bb/Navigation/navigationScreen.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
 import 'package:bb/PetInfo/petCategoryScreen.dart';
 import 'package:bb/PetInfo/petDetails.dart';
+import 'package:bb/PetInfo/petHealthInfo.dart';
+import 'package:bb/PetInfo/petMedications.dart';
 import 'package:bb/PetInfo/petMicroChipForm.dart';
+import 'package:bb/PetInfo/petVaccinationDetails.dart';
+import 'package:bb/PetInfo/petVeterinarianInfo.dart';
 import 'package:bb/SosSCreen.dart';
 import 'package:bb/Splash/splashScreen.dart';
 import 'package:bb/UpdateProfile.dart';
@@ -52,6 +56,10 @@ void main() async {
         '/petmicrochip': (context) => MicrochipForm(),
         '/sos': (context) => Sosscreen(),
         '/petCategoryScreen': (context) => Petcategoryscreen(),
+        '/petHealthinfo': (context) => Pethealthinfo(),
+        '/petvaccinationdetails': (context) => Petvaccinationdetails(),
+        '/petmedications': (context) => Petmedications(),
+        '/petveterinarianinfo': (context) => Petveterinarianinfo(),
       },
       debugShowCheckedModeBanner: false,
       navigatorObservers: [observer],

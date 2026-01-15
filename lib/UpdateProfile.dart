@@ -34,6 +34,8 @@ class _UpdateprofileState extends State<Updateprofile> {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController pincodeController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
+  final TextEditingController organizationNameController =
+      TextEditingController(); // Controller for organization name
 
   var FirstName = "";
   var LastName = "";
@@ -50,6 +52,7 @@ class _UpdateprofileState extends State<Updateprofile> {
   var Pincode = "";
   var ImageGet = "";
   String selectedGender = "Male";
+  String selectedUserType = "Individual"; // State for user type
 
   @override
   void initState() {
@@ -435,6 +438,27 @@ class _UpdateprofileState extends State<Updateprofile> {
                 ),
 
                 const SizedBox(height: 18),
+                // Organization and Normal
+                _label("User Type"),
+                Row(
+                  children: [
+                    _userTypeButton("Individual"),
+                    const SizedBox(width: 10),
+                    _userTypeButton("Organization"),
+                  ],
+                ),
+
+                if (selectedUserType == "Organization") ...[
+                  const SizedBox(height: 18),
+                  _label("Organization Name"),
+                  _inputField(
+                    controller: organizationNameController,
+                    hint: "Enter organization name",
+                    icon: Icons.business,
+                  ),
+                ],
+
+                const SizedBox(height: 18),
 
                 /// 📅 DATE OF BIRTH
                 _label("Date of Birth"),
@@ -452,7 +476,8 @@ class _UpdateprofileState extends State<Updateprofile> {
                     );
 
                     if (picked != null) {
-                      dobController.text = "${picked.year}-${picked.month}-${picked.day}";
+                      dobController.text =
+                          "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
                     }
                   },
                 ),
@@ -826,6 +851,44 @@ class _UpdateprofileState extends State<Updateprofile> {
               const SizedBox(width: 6),
               Text(
                 gender,
+                style: TextStyle(
+                  color: isSelected ? AppColors.white : AppColors.primarycolor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _userTypeButton(String type) {
+    final bool isSelected = selectedUserType == type;
+
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedUserType = type;
+          });
+        },
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primarycolor : AppColors.white.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                type == "Organization" ? Icons.business : Icons.person,
+                color: isSelected ? AppColors.white : AppColors.secondrycolor.withOpacity(0.8),
+              ),
+              const SizedBox(width: 6),
+              Text(
+                type,
                 style: TextStyle(
                   color: isSelected ? AppColors.white : AppColors.primarycolor,
                   fontWeight: FontWeight.bold,
