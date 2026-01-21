@@ -39,7 +39,7 @@ class _PetListScreenState extends State<PetListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgrounLightGrey,
+      backgroundColor: const Color.fromARGB(255, 245, 245, 247),
       appBar: AppBar(
         backgroundColor: AppColors.primarycolor,
         title: const Text(
@@ -99,12 +99,16 @@ class _PetListScreenState extends State<PetListScreen> {
                   final pets = snapshot.data!;
 
                   return ListView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(8),
                     itemCount: pets.length,
                     itemBuilder: (context, index) {
                       final pet = pets[index];
                       List reqnumber = pet.petBirthDate.toString().split(" ");
                       String req = reqnumber[0];
+                      String image = pet.petImage.toString();
+                      if (image == "null") {
+                        image = "null";
+                      }
 
                       return GestureDetector(
                         onTap: () {
@@ -112,7 +116,7 @@ class _PetListScreenState extends State<PetListScreen> {
                         },
                         child: Container(
                           // color: AppColors.backgrounLightGrey,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
 
                           // decoration: BoxDecoration(
                           //   gradient: const LinearGradient(
@@ -133,29 +137,45 @@ class _PetListScreenState extends State<PetListScreen> {
                           //   ],
                           // ),
                           decoration: BoxDecoration(
-                            color: AppColors.border,
-
-                            // gradient: const LinearGradient(
-                            //   colors: [
-                            //     Color(0xff7A0000), // Dark blood red (LEFT)
-                            //     Color(0xffC62828), // Medium red
-                            //     Color(0xffFF6F6F), // Light red (RIGHT)
-                            //   ],
-                            //   begin: Alignment.centerLeft,
-                            //   end: Alignment.centerRight,
-                            // ),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.secondrycolor.withOpacity(0.4),
-
-                                // color: Colors.redAccent.withOpacity(0.4),
+                                color: AppColors.secondrycolor.withOpacity(0.2),
                                 blurRadius: 10,
-                                offset: const Offset(0, 6),
+                                offset: const Offset(1, 2),
                               ),
                             ],
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 255, 255, 255),
+                                Color.fromARGB(255, 255, 255, 255),
+                              ],
+                            ),
                           ),
 
+                          // decoration: BoxDecoration(
+                          //   color: AppColors.border,
+
+                          //   // gradient: const LinearGradient(
+                          //   //   colors: [
+                          //   //     Color(0xff7A0000), // Dark blood red (LEFT)
+                          //   //     Color(0xffC62828), // Medium red
+                          //   //     Color(0xffFF6F6F), // Light red (RIGHT)
+                          //   //   ],
+                          //   //   begin: Alignment.centerLeft,
+                          //   //   end: Alignment.centerRight,
+                          //   // ),
+                          //   borderRadius: BorderRadius.circular(20),
+                          //   boxShadow: [
+                          //     BoxShadow(
+                          //       color: AppColors.secondrycolor.withOpacity(0.4),
+
+                          //       // color: Colors.redAccent.withOpacity(0.4),
+                          //       blurRadius: 10,
+                          //       offset: const Offset(0, 6),
+                          //     ),
+                          //   ],
+                          // ),
                           child: Padding(
                             padding: const EdgeInsets.all(14),
                             child: Row(
@@ -168,12 +188,12 @@ class _PetListScreenState extends State<PetListScreen> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: CircleAvatar(
-                                    radius: 34,
-                                    backgroundImage: pet.petImage!.isNotEmpty
-                                        ? NetworkImage(
+                                    radius: 25,
+                                    backgroundImage: image == "null" || image == ""
+                                        ? AssetImage("assest/bblogo.png") as ImageProvider
+                                        : NetworkImage(
                                             "https://pashuraktkosh.lyferp.com/${pet.petImage}",
-                                          )
-                                        : const AssetImage("assest/bblogo.png") as ImageProvider,
+                                          ),
                                   ),
                                 ),
 
@@ -188,7 +208,7 @@ class _PetListScreenState extends State<PetListScreen> {
                                         children: [
                                           const Icon(
                                             Icons.bloodtype,
-                                            color: AppColors.secondrycolor,
+                                            color: AppColors.successGreen,
                                             size: 18,
                                           ),
                                           const SizedBox(width: 6),
@@ -222,14 +242,15 @@ class _PetListScreenState extends State<PetListScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Text(
-                                        "${pet.countryBredIn}",
-                                        style: const TextStyle(
-                                          color: AppColors.fontGrey,
+                                      if (pet.countryBredIn.toString() != "null")
+                                        Text(
+                                          "${pet.countryBredIn}",
+                                          style: const TextStyle(
+                                            color: AppColors.fontGrey,
 
-                                          fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -250,7 +271,7 @@ class _PetListScreenState extends State<PetListScreen> {
                                     ),
                                     child: const Icon(
                                       Icons.arrow_forward_ios,
-                                      color: AppColors.primarycolor,
+                                      color: AppColors.successGreen,
                                       size: 16,
                                     ),
                                   ),

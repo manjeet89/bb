@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:bb/AddressModule/Country/CountryModel.dart';
 import 'package:bb/AddressModule/Country/CountryWidget.dart';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Breed/BreedModel.dart';
+import 'package:bb/Breed/Breedwidget.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class PetFormScreen extends StatefulWidget {
 class _PetFormScreenState extends State<PetFormScreen> {
   final TextEditingController petNameController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
+  final TextEditingController weightController = TextEditingController();
 
   String selectedGender = "Male";
   String selectedCountry = "India";
@@ -29,6 +32,9 @@ class _PetFormScreenState extends State<PetFormScreen> {
 
   CountryDropDownModel? selecteCountry;
   String? selectCountryId;
+
+  BreedModel? selectebreed;
+  String? selectbreedId;
 
   File? _croppedImage;
 
@@ -78,6 +84,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
   @override
   Widget build(BuildContext context) {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final Object? petIds = ModalRoute.of(context)!.settings.arguments;
+
     // const Color darkRed = Color(0xff7A0000);
     // const Color lightRed = Color(0xffFF6F6F);
 
@@ -184,7 +192,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
                     );
 
                     if (picked != null) {
-                      dobController.text = "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+                      dobController.text =
+                          "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
                     }
                   },
                 ),
@@ -230,7 +239,58 @@ class _PetFormScreenState extends State<PetFormScreen> {
                   //   ),
                   // ),
                 ),
+                const SizedBox(height: 18),
 
+                /// 🌍 COUNTRY DROPDOWN
+                _label("Breed"),
+                Container(
+                  // padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Breedwidget(
+                    selectedLocation: selectebreed,
+                    spidiesId: petIds.toString(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectebreed = value;
+                        selectbreedId = value!.breedId.toString();
+                      });
+
+                      // You can access both ID and name here
+                      if (value != null) {
+                        print("Location ID: ${value.breedId}");
+                        print("Location Name: ${value.breedName}");
+                      }
+                    },
+                  ),
+                  // DropdownButtonHideUnderline(
+                  //   child: DropdownButton<String>(
+                  //     value: selectedCountry,
+                  //     icon: const Icon(Icons.arrow_drop_down),
+                  //     isExpanded: true,
+                  //     items: countries.map((country) {
+                  //       return DropdownMenuItem(value: country, child: Text(country));
+                  //     }).toList(),
+                  //     onChanged: (value) {
+                  //       setState(() {
+                  //         selectedCountry = value!;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
+                ),
+
+                const SizedBox(height: 18),
+
+                /// 🐾 PET NAME
+                _label("Pet Weight"),
+                _inputField(
+                  controller: weightController,
+                  hint: "Enter weight",
+                  icon: Icons.monitor_weight,
+                ),
                 const SizedBox(height: 18),
 
                 /// Checkbox with text
@@ -310,13 +370,38 @@ class _PetFormScreenState extends State<PetFormScreen> {
                                   ),
                                 ),
                               );
-                            } else if (selectCountryId.toString() == "null") {
+                            }
+                            else if (selectCountryId.toString() == "null") {
                               scaffoldMessenger.showSnackBar(
                                 SnackBar(
                                   content: Text('Select country'),
                                   backgroundColor: Colors.redAccent, // Red for errors
                                   behavior: SnackBarBehavior.floating, // Modern floating look
                                   duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                            else if (selectbreedId.toString() == "null") {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Select breed'),
+                                  backgroundColor: Colors.redAccent, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            } else if (weightController.text.isEmpty) {
+                              scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Pet weight'),
+                                  backgroundColor: Colors.redAccent, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: 'RETRY',
+                                    textColor: Colors.white,
+                                    onPressed: () => petNameController.clear(),
+                                  ),
                                 ),
                               );
                             } else {
@@ -422,6 +507,11 @@ class _PetFormScreenState extends State<PetFormScreen> {
     var url = allapiscreen.petadd.toString();
     var Header = await allapiscreen.headerFunction();
 
+    List dateof = dobController.text.toString().split("-");
+    String day = dateof[0];
+    String month = dateof[1];
+    String year = dateof[2];
+
     Dio dio = Dio();
     DateTime now = DateTime.now();
     print(_croppedImage.toString());
@@ -434,10 +524,12 @@ class _PetFormScreenState extends State<PetFormScreen> {
         ),
       "pet_name": petNameController.text,
       "pet_gender": selectedGender == "Male" ? "1" : "0",
-      "pet_birth_date": dobController.text,
+      "pet_birth_date": year + "-" + month + "-" + day,
       "country_bred_in": selectedCountry,
+      "pet_breed_id": selectbreedId,
 
       "pet_category_id": petId,
+      "pet_weight_in_kg": weightController.text.toString(),
     });
 
     Response response = await dio.post(

@@ -51,7 +51,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
             },
             label: Text(petinfo, style: TextStyle(color: Colors.white)),
             // icon: Icon(Icons.add, color: Colors.white),
-            backgroundColor: showOptions != true ? AppColors.primarycolor : AppColors.darkRed,
+            backgroundColor: showOptions != true ? AppColors.successGreen : AppColors.darkRed,
           ),
           SizedBox(height: 16.0),
           Visibility(
@@ -152,6 +152,20 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                         ],
                       ),
                     ),
+                    SizedBox(width: 16.0),
+                    FloatingActionButton.extended(
+                      backgroundColor: AppColors.white,
+                      onPressed: () {
+                        navigatorKey.currentState?.pushNamed('/petWeightupdate', arguments: pet);
+                        // Add your action for Option 1
+                      },
+                      tooltip: 'Weight Update',
+                      label: Row(
+                        children: [
+                          Text("Weight Update", style: TextStyle(color: AppColors.successGreen)),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 SizedBox(height: 16.0),
@@ -242,7 +256,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
             /// 🔴 HEADER
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10),
               color: AppColors.primarycolor,
               // decoration: const BoxDecoration(
               //   gradient: LinearGradient(
@@ -253,15 +267,16 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               // ),
               child: Column(
                 children: [
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 40),
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.white,
-                    backgroundImage: pet.petImage!.isNotEmpty
+                    backgroundImage: pet.petImage.toString() != "null"
                         ? NetworkImage("https://pashuraktkosh.lyferp.com/${pet.petImage}")
                         : const AssetImage("assets/pet.png") as ImageProvider,
                   ),
                   const SizedBox(height: 12),
+                  // Divider(),
                   Text(
                     pet.petName.toString(),
                     style: const TextStyle(
@@ -276,12 +291,12 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
 
             /// 📄 DETAILS CARD
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(8),
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: AppColors.dividerGrey,
-                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(8),
                   boxShadow: const [
                     BoxShadow(color: AppColors.secondrycolor, blurRadius: 8, offset: Offset(0, 4)),
                   ],
@@ -289,12 +304,19 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 child: Column(
                   children: [
                     _detailRow(
-                      "Pet ID",
+                      "Pet ID :",
                       pet.petBirthDate.toString().replaceAll("-", "") + pet.petId.toString(),
                     ),
-                    _detailRow("Gender", pet.petGender.toString() == "1" ? "Male" : "Female"),
+                    Divider(),
+                    _detailRow("Gender :", pet.petGender.toString() == "1" ? "Male" : "Female"),
+                    Divider(),
+
+                    if (pet.petWeightInKg.toString() != "null")
+                      _detailRow("Weight :", pet.petWeightInKg.toString() + " KG"),
+                    Divider(),
+
                     _detailRow(
-                      "Date of Birth",
+                      "Date of Birth :",
                       formattedDate,
 
                       // days + "-" + month + "-" + year
@@ -302,7 +324,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       //   'dd-MMMM-yyyy',
                       // ).format(DateTime.parse(pet.petBirthDate.toString())).toString(),
                     ),
-                    _detailRow("Country", pet.countryBredIn.toString()),
+                    Divider(),
+
+                    if (pet.countryBredIn.toString() != "null")
+                      _detailRow("Country :", pet.countryBredIn.toString()),
                   ],
                 ),
               ),
@@ -319,11 +344,14 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       child: Row(
         children: [
           Expanded(
-            child: Text(title, style: const TextStyle(color: AppColors.fontGrey)),
+            child: Text(
+              title,
+              style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
+            ),
           ),
           Text(
             value.isNotEmpty ? value : "-",
-            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primarycolor),
+            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondrycolor),
           ),
         ],
       ),

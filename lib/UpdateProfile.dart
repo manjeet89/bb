@@ -262,6 +262,11 @@ class _UpdateprofileState extends State<Updateprofile> {
     var url = allapiscreen.userupdate.toString();
     var Header = await allapiscreen.headerFunction();
 
+    List dateof = dobController.text.toString().split("-");
+    String day = dateof[0];
+    String month = dateof[1];
+    String year = dateof[2];
+
     Dio dio = Dio();
     DateTime now = DateTime.now();
     print(_croppedImage.toString());
@@ -276,7 +281,7 @@ class _UpdateprofileState extends State<Updateprofile> {
       "user_last_name": lastnameController.text,
       "user_email_id": emailController.text,
       "user_gender": selectedGender == "Male" ? "1" : "0",
-      "user_date_of_birth": dobController.text,
+      "user_date_of_birth": year + "-" + month + "-" + day,
       "user_blood_group": selectBloodGroupId,
       "user_country": selectCountryId,
       "user_state": selectStateId,

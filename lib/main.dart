@@ -4,9 +4,11 @@ import 'package:bb/Credential/loginScreen.dart';
 import 'package:bb/Credential/otpScreen.dart';
 import 'package:bb/Navigation/navigationScreen.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
+import 'package:bb/PetInfo/WeightUpdate.dart';
 import 'package:bb/PetInfo/petCategoryScreen.dart';
 import 'package:bb/PetInfo/petDetails.dart';
 import 'package:bb/PetInfo/petHealthInfo.dart';
+import 'package:bb/PetInfo/petListScreen.dart';
 import 'package:bb/PetInfo/petMedications.dart';
 import 'package:bb/PetInfo/petMicroChipForm.dart';
 import 'package:bb/PetInfo/petVaccinationDetails.dart';
@@ -50,6 +52,7 @@ void main() async {
         '/home': (context) => NavigationBarApp(),
         '/profile': (context) => Userprofile(),
         '/petRegistration': (context) => PetFormScreen(),
+        '/petList': (context) => PetListScreen(),
         '/userRegistration': (context) => Updateprofile(),
         '/petDetails': (context) => PetDetailScreen(),
         '/petCategory': (context) => AnimalCategoryScreen(),
@@ -60,6 +63,7 @@ void main() async {
         '/petvaccinationdetails': (context) => Petvaccinationdetails(),
         '/petmedications': (context) => Petmedications(),
         '/petveterinarianinfo': (context) => Petveterinarianinfo(),
+        '/petWeightupdate': (context) => Weightupdate(),
       },
       debugShowCheckedModeBanner: false,
       navigatorObservers: [observer],

@@ -8,14 +8,14 @@ class AnimalCategoryScreen extends StatelessWidget {
   AnimalCategoryScreen({super.key});
 
   final List<AnimalCategory> categories = [
-    AnimalCategory(name: "Cat", image: Image.asset('assest/petcat.png')),
-    AnimalCategory(name: "Dog", image: Image.asset('assest/petdog.png')),
-    AnimalCategory(name: "Horse", image: Image.asset('assest/pethorse.png')),
-    AnimalCategory(name: "Hamster", image: Image.asset('assest/pethamster.png')),
-    AnimalCategory(name: "Bird", image: Image.asset('assest/petbird.png')),
-    AnimalCategory(name: "Pony", image: Image.asset('assest/petpony.png')),
-    AnimalCategory(name: "Guinea Pig", image: Image.asset('assest/petguinee.png')),
-    AnimalCategory(name: "Cattle", image: Image.asset('assest/petcattle.png')),
+    // AnimalCategory(name: "Cat", image: Image.asset('assest/petcat.png'),category_id: "2"),
+    // AnimalCategory(name: "Dog", image: Image.asset('assest/petdog.png'),category_id: "1"),
+    // AnimalCategory(name: "Horse", image: Image.asset('assest/pethorse.png')),
+    // AnimalCategory(name: "Hamster", image: Image.asset('assest/pethamster.png')),
+    // AnimalCategory(name: "Bird", image: Image.asset('assest/petbird.png')),
+    // AnimalCategory(name: "Pony", image: Image.asset('assest/petpony.png')),
+    // AnimalCategory(name: "Guinea Pig", image: Image.asset('assest/petguinee.png')),
+    // AnimalCategory(name: "Cattle", image: Image.asset('assest/petcattle.png')),
 
     // AnimalCategory(name: "Dog", icon: FontAwesomeIcons.dog),
     // AnimalCategory(name: "Horse", icon: FontAwesomeIcons.house),

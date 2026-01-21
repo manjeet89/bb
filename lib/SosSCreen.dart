@@ -1,3 +1,9 @@
+import 'package:bb/AddressModule/Country/CountryModel.dart';
+import 'package:bb/AddressModule/Country/CountryWidget.dart';
+import 'package:bb/AddressModule/District/DistricModel.dart';
+import 'package:bb/AddressModule/District/DistrictWidget.dart';
+import 'package:bb/AddressModule/State/StateModel.dart';
+import 'package:bb/AddressModule/State/StateWidget.dart';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/PetInfo/PetListController.dart';
 import 'package:bb/PetInfo/petListModel.dart';
@@ -17,7 +23,7 @@ class Sosscreen extends StatefulWidget {
 }
 
 class _SosscreenState extends State<Sosscreen> {
-  String selectedGender = "Male";
+  String selectedGender = "Manual Address";
   String selectedUserType = "Individual"; // State for user type
   bool isCheckboxCheckedsecond = false; // Track checkbox state
   bool isCheckboxCheckedFVRCP = false;
@@ -25,6 +31,13 @@ class _SosscreenState extends State<Sosscreen> {
   bool isCheckboxCheckedNotSure = false;
   bool isCheckboxCheckedFeLV = false;
   bool isCheckboxCheckedChlamydia = false;
+
+  final TextEditingController countryCtrl = TextEditingController();
+  final TextEditingController stateCtrl = TextEditingController();
+  final TextEditingController districtCtrl = TextEditingController();
+  final TextEditingController pincodeCtrl = TextEditingController();
+
+  bool progressindication = false;
 
   @override
   void initState() {
@@ -50,7 +63,16 @@ class _SosscreenState extends State<Sosscreen> {
     // });
   }
 
-  void submitForm(String petId, String digipin, String lat, String lng) async {
+  void submitForm(
+    String petId,
+    String digipin,
+    String lat,
+    String lng,
+    String countid,
+    String stateId,
+    String distid,
+    String pincode,
+  ) async {
     // if (_formKey.currentState!.validate() && certificateFile != null) {
     //   final data = {
     //     "microchip_number": microchipNumberCtrl.text,
@@ -76,6 +98,10 @@ class _SosscreenState extends State<Sosscreen> {
       "req_digipin": digipin.toString(),
       "req_latitude": lat.toString(),
       "req_longtitude": lng.toString(),
+      "user_country_id": countid.toString(),
+      "user_state_id": stateId.toString(),
+      "user_district_id": distid.toString(),
+      "user_pin_code": pincode.toString(),
     });
 
     Response response = await dio.post(
@@ -206,12 +232,16 @@ class _SosscreenState extends State<Sosscreen> {
                   final pets = snapshot.data!;
 
                   return ListView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(8),
                     itemCount: pets.length,
                     itemBuilder: (context, index) {
                       final pet = pets[index];
                       List reqnumber = pet.petBirthDate.toString().split(" ");
                       String req = reqnumber[0];
+                      String image = pet.petImage.toString();
+                      if (image == "null") {
+                        image = "null";
+                      }
 
                       return InkWell(
                         onTap: () async {
@@ -357,6 +387,11 @@ class _SosscreenState extends State<Sosscreen> {
                                           context,
                                           pet.petName.toString(),
                                         ); // _showLocationDialog(context); // open second dialog
+
+                                        // _askingcurrentLocationDialog(
+                                        //   context,
+                                        //   pet.petName.toString(),
+                                        // ); // open second dialog
                                       },
                                       child: Text(
                                         'Already form filled',
@@ -395,7 +430,7 @@ class _SosscreenState extends State<Sosscreen> {
                           // submitForm(pet.petId.toString(), digi, lat, lng);
                         },
                         child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
 
                           // decoration: BoxDecoration(
                           //   gradient: const LinearGradient(
@@ -416,7 +451,7 @@ class _SosscreenState extends State<Sosscreen> {
                           //   ],
                           // ),
                           decoration: BoxDecoration(
-                            color: AppColors.backgrounLightGrey,
+                            color: AppColors.white,
                             // gradient: const LinearGradient(
                             //   colors: [
                             //     Color(0xff7A0000), // Dark blood red (LEFT)
@@ -426,7 +461,7 @@ class _SosscreenState extends State<Sosscreen> {
                             //   begin: Alignment.centerLeft,
                             //   end: Alignment.centerRight,
                             // ),
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(8),
                             boxShadow: [
                               BoxShadow(
                                 color: AppColors.secondrycolor.withOpacity(0.4),
@@ -448,12 +483,12 @@ class _SosscreenState extends State<Sosscreen> {
                                     shape: BoxShape.circle,
                                   ),
                                   child: CircleAvatar(
-                                    radius: 34,
-                                    backgroundImage: pet.petImage!.isNotEmpty
-                                        ? NetworkImage(
+                                    radius: 30,
+                                    backgroundImage: image == "null"
+                                        ? AssetImage("assest/bblogo.png") as ImageProvider
+                                        : NetworkImage(
                                             "https://pashuraktkosh.lyferp.com/${pet.petImage}",
-                                          )
-                                        : const AssetImage("assest/bblogo.png") as ImageProvider,
+                                          ),
                                   ),
                                 ),
 
@@ -499,13 +534,14 @@ class _SosscreenState extends State<Sosscreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Text(
-                                        "${pet.countryBredIn}",
-                                        style: const TextStyle(
-                                          color: AppColors.fontGrey,
-                                          fontWeight: FontWeight.bold,
+                                      if (pet.countryBredIn.toString() != "null")
+                                        Text(
+                                          "${pet.countryBredIn}",
+                                          style: const TextStyle(
+                                            color: AppColors.fontGrey,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -513,13 +549,13 @@ class _SosscreenState extends State<Sosscreen> {
                                 // ➡️ Action Icon
                                 GestureDetector(
                                   onTap: () async {
-                                    String digiPin = await _listenLocation();
-                                    List divi = digiPin.split("/");
-                                    String digi = divi[0];
-                                    String lat = divi[1];
-                                    String lng = divi[2];
+                                    // String digiPin = await _listenLocation();
+                                    // List divi = digiPin.split("/");
+                                    // String digi = divi[0];
+                                    // String lat = divi[1];
+                                    // String lng = divi[2];
                                     print("get digipin" + digiPin);
-                                    submitForm(pet.petId.toString(), digi, lat, lng);
+                                    // submitForm(pet.petId.toString(), digi, lat, lng);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
@@ -580,6 +616,47 @@ class _SosscreenState extends State<Sosscreen> {
     );
   }
 
+  Widget _genderButton(
+    String gender,
+    IconData icon,
+    String selectedGender,
+    Function(String) onSelected,
+  ) {
+    final bool isSelected = selectedGender == gender;
+
+    return GestureDetector(
+      onTap: () {
+        onSelected(gender); // ✅ dialog setState
+      },
+      child: Container(
+        height: 48,
+        margin: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.successGreen : AppColors.white.withOpacity(0.7),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? AppColors.white : AppColors.primarycolor.withOpacity(0.3),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              gender,
+              style: TextStyle(
+                fontSize: 12,
+                color: isSelected ? AppColors.white : AppColors.primarycolor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _showLocationDialog(BuildContext context, String name) {
     showDialog(
       context: context,
@@ -615,6 +692,7 @@ class _SosscreenState extends State<Sosscreen> {
           ),
           TextButton(
             onPressed: () {
+              _askingcurrentLocationDialog(context, name); // open second dialog
               Navigator.pop(context); // close first dialog
               // _showLocationDialog(context); // open second dialog
             },
@@ -632,6 +710,420 @@ class _SosscreenState extends State<Sosscreen> {
         //     label: Text('Use Digipin', style: TextStyle(color: AppColors.white)),
         //   ),
         // ],
+      ),
+    );
+  }
+
+  void _askingcurrentLocationDialog(BuildContext context, String name) {
+    String selectedOption = "Use Digipin";
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, dialogSetState) {
+          return AlertDialog(
+            backgroundColor: AppColors.primarycolor,
+
+            title: Column(
+              children: [
+                Icon(Icons.location_on, color: AppColors.successGreen),
+                const SizedBox(height: 8),
+                Text('Location of $name', style: TextStyle(color: AppColors.white)),
+              ],
+            ),
+
+            /// ✅ FULL WIDTH CONTENT
+            content: SizedBox(
+              width: double.maxFinite, // ⭐ KEY LINE
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 10),
+
+                  Column(
+                    children: [
+                      _genderButton("Use Digipin", Icons.qr_code, selectedOption, (value) {
+                        dialogSetState(() {
+                          selectedOption = value;
+                        });
+                      }),
+                      const SizedBox(width: 10),
+                      _genderButton("Manual Address", Icons.edit_location, selectedOption, (value) {
+                        dialogSetState(() {
+                          selectedOption = value;
+                          _manulaLocationDialog(context, name);
+                        });
+                      }),
+                    ],
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  Text(
+                    'Please provide the current location where $name is located.',
+                    style: TextStyle(color: AppColors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel', style: TextStyle(color: AppColors.darkRed)),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, selectedOption);
+                  if ("Use Digipin" == selectedOption) {
+                    String digiPin = await _listenLocation();
+                    List divi = digiPin.split("/");
+                    String digi = divi[0];
+                    String lat = divi[1];
+                    String lng = divi[2];
+                    print("get digipin" + digiPin);
+                    setState(() {
+                      submitForm(name.toString(), digi, lat, lng, "", "", "", "");
+                    });
+                  } else {
+                    print("object");
+                  }
+                  print(selectedOption);
+                  // Navigator.pop(context, selectedOption);
+                },
+                child: Text('Proceed', style: TextStyle(color: AppColors.successGreen)),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+  // void _manulaLocationDialog(BuildContext context, String name) {
+  //   CountryDropDownModel? selecteCountry;
+  //   String? selectCountryId;
+  //   StateModel? selecteState;
+  //  String? selectStateId;
+  //   DistrictModelDropDown? selecteDistrict;
+  //   String? selectDistrictId;
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) => StatefulBuilder(
+  //       builder: (context, dialogSetState) {
+  //         return AlertDialog(
+  //           content: SizedBox(
+  //             width: double.maxFinite,
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 /// 🌍 COUNTRY DROPDOWN
+  //                 _label("Country"),
+  //                 Container(
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.white,
+  //                     borderRadius: BorderRadius.circular(14),
+  //                   ),
+  //                   child: Countrywidget(
+  //                     selectedLocation: selecteCountry,
+  //                     onChanged: (value) {
+  //                       dialogSetState(() {
+  //                         selecteCountry = value;
+  //                         selectCountryId = value?.countryId;
+  //                         // ✅ reset dependent dropdowns
+  //                         selecteState = null;
+  //                         selectStateId = null;
+  //                         selecteDistrict = null;
+  //                         selectDistrictId = null;
+  //                      });
+  //                       if (value != null) {
+  //                         print("Country ID: ${value.countryId}");
+  //                         print("Country Name: ${value.countryName}");
+  //                       }
+  //                     },
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 12),
+  //                 /// 🏙 STATE DROPDOWN
+  //                 if (selectCountryId != null)
+  //                   Statewidget(
+  //                     categoryId: selectCountryId!,
+  //                     selectedLocation: selecteState,
+  //                     onChanged: (value) {
+  //                       dialogSetState(() {
+  //                         selecteState = value;
+  //                         selectStateId = value?.stateId;
+  //                         selecteDistrict = null;
+  //                         selectDistrictId = null;
+  //                       });
+  //                     },
+  //                  ),
+  //                 const SizedBox(height: 12),
+  //                 /// 🏘 DISTRICT DROPDOWN
+  //                 if (selectStateId != null)
+  //                   Districtwidget(
+  //                     categoryId: selectStateId!,
+  //                     selectedLocation: selecteDistrict,
+  //                     onChanged: (value) {
+  //                       dialogSetState(() {
+  //                         selecteDistrict = value;
+  //                         selectDistrictId = value?.districtId;
+  //                       });
+  //                     },
+  //                   ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
+  void _manulaLocationDialog(BuildContext context, String name) {
+    CountryDropDownModel? selecteCountry;
+    StateModel? selecteState;
+    DistrictModelDropDown? selecteDistrict;
+
+    String? countid;
+    String? distid;
+    String? stateid;
+
+    bool showForm = false; // 🔑 step switch
+
+    final countryCtrl = TextEditingController();
+    final stateCtrl = TextEditingController();
+    final districtCtrl = TextEditingController();
+    final pincodeCtrl = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, dialogSetState) {
+          return AlertDialog(
+            backgroundColor: AppColors.primarycolor,
+            title: Text(
+              showForm ? 'Confirm Location' : 'Select Location',
+              style: TextStyle(color: AppColors.white),
+            ),
+
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  /// ================= STEP 1 =================
+                  if (!showForm) ...[
+                    _label("Country"),
+                    Container(
+                      // padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.white),
+                      ),
+                      child: Countrywidget(
+                        selectedLocation: selecteCountry,
+                        onChanged: (value) {
+                          dialogSetState(() {
+                            selecteCountry = value;
+                            countid = selecteCountry!.countryId.toString();
+                            // print(countid);
+                            selecteState = null;
+                            selecteDistrict = null;
+                          });
+                        },
+                      ),
+                    ),
+
+                    if (selecteCountry != null) ...[
+                      const SizedBox(height: 12),
+                      _label("State"),
+                      Container(
+                        // padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.white),
+                        ),
+                        child: Statewidget(
+                          categoryId: selecteCountry!.countryId!,
+                          selectedLocation: selecteState,
+                          onChanged: (value) {
+                            dialogSetState(() {
+                              selecteState = value;
+                              stateid = selecteState!.stateId.toString();
+
+                              selecteDistrict = null;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+
+                    if (selecteState != null) ...[
+                      const SizedBox(height: 12),
+                      _label("District"),
+                      Container(
+                        // padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: Colors.white),
+                        ),
+                        child: Districtwidget(
+                          categoryId: selecteState!.stateId!,
+                          selectedLocation: selecteDistrict,
+                          onChanged: (value) {
+                            dialogSetState(() {
+                              selecteDistrict = value;
+                              distid = selecteDistrict!.districtId.toString();
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ],
+
+                  /// ================= STEP 2 =================
+                  if (showForm) ...[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _filledField("Country", countryCtrl),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _filledField("State", stateCtrl),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _filledField("District", districtCtrl),
+                    ),
+
+                    // const SizedBox(height: 10),
+
+                    /// PINCODE
+                    _inputField("Pin Code", pincodeCtrl),
+                  ],
+                ],
+              ),
+            ),
+
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text("Cancel", style: TextStyle(color: AppColors.darkRed)),
+              ),
+
+              /// NEXT / SUBMIT
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+                onPressed: () {
+                  if (!showForm) {
+                    if (selecteCountry != null && selecteState != null && selecteDistrict != null) {
+                      dialogSetState(() {
+                        countryCtrl.text = selecteCountry!.countryName!;
+                        stateCtrl.text = selecteState!.stateName!;
+                        districtCtrl.text = selecteDistrict!.districtName!;
+                        showForm = true;
+                        // final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+                        // scaffoldMessenger.showSnackBar(
+                        //   SnackBar(
+                        //     content: Text("Uploaded"),
+                        //     backgroundColor: Colors.redAccent, // Red for errors
+                        //     behavior: SnackBarBehavior.floating, // Modern floating look
+                        //     duration: Duration(seconds: 2),
+                        //     // action: SnackBarAction(
+                        //     //   label: 'RETRY',
+                        //     //   textColor: Colors.white,
+                        //     //   onPressed: () => firstnameController.clear(),
+                        //     // ),
+                        //   ),
+                        // );
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      setState(() {
+                        submitForm(
+                          name.toString(),
+                          "",
+                          "",
+                          "",
+                          countid.toString(),
+                          stateid.toString(),
+                          distid.toString(),
+                          pincodeCtrl.text,
+                        );
+                      });
+                    });
+                    print("Country: ${countryCtrl.text}");
+                    print("State: ${stateCtrl.text}");
+                    print("District: ${districtCtrl.text}");
+                    print("Pincode: ${pincodeCtrl.text}");
+
+                    // Navigator.pop(context);
+                  }
+                },
+                child: Text(showForm ? "Submit" : "Proceed"),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _filledField(String label, TextEditingController ctrl) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: TextField(
+        style: TextStyle(color: Colors.white),
+        controller: ctrl,
+        readOnly: true,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Colors.black,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+    );
+  }
+
+  Widget _inputField(String label, TextEditingController ctrl) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        maxLength: 6,
+        style: TextStyle(color: Colors.white),
+
+        controller: ctrl,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          filled: true,
+          fillColor: Colors.black,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+    );
+  }
+
+  Widget _label(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Text(
+        text,
+        style: const TextStyle(
+          color: Color.fromARGB(255, 255, 255, 255),
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -658,7 +1150,8 @@ class _SosscreenState extends State<Sosscreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context); // close first dialog
-              _showLocationDialog(context, name); // open second dialog
+              // _showLocationDialog(context, name); // open second dialog
+              _askingcurrentLocationDialog(context, name.toString());
             },
             child: Text('Yes', style: TextStyle(color: AppColors.successGreen)),
           ),
