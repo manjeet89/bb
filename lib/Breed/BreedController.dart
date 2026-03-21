@@ -27,6 +27,7 @@ class Breedcontroller {
 
       // final Map<String, dynamic> data = json.decode(response.body);
       List<dynamic> locations = data['data'];
+      locations.sort((a, b) => a['breed_name'].toString().compareTo(b['breed_name'].toString()));
       return locations.map((e) => BreedModel.fromJson(e)).toList();
     } else {
       throw Exception("Failed to load locations");

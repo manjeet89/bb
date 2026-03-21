@@ -1,6 +1,10 @@
 import 'package:bb/HomeScreen.dart';
 import 'package:bb/MoreScreen.dart';
+import 'package:bb/PetInfo/PetReqistration.dart';
+import 'package:bb/PetInfo/petDetails.dart';
 import 'package:bb/PetInfo/petListScreen.dart';
+import 'package:bb/PetInfo/petMicroChipForm.dart';
+import 'package:bb/UpdateProfile.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,23 +12,35 @@ import 'package:flutter/services.dart';
 /// Flutter code sample for [NavigationBar].
 
 class NavigationBarApp extends StatelessWidget {
-  const NavigationBarApp({super.key});
+  final int indexvalue; // Declare the indexvalue as a final field
+
+  const NavigationBarApp({super.key, required this.indexvalue});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: NavigationExample(), debugShowCheckedModeBanner: false);
+    return MaterialApp(
+      home: NavigationExample(indexvalue: indexvalue),
+      debugShowCheckedModeBanner: false,
+    );
   }
 }
 
 class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
+  final int indexvalue; // Declare the indexvalue as a final field
+  const NavigationExample({super.key, required this.indexvalue});
 
   @override
   State<NavigationExample> createState() => _NavigationExampleState();
 }
 
 class _NavigationExampleState extends State<NavigationExample> {
-  int currentPageIndex = 0;
+  late int currentPageIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentPageIndex = widget.indexvalue; // Initialize currentPageIndex with indexvalue
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +71,7 @@ class _NavigationExampleState extends State<NavigationExample> {
           indicatorColor: AppColors.secondrycolor,
           backgroundColor: Colors.white,
           selectedIndex: currentPageIndex,
-          labelTextStyle: MaterialStateProperty.all(
+          labelTextStyle: WidgetStateProperty.all(
             const TextStyle(
               color: AppColors.primarycolor,
               fontSize: 12,
@@ -92,6 +108,7 @@ class _NavigationExampleState extends State<NavigationExample> {
         body: <Widget>[
           /// Home page
           BloodBankHome(),
+
           // Card(
           //   shadowColor: Colors.transparent,
           //   margin: const EdgeInsets.all(8.0),

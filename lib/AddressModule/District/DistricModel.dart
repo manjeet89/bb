@@ -41,14 +41,14 @@ class DistrictModelDropDown {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["district_id"] = districtId;
-    _data["state_id"] = stateId;
-    _data["district_name"] = districtName;
-    _data["district_status"] = districtStatus;
-    _data["district_updated_on"] = districtUpdatedOn;
-    _data["district_created_on"] = districtCreatedOn;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["district_id"] = districtId;
+    data["state_id"] = stateId;
+    data["district_name"] = districtName;
+    data["district_status"] = districtStatus;
+    data["district_updated_on"] = districtUpdatedOn;
+    data["district_created_on"] = districtCreatedOn;
+    return data;
   }
 
   @override

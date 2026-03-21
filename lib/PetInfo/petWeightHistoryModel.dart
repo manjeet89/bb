@@ -41,13 +41,13 @@ class Petweighthistorymodel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["weight_id"] = weightId;
-    _data["weight_pet_id"] = weightPetId;
-    _data["weight_owner_id"] = weightOwnerId;
-    _data["weight_current"] = weightCurrent;
-    _data["weight_update_on"] = weightUpdateOn;
-    _data["weight_created_on"] = weightCreatedOn;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["weight_id"] = weightId;
+    data["weight_pet_id"] = weightPetId;
+    data["weight_owner_id"] = weightOwnerId;
+    data["weight_current"] = weightCurrent;
+    data["weight_update_on"] = weightUpdateOn;
+    data["weight_created_on"] = weightCreatedOn;
+    return data;
   }
 }

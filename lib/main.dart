@@ -3,6 +3,8 @@ import 'package:bb/AnimalCategory/screen/animal_category_screen.dart';
 import 'package:bb/Credential/loginScreen.dart';
 import 'package:bb/Credential/otpScreen.dart';
 import 'package:bb/Navigation/navigationScreen.dart';
+import 'package:bb/PetInfo/Blood_Donate.dart';
+import 'package:bb/PetInfo/ExpireDate.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
 import 'package:bb/PetInfo/WeightUpdate.dart';
 import 'package:bb/PetInfo/petCategoryScreen.dart';
@@ -13,6 +15,10 @@ import 'package:bb/PetInfo/petMedications.dart';
 import 'package:bb/PetInfo/petMicroChipForm.dart';
 import 'package:bb/PetInfo/petVaccinationDetails.dart';
 import 'package:bb/PetInfo/petVeterinarianInfo.dart';
+import 'package:bb/Poilcy/privacy_policy.dart';
+import 'package:bb/Poilcy/refund_calcilcation.dart';
+import 'package:bb/Poilcy/shinping_policy.dart';
+import 'package:bb/Poilcy/terms_conditions.dart';
 import 'package:bb/SosSCreen.dart';
 import 'package:bb/Splash/splashScreen.dart';
 import 'package:bb/UpdateProfile.dart';
@@ -49,7 +55,9 @@ void main() async {
       routes: {
         '/login': (context) => BloodBankLoginPage(),
         '/otp': (context) => Otpscreen(),
-        '/home': (context) => NavigationBarApp(),
+        '/home': (context) => NavigationBarApp(indexvalue: 0),
+        '/home1': (context) => NavigationBarApp(indexvalue: 1),
+        '/home2': (context) => NavigationBarApp(indexvalue: 2),
         '/profile': (context) => Userprofile(),
         '/petRegistration': (context) => PetFormScreen(),
         '/petList': (context) => PetListScreen(),
@@ -64,6 +72,13 @@ void main() async {
         '/petmedications': (context) => Petmedications(),
         '/petveterinarianinfo': (context) => Petveterinarianinfo(),
         '/petWeightupdate': (context) => Weightupdate(),
+        // policys
+        '/privacyPolicy': (context) => PrivacyPolicy(),
+        '/termsConditions': (context) => TermsConditions(),
+        '/refundCalcilcation': (context) => RefundCalcilcation(),
+        '/shinpingPolicy': (context) => ShinpingPolicy(),
+        '/Expiredate': (context) => Expiredate(),
+        '/BloodDonatePetInfo': (context) => BloodDonatePetInfo(),
       },
       debugShowCheckedModeBanner: false,
       navigatorObservers: [observer],
@@ -73,7 +88,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
   //bool isLoggedIn,
   // This widget is the root of your application.
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -139,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // ---------------- INIT SDK ----------------
   Future<void> initPhonePe() async {
-    print("${environment} ${merchantId} ${appId} ${enableLogging}");
+    print("$environment $merchantId $appId $enableLogging");
     try {
       final isInit = await PhonePePaymentSdk.init(environment, merchantId, appId, enableLogging);
 
@@ -176,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
   //   checksum = "${sha256.convert(utf8.encode(base64Body + apiEndPoint + saltKey))}###$saltIndex";
   // }
 
-  getChecksum() {
+  String getChecksum() {
     transactionId = "ORD${DateTime.now().millisecondsSinceEpoch}";
     final requestData = {
       "merchantId": merchantId,

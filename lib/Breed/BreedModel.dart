@@ -47,16 +47,16 @@ class BreedModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["breed_id"] = breedId;
-    _data["breed_category_id"] = breedCategoryId;
-    _data["breed_name"] = breedName;
-    _data["breed_slug"] = breedSlug;
-    _data["breed_image"] = breedImage;
-    _data["breed_discounted_price"] = breedDiscountedPrice;
-    _data["breed_status"] = breedStatus;
-    _data["breed_updated_on"] = breedUpdatedOn;
-    _data["breed_created_on"] = breedCreatedOn;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["breed_id"] = breedId;
+    data["breed_category_id"] = breedCategoryId;
+    data["breed_name"] = breedName;
+    data["breed_slug"] = breedSlug;
+    data["breed_image"] = breedImage;
+    data["breed_discounted_price"] = breedDiscountedPrice;
+    data["breed_status"] = breedStatus;
+    data["breed_updated_on"] = breedUpdatedOn;
+    data["breed_created_on"] = breedCreatedOn;
+    return data;
   }
 }

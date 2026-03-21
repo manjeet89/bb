@@ -56,17 +56,17 @@ class StateModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["state_id"] = stateId;
-    _data["state_name"] = stateName;
-    _data["country_id"] = countryId;
-    _data["country_code"] = countryCode;
-    _data["country_name"] = countryName;
-    _data["state_code"] = stateCode;
-    _data["type"] = type;
-    _data["latitude"] = latitude;
-    _data["longitude"] = longitude;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["state_id"] = stateId;
+    data["state_name"] = stateName;
+    data["country_id"] = countryId;
+    data["country_code"] = countryCode;
+    data["country_name"] = countryName;
+    data["state_code"] = stateCode;
+    data["type"] = type;
+    data["latitude"] = latitude;
+    data["longitude"] = longitude;
+    return data;
   }
 
   @override

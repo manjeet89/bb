@@ -44,7 +44,7 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primarycolor,
         title: const Text(
-          "My Category 🐾",
+          "Select Species 🐾",
           style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -72,9 +72,9 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
               shrinkWrap: true,
               // physics: const NeverScrollableScrollPhysics(),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
+                crossAxisCount: 1,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
               ),
               padding: const EdgeInsets.all(12),
               itemCount: pets.length,
@@ -111,6 +111,8 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(14),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CircleAvatar(
                             backgroundColor: AppColors.cardBackgroundWhite,

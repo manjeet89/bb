@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class BloodBankLoginPage extends StatefulWidget {
+  const BloodBankLoginPage({super.key});
+
   @override
   State<BloodBankLoginPage> createState() => _BloodBankLoginPageState();
 }
@@ -105,7 +107,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
               SizedBox(height: 20),
 
               // Login Button (Call to Action)
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(

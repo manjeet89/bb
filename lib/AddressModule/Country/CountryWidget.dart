@@ -10,11 +10,11 @@ class Countrywidget extends StatefulWidget {
   // final String label;
 
   const Countrywidget({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.selectedLocation,
     // this.label = "stock category",
-  }) : super(key: key);
+  });
 
   @override
   State<Countrywidget> createState() => _CountrywidgetState();

@@ -36,12 +36,12 @@ class Petcategorymodel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["category_id"] = categoryId;
-    _data["category_name"] = categoryName;
-    _data["category_status"] = categoryStatus;
-    _data["category_updated_on"] = categoryUpdatedOn;
-    _data["category_created_on"] = categoryCreatedOn;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["category_id"] = categoryId;
+    data["category_name"] = categoryName;
+    data["category_status"] = categoryStatus;
+    data["category_updated_on"] = categoryUpdatedOn;
+    data["category_created_on"] = categoryCreatedOn;
+    return data;
   }
 }

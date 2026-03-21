@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Otpscreen extends StatefulWidget {
+  const Otpscreen({super.key});
+
   @override
   State<Otpscreen> createState() => _OtpscreenState();
 }
@@ -62,7 +64,7 @@ class _OtpscreenState extends State<Otpscreen> {
               SizedBox(height: 20),
 
               // Login Button (Call to Action)
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(

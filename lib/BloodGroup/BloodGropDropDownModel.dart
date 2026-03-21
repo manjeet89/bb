@@ -26,12 +26,12 @@ class BloodGroupModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["blood_id"] = bloodId;
-    _data["blood_name"] = bloodName;
-    _data["blood_status"] = bloodStatus;
-    _data["blood_created_on"] = bloodCreatedOn;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["blood_id"] = bloodId;
+    data["blood_name"] = bloodName;
+    data["blood_status"] = bloodStatus;
+    data["blood_created_on"] = bloodCreatedOn;
+    return data;
   }
 
   @override

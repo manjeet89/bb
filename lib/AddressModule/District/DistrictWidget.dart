@@ -11,12 +11,12 @@ class Districtwidget extends StatefulWidget {
   // final String label;
 
   const Districtwidget({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.selectedLocation,
     required this.categoryId,
     // this.label = "stock category",
-  }) : super(key: key);
+  });
 
   @override
   State<Districtwidget> createState() => _DistrictwidgetState();

@@ -138,30 +138,30 @@ class CountryDropDownModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["country_id"] = countryId;
-    _data["country_name"] = countryName;
-    _data["iso3"] = iso3;
-    _data["iso2"] = iso2;
-    _data["numeric_code"] = numericCode;
-    _data["phone_code"] = phoneCode;
-    _data["capital"] = capital;
-    _data["currency"] = currency;
-    _data["currency_name"] = currencyName;
-    _data["currency_symbol"] = currencySymbol;
-    _data["tld"] = tld;
-    _data["native"] = native;
-    _data["region"] = region;
-    _data["region_id"] = regionId;
-    _data["subregion"] = subregion;
-    _data["subregion_id"] = subregionId;
-    _data["nationality"] = nationality;
-    _data["timezones"] = timezones;
-    _data["latitude"] = latitude;
-    _data["longitude"] = longitude;
-    _data["emoji"] = emoji;
-    _data["emojiU"] = emojiU;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["country_id"] = countryId;
+    data["country_name"] = countryName;
+    data["iso3"] = iso3;
+    data["iso2"] = iso2;
+    data["numeric_code"] = numericCode;
+    data["phone_code"] = phoneCode;
+    data["capital"] = capital;
+    data["currency"] = currency;
+    data["currency_name"] = currencyName;
+    data["currency_symbol"] = currencySymbol;
+    data["tld"] = tld;
+    data["native"] = native;
+    data["region"] = region;
+    data["region_id"] = regionId;
+    data["subregion"] = subregion;
+    data["subregion_id"] = subregionId;
+    data["nationality"] = nationality;
+    data["timezones"] = timezones;
+    data["latitude"] = latitude;
+    data["longitude"] = longitude;
+    data["emoji"] = emoji;
+    data["emojiU"] = emojiU;
+    return data;
   }
 
   @override

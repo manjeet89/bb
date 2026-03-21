@@ -10,11 +10,11 @@ class Bloodgroupwidget extends StatefulWidget {
   // final String label;
 
   const Bloodgroupwidget({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.selectedLocation,
     // this.label = "stock category",
-  }) : super(key: key);
+  });
 
   @override
   State<Bloodgroupwidget> createState() => _BloodgroupwidgetState();

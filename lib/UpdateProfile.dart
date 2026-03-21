@@ -19,7 +19,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Updateprofile extends StatefulWidget {
+class Updateprofile extends StatefulWidget { 
   const Updateprofile({super.key});
 
   @override
@@ -64,8 +64,8 @@ class _UpdateprofileState extends State<Updateprofile> {
   File? _croppedImage;
 
   Future<void> _pickAndCropcamera(ImageSource source) async {
-    final _picker = ImagePicker();
-    final picked = await _picker.pickImage(source: source);
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: source);
     if (picked == null) return;
 
     // Crop image first
@@ -103,7 +103,7 @@ class _UpdateprofileState extends State<Updateprofile> {
     }
   }
 
-  FetchData() async {
+  Future<void> FetchData() async {
     var url = allapiscreen.userprofile.toString();
     var Header = await allapiscreen.headerFunction();
 
@@ -256,7 +256,7 @@ class _UpdateprofileState extends State<Updateprofile> {
   BloodGroupModel? selecteBloodGroup;
   String? selectBloodGroupId;
 
-  UploadValue() async {
+  Future<void> UploadValue() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     var url = allapiscreen.userupdate.toString();
@@ -280,8 +280,11 @@ class _UpdateprofileState extends State<Updateprofile> {
       "user_first_name": firstnameController.text,
       "user_last_name": lastnameController.text,
       "user_email_id": emailController.text,
+      "organisation_name": organizationNameController.text,
       "user_gender": selectedGender == "Male" ? "1" : "0",
-      "user_date_of_birth": year + "-" + month + "-" + day,
+      "owner_type": "1",
+      //selectedUserType == "Individual" ? "0" : "1",
+      "user_date_of_birth": "$year-$month-$day",
       "user_blood_group": selectBloodGroupId,
       "user_country": selectCountryId,
       "user_state": selectStateId,
@@ -332,466 +335,720 @@ class _UpdateprofileState extends State<Updateprofile> {
   Widget build(BuildContext context) {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    // const Color darkRed = Color(0xff7A0000);
-    // const Color lightRed = Color(0xffFF6F6F);
-
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
-      appBar: AppBar(
-        title: Text(
-          "Update User Profile",
-          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.primarycolor,
-      ),
+      backgroundColor: const Color(0xffF4F6FA),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Container(
-          // color: AppColors.cardBackgroundWhite,
-          decoration: BoxDecoration(
-            color: AppColors.border,
-            // gradient: const LinearGradient(
-            //   // colors:AppColors.cardBackgroundWhite,
-            //   // [AppColors.darkRed, AppColors.mediumRed, AppColors.lightRed],
-            //   begin: Alignment.centerLeft,
-            //   end: Alignment.centerRight,
-            // ),
-            borderRadius: BorderRadius.circular(24),
-            boxShadow: const [
-              BoxShadow(color: AppColors.secondrycolor, blurRadius: 8, offset: Offset(0, 4)),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      ShowImage(context, allapiscreen.imageapi.toString() + ImageGet);
-                    },
-                    child: Stack(
+      body: CustomScrollView(
+        slivers: [
+          /// 🔴 HEADER WITH IMAGE
+          SliverAppBar(
+            expandedHeight: 200,
+            pinned: true,
+            backgroundColor: AppColors.primarycolor,
+            flexibleSpace: FlexibleSpaceBar(
+              // title: const Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold)),
+              background: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [AppColors.primarycolor, AppColors.secondrycolor],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 40),
+
+                    /// PROFILE IMAGE
+                    Stack(
                       alignment: Alignment.bottomRight,
                       children: [
-                        ImageGet == "null" && _croppedImage == null
-                            ? const Icon(Icons.person, size: 50, color: Colors.white)
-                            : CircleAvatar(
-                                radius: 50,
-                                backgroundColor: Colors.grey.shade300,
-                                backgroundImage: _croppedImage != null
-                                    ? FileImage(_croppedImage!)
-                                    : NetworkImage(allapiscreen.imageapi.toString() + ImageGet)
-                                          as ImageProvider,
-                              ),
+                        CircleAvatar(
+                          radius: 55,
+                          backgroundColor: Colors.white,
+                          backgroundImage: _croppedImage != null
+                              ? FileImage(_croppedImage!)
+                              : (ImageGet != "null"
+                                        ? NetworkImage(allapiscreen.imageapi + ImageGet)
+                                        : const AssetImage("assest/petbird.png"))
+                                    as ImageProvider,
+                        ),
 
-                        // Edit icon
                         GestureDetector(
-                          onTap: () {
-                            _pickAndCropcamera(ImageSource.gallery);
-                          },
+                          onTap: () => _pickAndCropcamera(ImageSource.gallery),
                           child: Container(
+                            padding: const EdgeInsets.all(8),
                             decoration: const BoxDecoration(
-                              color: Colors.blue,
+                              color: Colors.white,
                               shape: BoxShape.circle,
                             ),
-                            padding: const EdgeInsets.all(6),
-                            child: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: AppColors.primarycolor,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
+              ),
+            ),
+          ),
 
-                /// 🐾 PET NAME
-                _label("First Name"),
-                _inputField(
-                  controller: firstnameController,
-                  hint: "Enter first name",
-                  icon: Icons.person,
-                ),
-
-                const SizedBox(height: 18),
-
-                /// 🐾 PET NAME
-                _label("Last Name"),
-                _inputField(
-                  controller: lastnameController,
-                  hint: "Enter last name",
-                  icon: Icons.person_3_outlined,
-                ),
-
-                const SizedBox(height: 18),
-
-                /// 🐾 PET NAME
-                _label("Email Address"),
-                _inputField(controller: emailController, hint: "Enter email id", icon: Icons.email),
-
-                const SizedBox(height: 18),
-
-                /// ⚧ GENDER
-                _label("Gender"),
-                Row(
+          /// 🧾 FORM CONTENT
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                _sectionCard(
+                  title: "Personal Information",
                   children: [
-                    _genderButton("Male", Icons.male),
-                    const SizedBox(width: 10),
-                    _genderButton("Female", Icons.female),
+                    _label("First Name"),
+                    _inputField(
+                      controller: firstnameController,
+                      hint: "First Name",
+                      icon: Icons.person,
+                    ),
+                    _gap(),
+                    _label("Last Name"),
+                    _inputField(
+                      controller: lastnameController,
+                      hint: "Last Name",
+                      icon: Icons.person_outline,
+                    ),
+                    _gap(),
+                    _label("Email"),
+                    _inputField(controller: emailController, hint: "Email", icon: Icons.email),
+                    _gap(),
+                    _label("Gender"),
+                    Row(
+                      children: [
+                        _genderButton("Male", Icons.male),
+                        const SizedBox(width: 10),
+                        _genderButton("Female", Icons.female),
+                      ],
+                    ),
+                    _gap(),
+                    _label("Date of Birth"),
+                    _inputField(
+                      controller: dobController,
+                      hint: "Date of Birth",
+                      icon: Icons.calendar_today,
+                      readOnly: true,
+                      onTap: dobController.text.isNotEmpty
+                          ? null
+                          : () async {
+                              DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                              );
+                              if (picked != null) {
+                                dobController.text = "${picked.day}-${picked.month}-${picked.year}";
+                              }
+                            },
+                    ),
                   ],
                 ),
 
-                const SizedBox(height: 18),
-                // Organization and Normal
-                _label("User Type"),
-                Row(
+                _sectionCard(
+                  title: "Medical Information",
                   children: [
-                    _userTypeButton("Individual"),
-                    const SizedBox(width: 10),
-                    _userTypeButton("Organization"),
+                    _label("Blood Group"),
+                    Bloodgroupwidget(
+                      selectedLocation: selecteBloodGroup,
+                      onChanged: (value) {
+                        setState(() {
+                          selecteBloodGroup = value;
+                          selectBloodGroupId = value?.bloodId;
+                        });
+                      },
+                    ),
                   ],
                 ),
 
-                if (selectedUserType == "Organization") ...[
-                  const SizedBox(height: 18),
-                  _label("Organization Name"),
-                  _inputField(
-                    controller: organizationNameController,
-                    hint: "Enter organization name",
-                    icon: Icons.business,
-                  ),
-                ],
-
-                const SizedBox(height: 18),
-
-                /// 📅 DATE OF BIRTH
-                _label("Date of Birth"),
-                _inputField(
-                  controller: dobController,
-                  hint: "Select date",
-                  icon: Icons.calendar_month,
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-
-                    if (picked != null) {
-                      dobController.text =
-                          "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
-                    }
-                  },
-                ),
-                const SizedBox(height: 18),
-
-                /// 🌍 COUNTRY DROPDOWN
-                _label("Blood Group"),
-                Container(
-                  // padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Bloodgroupwidget(
-                    selectedLocation: selecteBloodGroup,
-                    onChanged: (value) {
-                      setState(() {
-                        selecteBloodGroup = value;
-                        selectBloodGroupId = value!.bloodId.toString();
-                      });
-
-                      // You can access both ID and name here
-                      if (value != null) {
-                        print("Location ID: ${value.bloodId}");
-                        print("Location Name: ${value.bloodName}");
-                      }
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                /// 🌍 COUNTRY DROPDOWN
-                _label("Country"),
-                Container(
-                  // padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Countrywidget(
-                    selectedLocation: selecteCountry,
-                    onChanged: (value) {
-                      setState(() {
-                        selecteCountry = value;
-                        selectCountryId = value!.countryId.toString();
-
-                        // 👇 reset dependent dropdown
-
-                        selecteDistrict = null;
-                        selectDistrictId = null;
-                        selecteState = null;
-                        selectStateId = null;
-                      });
-
-                      // You can access both ID and name here
-                      if (value != null) {
-                        print("Location ID: ${value.countryId}");
-                        print("Location Name: ${value.countryName}");
-                      }
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 18),
-                _label("State"),
-                Container(
-                  // padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Statewidget(
-                    selectedLocation: selecteState,
-                    categoryId: selectCountryId.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        selecteState = value;
-                        selectStateId = value!.stateId.toString();
-
-                        // 👇 reset dependent dropdown
-                        selecteDistrict = null;
-                        selectDistrictId = null;
-                      });
-
-                      // You can access both ID and name here
-                      if (value != null) {
-                        print("Location ID: ${value.stateId}");
-                        print("Location Name: ${value.stateName}");
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: 18),
-                _label("District"),
-                Container(
-                  // padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Districtwidget(
-                    selectedLocation: selecteDistrict,
-                    categoryId: selectStateId.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        selecteDistrict = value;
-                        selectDistrictId = value!.districtId.toString();
-                      });
-
-                      // You can access both ID and name here
-                      if (value != null) {
-                        print("Location ID: ${value.districtId}");
-                        print("Location Name: ${value.districtName}");
-                      }
-                    },
-                  ),
-                ),
-                const SizedBox(height: 18),
-
-                /// 🐾 PET NAME
-                _label("City"),
-                _inputField(
-                  controller: cityController,
-                  hint: "Enter city",
-                  icon: Icons.location_city_outlined,
-                ),
-
-                const SizedBox(height: 18),
-
-                /// 🐾 PET NAME
-                _label("Address"),
-                _inputField(
-                  controller: addressController,
-                  hint: "Enter address",
-                  icon: Icons.email,
-                ),
-
-                const SizedBox(height: 18),
-
-                /// 🐾 PET NAME
-                _label("Pincode"),
-                _inputField(
-                  controller: pincodeController,
-                  hint: "Enter pincode",
-                  icon: Icons.pinch_outlined,
-                ),
-
-                const SizedBox(height: 30),
-
-                /// 🩸 SUBMIT BUTTON
-                SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primarycolor,
-                      foregroundColor: AppColors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                _sectionCard(
+                  title: "Address Information",
+                  children: [
+                    _label("Country"),
+                    Countrywidget(
+                      selectedLocation: selecteCountry,
+                      onChanged: (value) {
+                        setState(() {
+                          selecteCountry = value;
+                          selectCountryId = value?.countryId;
+                          selecteState = null;
+                          selecteDistrict = null;
+                        });
+                      },
                     ),
-                    onPressed: () {
-                      print("Pet Name: ${emailController.text}");
-                      print("Gender: $selectedGender");
-                      print("DOB: ${dobController.text}");
-                      print("Country: $selectedCountry");
-
-                      if (firstnameController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('First name enter'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => firstnameController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (lastnameController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Last name enter'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => lastnameController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (emailController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Email id enter'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => emailController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (dobController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Select dob'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => emailController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (selectBloodGroupId.toString() == "null") {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Select blood group'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            // action: SnackBarAction(
-                            //   label: 'RETRY',
-                            //   textColor: Colors.white,
-                            //   onPressed: () => firstnameController.clear(),
-                            // ),
-                          ),
-                        );
-                      } else if (selectCountryId.toString() == "null") {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Select country'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            // action: SnackBarAction(
-                            //   label: 'RETRY',
-                            //   textColor: Colors.white,
-                            //   onPressed: () => firstnameController.clear(),
-                            // ),
-                          ),
-                        );
-                      } else if (selectStateId.toString() == "null") {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Select state'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            // action: SnackBarAction(
-                            //   label: 'RETRY',
-                            //   textColor: Colors.white,
-                            //   onPressed: () => firstnameController.clear(),
-                            // ),
-                          ),
-                        );
-                      } else if (cityController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('City name enter'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => cityController.clear(),
-                            ),
-                          ),
-                        );
-                      } else if (pincodeController.text.isEmpty) {
-                        scaffoldMessenger.showSnackBar(
-                          SnackBar(
-                            content: Text('Enter pincode'),
-                            backgroundColor: Colors.redAccent, // Red for errors
-                            behavior: SnackBarBehavior.floating, // Modern floating look
-                            duration: Duration(seconds: 3),
-                            action: SnackBarAction(
-                              label: 'RETRY',
-                              textColor: Colors.white,
-                              onPressed: () => pincodeController.clear(),
-                            ),
-                          ),
-                        );
-                      } else {
-                        UploadValue();
-                      }
-                    },
-                    child: const Text(
-                      "Update",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    _gap(),
+                    _label("State"),
+                    Statewidget(
+                      selectedLocation: selecteState,
+                      categoryId: selectCountryId.toString(),
+                      onChanged: (value) {
+                        setState(() {
+                          selecteState = value;
+                          selectStateId = value?.stateId;
+                          selecteDistrict = null;
+                        });
+                      },
                     ),
-                  ),
+                    _gap(),
+                    _label("District"),
+                    Districtwidget(
+                      selectedLocation: selecteDistrict,
+                      categoryId: selectStateId.toString(),
+                      onChanged: (value) {
+                        setState(() {
+                          selecteDistrict = value;
+                          selectDistrictId = value?.districtId;
+                        });
+                      },
+                    ),
+                    _gap(),
+                    _label("City"),
+                    _inputField(
+                      controller: cityController,
+                      hint: "City",
+                      icon: Icons.location_city,
+                    ),
+                    _gap(),
+                    _label("Address"),
+                    _inputField(controller: addressController, hint: "Address", icon: Icons.home),
+                    _gap(),
+                    _label("Pincode"),
+                    _inputField(
+                      controller: pincodeController,
+                      hint: "Pincode",
+                      icon: Icons.pin_drop,
+                    ),
+                  ],
                 ),
-              ],
+
+                const SizedBox(height: 80),
+              ]),
+            ),
+          ),
+        ],
+      ),
+
+      /// 🔴 FIXED BOTTOM BUTTON
+      bottomSheet: Container(
+        padding: const EdgeInsets.all(16),
+        color: Colors.white,
+        child: SizedBox(
+          height: 52,
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primarycolor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            ),
+            onPressed: UploadValue,
+            child: const Text(
+              "Update Profile",
+              style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ),
       ),
     );
   }
+
+  Widget _sectionCard({required String title, required List<Widget> children}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          ...children,
+        ],
+      ),
+    );
+  }
+
+  Widget _gap() => const SizedBox(height: 14);
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+  //   // const Color darkRed = Color(0xff7A0000);
+  //   // const Color lightRed = Color(0xffFF6F6F);
+
+  //   return Scaffold(
+  //     backgroundColor: const Color(0xffF5F5F5),
+  //     appBar: AppBar(
+  //       title: Text(
+  //         "Update User Profile",
+  //         style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+  //       ),
+  //       centerTitle: true,
+  //       backgroundColor: AppColors.primarycolor,
+  //     ),
+
+  //     body: SingleChildScrollView(
+  //       padding: const EdgeInsets.all(16),
+  //       child: Container(
+  //         // color: AppColors.cardBackgroundWhite,
+  //         decoration: BoxDecoration(
+  //           color: AppColors.white,
+  //           // gradient: const LinearGradient(
+  //           //   // colors:AppColors.cardBackgroundWhite,
+  //           //   // [AppColors.darkRed, AppColors.mediumRed, AppColors.lightRed],
+  //           //   begin: Alignment.centerLeft,
+  //           //   end: Alignment.centerRight,
+  //           // ),
+  //           borderRadius: BorderRadius.circular(24),
+  //           boxShadow: const [
+  //             BoxShadow(color: AppColors.secondrycolor, blurRadius: 8, offset: Offset(0, 4)),
+  //           ],
+  //         ),
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(20),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Center(
+  //                 child: GestureDetector(
+  //                   onTap: () {
+  //                     ShowImage(context, allapiscreen.imageapi.toString() + ImageGet);
+  //                   },
+  //                   child: Stack(
+  //                     alignment: Alignment.bottomRight,
+  //                     children: [
+  //                       ImageGet == "null" && _croppedImage == null
+  //                           ? const Icon(Icons.person, size: 50, color: Colors.white)
+  //                           : CircleAvatar(
+  //                               radius: 50,
+  //                               backgroundColor: Colors.grey.shade300,
+  //                               backgroundImage: _croppedImage != null
+  //                                   ? FileImage(_croppedImage!)
+  //                                   : NetworkImage(allapiscreen.imageapi.toString() + ImageGet)
+  //                                         as ImageProvider,
+  //                             ),
+
+  //                       // Edit icon
+  //                       GestureDetector(
+  //                         onTap: () {
+  //                           _pickAndCropcamera(ImageSource.gallery);
+  //                         },
+  //                         child: Container(
+  //                           decoration: const BoxDecoration(
+  //                             color: Colors.blue,
+  //                             shape: BoxShape.circle,
+  //                           ),
+  //                           padding: const EdgeInsets.all(6),
+  //                           child: const Icon(Icons.camera_alt, size: 18, color: Colors.white),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+
+  //               /// 🐾 PET NAME
+  //               _label("First Name"),
+  //               _inputField(
+  //                 controller: firstnameController,
+  //                 hint: "Enter first name",
+  //                 icon: Icons.person,
+  //               ),
+
+  //               const SizedBox(height: 18),
+
+  //               /// 🐾 PET NAME
+  //               _label("Last Name"),
+  //               _inputField(
+  //                 controller: lastnameController,
+  //                 hint: "Enter last name",
+  //                 icon: Icons.person_3_outlined,
+  //               ),
+
+  //               const SizedBox(height: 18),
+
+  //               /// 🐾 PET NAME
+  //               _label("Email Address"),
+  //               _inputField(controller: emailController, hint: "Enter email id", icon: Icons.email),
+
+  //               const SizedBox(height: 18),
+
+  //               /// ⚧ GENDER
+  //               _label("Gender"),
+  //               Row(
+  //                 children: [
+  //                   _genderButton("Male", Icons.male),
+  //                   const SizedBox(width: 10),
+  //                   _genderButton("Female", Icons.female),
+  //                 ],
+  //               ),
+
+  //               const SizedBox(height: 18),
+  //               // Organization and Normal
+  //               _label("User Type"),
+  //               Row(
+  //                 children: [
+  //                   _userTypeButton("Individual"),
+  //                   const SizedBox(width: 10),
+  //                   _userTypeButton("Organization"),
+  //                 ],
+  //               ),
+
+  //               if (selectedUserType == "Organization") ...[
+  //                 const SizedBox(height: 18),
+  //                 _label("Organization Name"),
+  //                 _inputField(
+  //                   controller: organizationNameController,
+  //                   hint: "Enter organization name",
+  //                   icon: Icons.business,
+  //                 ),
+  //               ],
+
+  //               const SizedBox(height: 18),
+
+  //               /// 📅 DATE OF BIRTH
+  //               _label("Date of Birth"),
+  //               _inputField(
+  //                 controller: dobController,
+  //                 hint: "Select date",
+  //                 icon: Icons.calendar_month,
+  //                 readOnly: true,
+  //                 onTap: dobController.text.toString().isNotEmpty == dobController.text.toString()
+  //                     ? () async {
+  //                         DateTime? picked = await showDatePicker(
+  //                           context: context,
+  //                           initialDate: DateTime.now(),
+  //                           firstDate: DateTime(1900),
+  //                           lastDate: DateTime.now(),
+  //                         );
+
+  //                         if (picked != null) {
+  //                           dobController.text =
+  //                               "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year}";
+  //                         }
+  //                       }
+  //                     : null,
+  //               ),
+  //               const SizedBox(height: 18),
+
+  //               /// 🌍 COUNTRY DROPDOWN
+  //               _label("Blood Group"),
+  //               Container(
+  //                 // padding: const EdgeInsets.symmetric(horizontal: 12),
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.white,
+  //                   borderRadius: BorderRadius.circular(14),
+  //                 ),
+  //                 child: Bloodgroupwidget(
+  //                   selectedLocation: selecteBloodGroup,
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       selecteBloodGroup = value;
+  //                       selectBloodGroupId = value!.bloodId.toString();
+  //                     });
+
+  //                     // You can access both ID and name here
+  //                     if (value != null) {
+  //                       print("Location ID: ${value.bloodId}");
+  //                       print("Location Name: ${value.bloodName}");
+  //                     }
+  //                   },
+  //                 ),
+  //               ),
+
+  //               const SizedBox(height: 30),
+
+  //               /// 🌍 COUNTRY DROPDOWN
+  //               _label("Country"),
+  //               Container(
+  //                 // padding: const EdgeInsets.symmetric(horizontal: 12),
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.white,
+  //                   borderRadius: BorderRadius.circular(14),
+  //                 ),
+  //                 child: Countrywidget(
+  //                   selectedLocation: selecteCountry,
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       selecteCountry = value;
+  //                       selectCountryId = value!.countryId.toString();
+
+  //                       // 👇 reset dependent dropdown
+
+  //                       selecteDistrict = null;
+  //                       selectDistrictId = null;
+  //                       selecteState = null;
+  //                       selectStateId = null;
+  //                     });
+
+  //                     // You can access both ID and name here
+  //                     if (value != null) {
+  //                       print("Location ID: ${value.countryId}");
+  //                       print("Location Name: ${value.countryName}");
+  //                     }
+  //                   },
+  //                 ),
+  //               ),
+
+  //               const SizedBox(height: 18),
+  //               _label("State"),
+  //               Container(
+  //                 // padding: const EdgeInsets.symmetric(horizontal: 12),
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.white,
+  //                   borderRadius: BorderRadius.circular(14),
+  //                 ),
+  //                 child: Statewidget(
+  //                   selectedLocation: selecteState,
+  //                   categoryId: selectCountryId.toString(),
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       selecteState = value;
+  //                       selectStateId = value!.stateId.toString();
+
+  //                       // 👇 reset dependent dropdown
+  //                       selecteDistrict = null;
+  //                       selectDistrictId = null;
+  //                     });
+
+  //                     // You can access both ID and name here
+  //                     if (value != null) {
+  //                       print("Location ID: ${value.stateId}");
+  //                       print("Location Name: ${value.stateName}");
+  //                     }
+  //                   },
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 18),
+  //               _label("District"),
+  //               Container(
+  //                 // padding: const EdgeInsets.symmetric(horizontal: 12),
+  //                 decoration: BoxDecoration(
+  //                   color: Colors.white,
+  //                   borderRadius: BorderRadius.circular(14),
+  //                 ),
+  //                 child: Districtwidget(
+  //                   selectedLocation: selecteDistrict,
+  //                   categoryId: selectStateId.toString(),
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       selecteDistrict = value;
+  //                       selectDistrictId = value!.districtId.toString();
+  //                     });
+
+  //                     // You can access both ID and name here
+  //                     if (value != null) {
+  //                       print("Location ID: ${value.districtId}");
+  //                       print("Location Name: ${value.districtName}");
+  //                     }
+  //                   },
+  //                 ),
+  //               ),
+  //               const SizedBox(height: 18),
+
+  //               /// 🐾 PET NAME
+  //               _label("City"),
+  //               _inputField(
+  //                 controller: cityController,
+  //                 hint: "Enter city",
+  //                 icon: Icons.location_city_outlined,
+  //               ),
+
+  //               const SizedBox(height: 18),
+
+  //               /// 🐾 PET NAME
+  //               _label("Address"),
+  //               _inputField(
+  //                 controller: addressController,
+  //                 hint: "Enter address",
+  //                 icon: Icons.email,
+  //               ),
+
+  //               const SizedBox(height: 18),
+
+  //               /// 🐾 PET NAME
+  //               _label("Pincode"),
+  //               _inputField(
+  //                 controller: pincodeController,
+  //                 hint: "Enter pincode",
+  //                 icon: Icons.pinch_outlined,
+  //               ),
+
+  //               const SizedBox(height: 30),
+
+  //               /// 🩸 SUBMIT BUTTON
+  //               SizedBox(
+  //                 width: double.infinity,
+  //                 height: 52,
+  //                 child: ElevatedButton(
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: AppColors.primarycolor,
+  //                     foregroundColor: AppColors.white,
+  //                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+  //                   ),
+  //                   onPressed: () {
+  //                     print("Pet Name: ${emailController.text}");
+  //                     print("Gender: $selectedGender");
+  //                     print("DOB: ${dobController.text}");
+  //                     print("Country: $selectedCountry");
+
+  //                     if (firstnameController.text.isEmpty) {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('First name enter'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           action: SnackBarAction(
+  //                             label: 'RETRY',
+  //                             textColor: Colors.white,
+  //                             onPressed: () => firstnameController.clear(),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     } else if (lastnameController.text.isEmpty) {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Last name enter'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           action: SnackBarAction(
+  //                             label: 'RETRY',
+  //                             textColor: Colors.white,
+  //                             onPressed: () => lastnameController.clear(),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     } else if (emailController.text.isEmpty) {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Email id enter'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           action: SnackBarAction(
+  //                             label: 'RETRY',
+  //                             textColor: Colors.white,
+  //                             onPressed: () => emailController.clear(),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     } else if (dobController.text.isEmpty) {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Select dob'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           action: SnackBarAction(
+  //                             label: 'RETRY',
+  //                             textColor: Colors.white,
+  //                             onPressed: () => emailController.clear(),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     } else if (selectBloodGroupId.toString() == "null") {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Select blood group'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           // action: SnackBarAction(
+  //                           //   label: 'RETRY',
+  //                           //   textColor: Colors.white,
+  //                           //   onPressed: () => firstnameController.clear(),
+  //                           // ),
+  //                         ),
+  //                       );
+  //                     } else if (selectCountryId.toString() == "null") {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Select country'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           // action: SnackBarAction(
+  //                           //   label: 'RETRY',
+  //                           //   textColor: Colors.white,
+  //                           //   onPressed: () => firstnameController.clear(),
+  //                           // ),
+  //                         ),
+  //                       );
+  //                     } else if (selectStateId.toString() == "null") {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Select state'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           // action: SnackBarAction(
+  //                           //   label: 'RETRY',
+  //                           //   textColor: Colors.white,
+  //                           //   onPressed: () => firstnameController.clear(),
+  //                           // ),
+  //                         ),
+  //                       );
+  //                     } else if (cityController.text.isEmpty) {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('City name enter'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           action: SnackBarAction(
+  //                             label: 'RETRY',
+  //                             textColor: Colors.white,
+  //                             onPressed: () => cityController.clear(),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     } else if (pincodeController.text.isEmpty) {
+  //                       scaffoldMessenger.showSnackBar(
+  //                         SnackBar(
+  //                           content: Text('Enter pincode'),
+  //                           backgroundColor: Colors.redAccent, // Red for errors
+  //                           behavior: SnackBarBehavior.floating, // Modern floating look
+  //                           duration: Duration(seconds: 3),
+  //                           action: SnackBarAction(
+  //                             label: 'RETRY',
+  //                             textColor: Colors.white,
+  //                             onPressed: () => pincodeController.clear(),
+  //                           ),
+  //                         ),
+  //                       );
+  //                     } else {
+  //                       UploadValue();
+  //                     }
+  //                   },
+  //                   child: const Text(
+  //                     "Update",
+  //                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /// ---------- Widgets ----------
 
@@ -812,19 +1069,23 @@ class _UpdateprofileState extends State<Updateprofile> {
     bool readOnly = false,
     VoidCallback? onTap,
   }) {
+    // Make first name, last name, and email fields read-only if already filled
+    bool isReadOnly =
+        readOnly ||
+        (controller == firstnameController && firstnameController.text.isNotEmpty) ||
+        (controller == lastnameController && lastnameController.text.isNotEmpty);
+    // ||(controller == emailController && emailController.text.isNotEmpty);
+
     return TextField(
       controller: controller,
-      readOnly: readOnly,
+      readOnly: isReadOnly,
       onTap: onTap,
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: AppColors.secondrycolor),
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-          borderSide: BorderSide(color: AppColors.dividerGrey),
-        ),
+        border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.dividerGrey)),
       ),
     );
   }
@@ -842,7 +1103,7 @@ class _UpdateprofileState extends State<Updateprofile> {
         child: Container(
           height: 48,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primarycolor : AppColors.white.withOpacity(0.8),
+            color: isSelected ? AppColors.primarycolor : AppColors.border.withOpacity(0.8),
 
             borderRadius: BorderRadius.circular(14),
           ),
@@ -881,7 +1142,7 @@ class _UpdateprofileState extends State<Updateprofile> {
         child: Container(
           height: 48,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primarycolor : AppColors.white.withOpacity(0.8),
+            color: isSelected ? AppColors.primarycolor : AppColors.border.withOpacity(0.8),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Row(

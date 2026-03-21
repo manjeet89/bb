@@ -69,6 +69,8 @@ class Petlistmodel {
   String? isPetApi;
   String? petUpdatedOn;
   String? petCreatedOn;
+  String? petCategoryName;
+
 
   Petlistmodel({
     this.petId,
@@ -141,9 +143,10 @@ class Petlistmodel {
     this.isPetApi,
     this.petUpdatedOn,
     this.petCreatedOn,
+    this.petCategoryName,
   });
 
-  Petlistmodel.fromJson(Map<String, dynamic> json) {
+  Petlistmodel.fromJson(Map<String, dynamic> json, String categoryName) {
     if (json["pet_id"] is String) {
       petId = json["pet_id"];
     }
@@ -282,84 +285,90 @@ class Petlistmodel {
     if (json["pet_created_on"] is String) {
       petCreatedOn = json["pet_created_on"];
     }
+    petCategoryName = categoryName; // Assign category name from parameter
   }
 
-  static List<Petlistmodel> fromList(List<Map<String, dynamic>> list) {
-    return list.map(Petlistmodel.fromJson).toList();
+  static List<Petlistmodel> fromList(List<Map<String, dynamic>> list, Map<String, String> categoryMap) {
+    return list.map((json) {
+      final categoryId = json['pet_category_id']?.toString();
+      final categoryName = categoryMap[categoryId] ?? 'Unknown';
+      return Petlistmodel.fromJson(json, categoryName);
+    }).toList();
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> _data = <String, dynamic>{};
-    _data["pet_id"] = petId;
-    _data["pet_owner_id"] = petOwnerId;
-    _data["pet_name"] = petName;
-    _data["pet_weight_in_kg"] = petWeightInKg;
-    _data["pet_slug"] = petSlug;
-    _data["pet_category_id"] = petCategoryId;
-    _data["pet_cattery_id"] = petCatteryId;
-    _data["apply_cattery_name"] = applyCatteryName;
-    _data["pet_image"] = petImage;
-    _data["pet_blood_donor_details"] = petBloodDonorDetails;
-    _data["healthinfo"] = healthinfo;
-    _data["vaccinationinfo"] = vaccinationinfo;
-    _data["medicationinfo"] = medicationinfo;
-    _data["veterinarian"] = veterinarian;
-    _data["upload_image"] = uploadImage;
-    _data["upload_video"] = uploadVideo;
-    _data["upload_pdf"] = uploadPdf;
-    _data["pet_registration_number"] = petRegistrationNumber;
-    _data["pet_registration_number_created_date"] = petRegistrationNumberCreatedDate;
-    _data["other_pet_club_id"] = otherPetClubId;
-    _data["other_club_registration_number"] = otherClubRegistrationNumber;
-    _data["microchip_number"] = microchipNumber;
-    _data["microchip_implemented_by"] = microchipImplementedBy;
-    _data["microchip_implementor_name"] = microchipImplementorName;
-    _data["microchip_implementor_mobile_number"] = microchipImplementorMobileNumber;
-    _data["microchip_implemented_date"] = microchipImplementedDate;
-    _data["microchip_document"] = microchipDocument;
-    _data["is_sire_register_with_aff"] = isSireRegisterWithAff;
-    _data["is_sire_register_with_other"] = isSireRegisterWithOther;
-    _data["sire_other_club_id"] = sireOtherClubId;
-    _data["pet_sire_registration_number"] = petSireRegistrationNumber;
-    _data["pet_sire_registration_number_other"] = petSireRegistrationNumberOther;
-    _data["sire_front_side_certificate"] = sireFrontSideCertificate;
-    _data["sire_back_side_certificate"] = sireBackSideCertificate;
-    _data["sire_owner_transfer_form"] = sireOwnerTransferForm;
-    _data["sire_stud_agreement_form"] = sireStudAgreementForm;
-    _data["pet_sire_admin_status"] = petSireAdminStatus;
-    _data["is_dam_register_with_aff"] = isDamRegisterWithAff;
-    _data["is_dam_register_with_other"] = isDamRegisterWithOther;
-    _data["dam_other_club_id"] = damOtherClubId;
-    _data["pet_dam_registration_number"] = petDamRegistrationNumber;
-    _data["pet_dam_registration_number_other"] = petDamRegistrationNumberOther;
-    _data["dam_front_side_certificate"] = damFrontSideCertificate;
-    _data["dam_back_side_certificate"] = damBackSideCertificate;
-    _data["dam_owner_transfer_form"] = damOwnerTransferForm;
-    _data["dam_stud_agreement_form"] = damStudAgreementForm;
-    _data["pet_dam_admin_status"] = petDamAdminStatus;
-    _data["pet_birth_date"] = petBirthDate;
-    _data["pet_breed_id"] = petBreedId;
-    _data["pet_ccp_id"] = petCcpId;
-    _data["country_bred_in"] = countryBredIn;
-    _data["pet_gender"] = petGender;
-    _data["with_microchip"] = withMicrochip;
-    _data["microchip_order_with"] = microchipOrderWith;
-    _data["is_indivisual_certificate"] = isIndivisualCertificate;
-    _data["is_tree_certificate"] = isTreeCertificate;
-    _data["front_side_certificate"] = frontSideCertificate;
-    _data["back_side_certificate"] = backSideCertificate;
-    _data["owner_transfer_form"] = ownerTransferForm;
-    _data["stud_agreement_form"] = studAgreementForm;
-    _data["pet_microchip_status"] = petMicrochipStatus;
-    _data["pet_microchip_comment"] = petMicrochipComment;
-    _data["pet_status_comment"] = petStatusComment;
-    _data["sterilization_status"] = sterilizationStatus;
-    _data["pet_status"] = petStatus;
-    _data["is_affix_cattery_paid"] = isAffixCatteryPaid;
-    _data["is_pet_paid"] = isPetPaid;
-    _data["is_pet_api"] = isPetApi;
-    _data["pet_updated_on"] = petUpdatedOn;
-    _data["pet_created_on"] = petCreatedOn;
-    return _data;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["pet_id"] = petId;
+    data["pet_owner_id"] = petOwnerId;
+    data["pet_name"] = petName;
+    data["pet_weight_in_kg"] = petWeightInKg;
+    data["pet_slug"] = petSlug;
+    data["pet_category_id"] = petCategoryId;
+    data["pet_cattery_id"] = petCatteryId;
+    data["apply_cattery_name"] = applyCatteryName;
+    data["pet_image"] = petImage;
+    data["pet_blood_donor_details"] = petBloodDonorDetails;
+    data["healthinfo"] = healthinfo;
+    data["vaccinationinfo"] = vaccinationinfo;
+    data["medicationinfo"] = medicationinfo;
+    data["veterinarian"] = veterinarian;
+    data["upload_image"] = uploadImage;
+    data["upload_video"] = uploadVideo;
+    data["upload_pdf"] = uploadPdf;
+    data["pet_registration_number"] = petRegistrationNumber;
+    data["pet_registration_number_created_date"] = petRegistrationNumberCreatedDate;
+    data["other_pet_club_id"] = otherPetClubId;
+    data["other_club_registration_number"] = otherClubRegistrationNumber;
+    data["microchip_number"] = microchipNumber;
+    data["microchip_implemented_by"] = microchipImplementedBy;
+    data["microchip_implementor_name"] = microchipImplementorName;
+    data["microchip_implementor_mobile_number"] = microchipImplementorMobileNumber;
+    data["microchip_implemented_date"] = microchipImplementedDate;
+    data["microchip_document"] = microchipDocument;
+    data["is_sire_register_with_aff"] = isSireRegisterWithAff;
+    data["is_sire_register_with_other"] = isSireRegisterWithOther;
+    data["sire_other_club_id"] = sireOtherClubId;
+    data["pet_sire_registration_number"] = petSireRegistrationNumber;
+    data["pet_sire_registration_number_other"] = petSireRegistrationNumberOther;
+    data["sire_front_side_certificate"] = sireFrontSideCertificate;
+    data["sire_back_side_certificate"] = sireBackSideCertificate;
+    data["sire_owner_transfer_form"] = sireOwnerTransferForm;
+    data["sire_stud_agreement_form"] = sireStudAgreementForm;
+    data["pet_sire_admin_status"] = petSireAdminStatus;
+    data["is_dam_register_with_aff"] = isDamRegisterWithAff;
+    data["is_dam_register_with_other"] = isDamRegisterWithOther;
+    data["dam_other_club_id"] = damOtherClubId;
+    data["pet_dam_registration_number"] = petDamRegistrationNumber;
+    data["pet_dam_registration_number_other"] = petDamRegistrationNumberOther;
+    data["dam_front_side_certificate"] = damFrontSideCertificate;
+    data["dam_back_side_certificate"] = damBackSideCertificate;
+    data["dam_owner_transfer_form"] = damOwnerTransferForm;
+    data["dam_stud_agreement_form"] = damStudAgreementForm;
+    data["pet_dam_admin_status"] = petDamAdminStatus;
+    data["pet_birth_date"] = petBirthDate;
+    data["pet_breed_id"] = petBreedId;
+    data["pet_ccp_id"] = petCcpId;
+    data["country_bred_in"] = countryBredIn;
+    data["pet_gender"] = petGender;
+    data["with_microchip"] = withMicrochip;
+    data["microchip_order_with"] = microchipOrderWith;
+    data["is_indivisual_certificate"] = isIndivisualCertificate;
+    data["is_tree_certificate"] = isTreeCertificate;
+    data["front_side_certificate"] = frontSideCertificate;
+    data["back_side_certificate"] = backSideCertificate;
+    data["owner_transfer_form"] = ownerTransferForm;
+    data["stud_agreement_form"] = studAgreementForm;
+    data["pet_microchip_status"] = petMicrochipStatus;
+    data["pet_microchip_comment"] = petMicrochipComment;
+    data["pet_status_comment"] = petStatusComment;
+    data["sterilization_status"] = sterilizationStatus;
+    data["pet_status"] = petStatus;
+    data["is_affix_cattery_paid"] = isAffixCatteryPaid;
+    data["is_pet_paid"] = isPetPaid;
+    data["is_pet_api"] = isPetApi;
+    data["pet_updated_on"] = petUpdatedOn;
+    data["pet_created_on"] = petCreatedOn;
+    data["pet_category_name"] = petCategoryName; // Include category name in JSON
+    return data;
   }
 }

@@ -11,12 +11,12 @@ class Breedwidget extends StatefulWidget {
   // final String label;
 
   Breedwidget({
-    Key? key,
+    super.key,
     required this.onChanged,
     this.selectedLocation,
     this.spidiesId,
     // this.label = "stock category",
-  }) : super(key: key);
+  });
 
   @override
   State<Breedwidget> createState() => _BreedwidgetState();
