@@ -575,6 +575,7 @@ import 'dart:io';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/Breed/BreedModel.dart';
 import 'package:bb/Breed/Breedwidget.dart';
+import 'package:bb/Header.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -635,14 +636,16 @@ class _PetFormScreenState extends State<PetFormScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F7FB),
-      appBar: AppBar(
-        title: const Text(
-          "Pet Registration",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: AppColors.primarycolor,
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "Pet Registration",
+      //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      //   ),
+      //   backgroundColor: AppColors.primarycolor,
+      //   centerTitle: true,
+      // ),
+            appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -721,7 +724,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
                       children: [
                         _Sterilization("Intact", Icons.import_contacts_rounded),
                         const SizedBox(width: 8),
-                        _Sterilization("Neutrered Spayed", Icons.nearby_error_outlined),
+                        _Sterilization("Neutrered/Spayed", Icons.nearby_error_outlined),
                       ],
                     ),
 
@@ -774,68 +777,49 @@ class _PetFormScreenState extends State<PetFormScreen> {
 
               _card(
                 title: "Secondary Guardian",
-                child:  Column(
-                        children: [
-                          /// Sterilization Status
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Does Your Pet Have Secondary Guardian",
-                              style: _labelStyle(),
-                            ),
-                          ),
+                child: Column(
+                  children: [
+                    /// Sterilization Status
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Does Your Pet Have Secondary Guardian", style: _labelStyle()),
+                    ),
 
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              _yes_no("No", Icons.cancel_rounded),
-                              const SizedBox(width: 8),
-                              _yes_no("Yes", Icons.corporate_fare),
-                            ],
-                          ),
-                    if(yesno == "Yes")
-
-                          const SizedBox(height: 16),
-                          if(yesno == "Yes")
-
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("First Name", style: _labelStyle()),
-                          ),
-                          if(yesno == "Yes")
-
-                          const SizedBox(height: 8),
-                          if(yesno == "Yes")
-
-                          _field("First Name", _FirstName, Icons.person),
-                          const SizedBox(height: 16),
-if(yesno == "Yes")
-
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Last Name", style: _labelStyle()),
-                          ),
-if(yesno == "Yes")
-
-                          const SizedBox(height: 8),if(yesno == "Yes")
-
-                          _field("Last Name", _LastName, Icons.person_2),
-                          const SizedBox(height: 16),
-if(yesno == "Yes")
-
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text("Mobile Number", style: _labelStyle()),
-                          ),
-if(yesno == "Yes")
-
-                          const SizedBox(height: 8),if(yesno == "Yes")
-
-                          _field("Mobile Number", _mobilenumb, Icons.numbers),
-                          const SizedBox(height: 16),
-                        ],
-                      )
-                   
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _yes_no("No", Icons.cancel),
+                        const SizedBox(width: 8),
+                        _yes_no("Yes", Icons.check),
+                      ],
+                    ),
+                    if (yesno == "Yes") const SizedBox(height: 16),
+                    if (yesno == "Yes")
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("First Name", style: _labelStyle()),
+                      ),
+                    if (yesno == "Yes") const SizedBox(height: 8),
+                    if (yesno == "Yes") _field("First Name", _FirstName, Icons.person),
+                    const SizedBox(height: 16),
+                    if (yesno == "Yes")
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Last Name", style: _labelStyle()),
+                      ),
+                    if (yesno == "Yes") const SizedBox(height: 8),
+                    if (yesno == "Yes") _field("Last Name", _LastName, Icons.person_2),
+                    const SizedBox(height: 16),
+                    if (yesno == "Yes")
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text("Mobile Number", style: _labelStyle()),
+                      ),
+                    if (yesno == "Yes") const SizedBox(height: 8),
+                    if (yesno == "Yes") _field("Mobile Number", _mobilenumb, Icons.numbers),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
 
               const SizedBox(height: 20),
@@ -1056,26 +1040,93 @@ if(yesno == "Yes")
   /// ---------------- API SUBMIT ----------------
 
   Future<void> submit(BuildContext context, petCategoryId) async {
-    final dio = Dio();
-    final headers = await allapiscreen.headerFunction();
+    if (_petName.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("pet name is required")));
+    } else if (_dob.text.toString().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("dob is required")));
+    } else if (breedId.toString() == "null") {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("breed is required")));
+    } else if (_weight.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Weight is required")));
+    } else if (_petName.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("pet name is required")));
+    } else if (yesno == "Yes") {
+      if (_FirstName.text.toString().isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("first name is required")));
+      } else if (_LastName.text.toString().isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("last name is required")));
+      } else if (_mobilenumb.text.toString().isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("mobile is required")));
+      } else {
+        final dio = Dio();
+        final headers = await allapiscreen.headerFunction();
 
-    final date = _dob.text.split("-");
-    final formData = FormData.fromMap({
-      if (petImage != null) "pet_image": await MultipartFile.fromFile(petImage!.path),
-      "pet_name": _petName.text,
-      "pet_gender": gender == "Male" ? "1" : "0",
-      "pet_birth_date": "${date[2]}-${date[1]}-${date[0]}",
-      "pet_breed_id": breedId,
-      "pet_category_id": petCategoryId,
-      "pet_weight_in_kg": _weight.text,
-    });
+        final date = _dob.text.split("-");
+        final formData = FormData.fromMap({
+          if (petImage != null) "pet_image": await MultipartFile.fromFile(petImage!.path),
+          "pet_name": _petName.text,
+          "pet_gender": gender == "Male" ? "1" : "0",
+          // "pet_gender": sterilization == "Intact" ? "1" : "0",
+          "pet_birth_date": "${date[2]}-${date[1]}-${date[0]}",
+          "pet_breed_id": breedId,
+          "pet_category_id": petCategoryId,
+          "pet_weight_in_kg": _weight.text,
 
-    await dio.post(
-      allapiscreen.petadd,
-      data: formData,
-      options: Options(headers: headers),
-    );
+          "is_secondary_gardian_available": yesno == "Yes" ? "1" : "0",
+          "user_first_name": _FirstName.text,
+          "user_last_name": _LastName.text,
+          "user_mobile_number": _mobilenumb.text,
+        });
 
-    Navigator.pushNamed(context, '/home1');
+        await dio.post(
+          allapiscreen.petadd,
+          data: formData,
+          options: Options(headers: headers),
+        );
+
+        Navigator.pushNamed(context, '/home1');
+      }
+    } else {
+      final dio = Dio();
+      final headers = await allapiscreen.headerFunction();
+
+      final date = _dob.text.split("-");
+      final formData = FormData.fromMap({
+        if (petImage != null) "pet_image": await MultipartFile.fromFile(petImage!.path),
+        "pet_name": _petName.text,
+        "pet_gender": gender == "Male" ? "1" : "0",
+        // "pet_gender": sterilization == "Intact" ? "1" : "0",
+        "pet_birth_date": "${date[2]}-${date[1]}-${date[0]}",
+        "pet_breed_id": breedId,
+        "pet_category_id": petCategoryId,
+        "pet_weight_in_kg": _weight.text,
+
+        "is_secondary_gardian_available": yesno == "Yes" ? "1" : "0",
+        "user_first_name": _FirstName.text,
+        "user_last_name": _LastName.text,
+        "user_mobile_number": _mobilenumb.text,
+      });
+
+      await dio.post(
+        allapiscreen.petadd,
+        data: formData,
+        options: Options(headers: headers),
+      );
+      Navigator.pushNamed(context, '/home1');
+    }
   }
 }

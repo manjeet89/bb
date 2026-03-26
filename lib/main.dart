@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:bb/AnimalCategory/screen/animal_category_screen.dart';
 import 'package:bb/Credential/loginScreen.dart';
 import 'package:bb/Credential/otpScreen.dart';
+import 'package:bb/DonateNow.dart';
 import 'package:bb/Navigation/navigationScreen.dart';
+import 'package:bb/Notification.dart';
 import 'package:bb/PetInfo/Blood_Donate.dart';
 import 'package:bb/PetInfo/ExpireDate.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
@@ -15,6 +17,7 @@ import 'package:bb/PetInfo/petMedications.dart';
 import 'package:bb/PetInfo/petMicroChipForm.dart';
 import 'package:bb/PetInfo/petVaccinationDetails.dart';
 import 'package:bb/PetInfo/petVeterinarianInfo.dart';
+import 'package:bb/Poilcy/AboutsUs.dart';
 import 'package:bb/Poilcy/privacy_policy.dart';
 import 'package:bb/Poilcy/refund_calcilcation.dart';
 import 'package:bb/Poilcy/shinping_policy.dart';
@@ -77,8 +80,11 @@ void main() async {
         '/termsConditions': (context) => TermsConditions(),
         '/refundCalcilcation': (context) => RefundCalcilcation(),
         '/shinpingPolicy': (context) => ShinpingPolicy(),
+        '/Aboutsus': (context) => Aboutsus(),
         '/Expiredate': (context) => Expiredate(),
         '/BloodDonatePetInfo': (context) => BloodDonatePetInfo(),
+        '/Notification': (context) => NotificationApp(),
+        '/Donatenow': (context) => Donatenow(),
       },
       debugShowCheckedModeBanner: false,
       navigatorObservers: [observer],

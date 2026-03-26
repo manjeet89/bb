@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -125,14 +126,16 @@ class _PetmedicationsState extends State<Petmedications> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: Text(
-          "Medications",
-          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.primarycolor,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     "Medications",
+      //     style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+      //   ),
+      //   centerTitle: true,
+      //   backgroundColor: AppColors.primarycolor,
+      // ),
+      appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -498,6 +501,7 @@ class _PetmedicationsState extends State<Petmedications> {
           context,
         ).showSnackBar(const SnackBar(content: Text("Medication saved successfully")));
         // Navigator.pop(context);
+        Navigator.pushNamed(context, '/home1');
       }
     } catch (e) {
       debugPrint("API ERROR: $e");

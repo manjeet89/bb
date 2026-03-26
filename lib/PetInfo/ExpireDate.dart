@@ -1,4 +1,5 @@
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:dio/dio.dart';
@@ -43,9 +44,12 @@ class _ExpiredateState extends State<Expiredate> {
   Future<void> submitForm() async {
     final pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
     final header = await allapiscreen.headerFunction();
-    final url = allapiscreen.microchipupdate.toString();
+    final url = allapiscreen.expiredate.toString();
 
-    FormData data = FormData.fromMap({"pet_id": pet.petId.toString()});
+    FormData data = FormData.fromMap({
+      "pet_id": pet.petId.toString(),
+      "pet_expire_date": dateCtrl.text,
+    });
 
     await Dio().post(
       url,
@@ -66,13 +70,15 @@ class _ExpiredateState extends State<Expiredate> {
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F7F9),
-      appBar: AppBar(
-        title: const Text(
-          "Pet is Alive",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: AppColors.primarycolor,
-      ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "Pet is Alive",
+      //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      //   ),
+      //   backgroundColor: AppColors.primarycolor,
+      // ),
+            appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

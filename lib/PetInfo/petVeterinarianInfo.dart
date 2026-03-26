@@ -289,6 +289,7 @@
 
 import 'dart:convert';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -335,12 +336,14 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: AppColors.w,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.primarycolor,
-        centerTitle: true,
-        title: const Text("Veterinarian Info", style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.white)),
-      ),
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: AppColors.primarycolor,
+      //   centerTitle: true,
+      //   title: const Text("Veterinarian Info", style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.white)),
+      // ),
+            appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

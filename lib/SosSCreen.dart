@@ -1798,7 +1798,7 @@ class _SosscreenState extends State<Sosscreen> {
                   const SizedBox(height: 4),
 
                   Text(
-                    pet.petCategoryName.toString(),
+                    pet.petName.toString(),
                     style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
                   ),
 
@@ -1827,7 +1827,12 @@ class _SosscreenState extends State<Sosscreen> {
               ),
             ),
 
-            const Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.secondrycolor),
+            InkWell(
+              onTap: () {
+                navigatorKey.currentState?.pushNamed('/petDetails', arguments: pet);
+              },
+              child: const Icon(Icons.arrow_forward_ios, size: 16, color: AppColors.secondrycolor),
+            ),
           ],
         ),
       ),

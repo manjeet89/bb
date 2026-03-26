@@ -27,6 +27,12 @@ class allapiscreen {
       "https://pashuraktkosh.lyferp.com/api/pet/update_health_info";
   static const String veterinarian =
       "https://pashuraktkosh.lyferp.com/api/pet/update_veterinarian_info";
+  static const String last_blood_donate_date =
+      "https://pashuraktkosh.lyferp.com/api/pet/update_last_blood_donate_date";
+  static const String expiredate =
+      "https://pashuraktkosh.lyferp.com/api/pet/update_pet_expire_date";
+  static const String donatenow =
+      "https://pashuraktkosh.lyferp.com/api/home/donate_now";
 
   static Future<Map<String, String>> headerFunction() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

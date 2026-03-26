@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class BloodDonatePetInfo extends StatefulWidget {
   const BloodDonatePetInfo({super.key});
@@ -70,14 +70,14 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
   Future<void> submitForm() async {
     final pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
     final header = await allapiscreen.headerFunction();
-    final url = allapiscreen.microchipupdate.toString();
+    final url = allapiscreen.last_blood_donate_date.toString();
 
     FormData data = FormData.fromMap({
       "pet_id": pet.petId.toString(),
 
-      "microchip_implemented_date": dateCtrl.text,
+      "donate_date": dateCtrl.text,
       if (certificateFile != null)
-        "microchip_document": await MultipartFile.fromFile(certificateFile!.path),
+        "donate_proof": await MultipartFile.fromFile(certificateFile!.path),
     });
 
     await Dio().post(
@@ -99,13 +99,16 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F7F9),
-      appBar: AppBar(
-        title: const Text(
-          "Blood Donate Details",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: AppColors.primarycolor,
-      ),
+
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "Blood Donate Details",
+      //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      //   ),
+      //   backgroundColor: AppColors.primarycolor,
+      // ),
+      appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -124,10 +127,10 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _label("Insertion Date"),
+                    _label("Donate Date"),
                     _dateField(),
 
-                    _label("Insertion Certificate"),
+                    _label("Donate Certificate"),
                     _filePicker(),
                   ],
                 ),

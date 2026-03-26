@@ -382,6 +382,7 @@
 
 import 'dart:convert';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -440,14 +441,16 @@ class _PethealthinfoState extends State<Pethealthinfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF6F7F9),
-      appBar: AppBar(
-        backgroundColor: AppColors.primarycolor,
-        title: const Text(
-          "Health Information",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.primarycolor,
+      //   title: const Text(
+      //     "Health Information",
+      //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      //   ),
+      //   centerTitle: true,
+      // ),
+            appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

@@ -458,12 +458,20 @@
 //   }
 // }
 
+import 'dart:convert';
+
+import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/LeaderBoard.dart';
+import 'package:bb/MovingDonateButton.dart';
+import 'package:bb/Ratatingquotes.dart';
 import 'package:bb/main.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 /// ================= DONOR MODEL =================
 class Donor {
@@ -504,7 +512,7 @@ class BloodBankHome extends StatefulWidget {
   State<BloodBankHome> createState() => _BloodBankHomeState();
 }
 
-class _BloodBankHomeState extends State<BloodBankHome> {
+class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProviderStateMixin {
   /// 🔹 YOUR DATA
   final double totalCats = 1.2;
   final double totalDogs = 1.5;
@@ -546,9 +554,53 @@ class _BloodBankHomeState extends State<BloodBankHome> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _fetchProfile();
+
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+
+    _animation = Tween<double>(
+      begin: -20,
+      end: 20,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.repeat(reverse: true); // 🔥 left-right loop
+  }
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _fetchProfile() async {
+    var url = allapiscreen.userprofile.toString();
+    var header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header);
+
+    if (response.statusCode == 200) {
+      final decoded = json.decode(response.body);
+      setState(() async {
+        SharedPreferences FontEmpTypeName = await SharedPreferences.getInstance();
+        await FontEmpTypeName.setString("FirstName", decoded['data']['user_first_name'] ?? "");
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffF6F7FB),
+      floatingActionButton: MovingDonateButton(
+        onTap: () {
+          navigatorKey.currentState?.pushNamed('/Donatenow');
+        },
+      ),
 
       /// ================= APP BAR =================
       appBar: AppBar(
@@ -591,6 +643,12 @@ class _BloodBankHomeState extends State<BloodBankHome> {
             ),
             const SizedBox(height: 26),
 
+            /// ---------- LEADER BOARD (CATS / DOGS) ----------
+            _sectionTitle("Leaderboard"),
+           const LeaderboardSection() .animate().fadeIn(delay: 200.ms).slideX(),
+
+            const SizedBox(height: 26),
+
             /// ---------- YOUR DATA (CATS / DOGS) ----------
             _sectionTitle("Available Blood Donors"),
             Row(
@@ -601,6 +659,20 @@ class _BloodBankHomeState extends State<BloodBankHome> {
             ).animate().fadeIn(delay: 200.ms).slideX(),
 
             const SizedBox(height: 26),
+            _sectionTitle("Best pet quotes"),
+            RotatingQuotes(
+              quotes: [
+                "“Animals are a window to your soul and a doorway to your spiritual destiny.” — Kim Shotola",
+                "“The bond with a dog is as lasting as the ties of this Earth can ever be.” — Konrad Lorenz",
+                "“I had been told that the training procedure for cats was difficult. It isn’t. Mine had me trained in two days.” — Bill Dana",
+
+                "“Happiness is a warm puppy.” — Charles M. Schulz",
+                "“A kitten is, in the animal world, what a rosebud is in the garden.” — Robert Southey",
+                "“To love and be loved is to feel the sun from both sides.” — David Viscott",
+                "“Friendship isn’t a big thing — it’s a million little things.” — Paulo Coelho",
+                "“Animals are such agreeable friends — they ask no questions, they pass no criticism.” — George Eliot",
+              ],
+            ),
 
             const SizedBox(height: 24),
             _sectionTitle('Pet Care Tips'),
@@ -611,17 +683,17 @@ class _BloodBankHomeState extends State<BloodBankHome> {
                   'Regular Vet Checkups',
                   'Ensure your pet gets regular checkups to stay healthy and catch any issues early.',
                 ),
-                const SizedBox(height: 12),
-                _adviceCard(
-                  'Balanced Diet',
-                  'Provide a balanced diet with the right nutrients for your pet’s age and breed.',
-                ),
-                const SizedBox(height: 12),
-                _adviceCard(
-                  'Exercise',
-                  'Keep your pet active with regular exercise to maintain their physical and mental health.',
-                ),
-                const SizedBox(height: 12),
+                // const SizedBox(height: 12),
+                // _adviceCard(
+                //   'Balanced Diet',
+                //   'Provide a balanced diet with the right nutrients for your pet’s age and breed.',
+                // ),
+                // const SizedBox(height: 12),
+                // _adviceCard(
+                //   'Exercise',
+                //   'Keep your pet active with regular exercise to maintain their physical and mental health.',
+                // ),
+                // const SizedBox(height: 12),
                 _adviceCard(
                   'Grooming',
                   'Regular grooming helps keep your pet clean and prevents skin issues.',
@@ -652,11 +724,11 @@ class _BloodBankHomeState extends State<BloodBankHome> {
             // ),
 
             /// ---------- ADDITIONAL DATA ----------
-            _sectionTitle("Nearby Blood Donors"),
-            const SizedBox(height: 12),
+            // _sectionTitle("Nearby Blood Donors"),
+            // const SizedBox(height: 12),
 
             //  nearbyBloodDonorsSection(context),
-            ...donors.map((d) => _donorCard(d)).toList(),
+            // ...donors.map((d) => _donorCard(d)).toList(),
           ],
         ),
       ),
@@ -828,7 +900,16 @@ class _BloodBankHomeState extends State<BloodBankHome> {
             /// 🔔 Bell with dot
             Stack(
               children: [
-                const Icon(Icons.notifications_active, color: AppColors.secondrycolor, size: 22),
+                InkWell(
+                  onTap: () {
+                    navigatorKey.currentState?.pushNamed('/Notification');
+                  },
+                  child: const Icon(
+                    Icons.notifications_active,
+                    color: AppColors.secondrycolor,
+                    size: 22,
+                  ),
+                ),
                 Positioned(
                   right: 0,
                   top: 0,
@@ -844,12 +925,11 @@ class _BloodBankHomeState extends State<BloodBankHome> {
             const SizedBox(width: 8),
 
             /// 🖼 Pet image
-            CircleAvatar(
-              radius: 14,
-              backgroundColor: AppColors.primarycolor.withOpacity(0.1),
-              child: Image.asset("assest/petdog.png", width: 18),
-            ),
-
+            // CircleAvatar(
+            //   radius: 14,
+            //   backgroundColor: AppColors.primarycolor.withOpacity(0.1),
+            //   child: Image.asset("assest/petdog.png", width: 18),
+            // ),
             const SizedBox(width: 8),
 
             /// 🚨 SOS badge (animated pulse)

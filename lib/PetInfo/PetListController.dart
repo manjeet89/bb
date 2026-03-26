@@ -29,7 +29,7 @@ class PetService {
         final categoryId = e['pet_category_id'].toString();
         final categoryName = categoryMap[categoryId] ?? 'Unknown';
 
-        return Petlistmodel.fromJson(e, categoryName);
+        return Petlistmodel.fromJson(e);
       }).toList();
     } else {
       throw Exception("Failed to load pets");

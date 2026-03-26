@@ -560,6 +560,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:dio/dio.dart';
@@ -678,13 +679,15 @@ class _MicrochipFormState extends State<MicrochipForm> {
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F7F9),
-      appBar: AppBar(
-        title: const Text(
-          "Microchip Details",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: AppColors.primarycolor,
-      ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     "Microchip Details",
+      //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+      //   ),
+      //   backgroundColor: AppColors.primarycolor,
+      // ),
+            appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

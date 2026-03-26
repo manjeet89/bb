@@ -9,8 +9,10 @@ import 'package:bb/AddressModule/State/StateWidget.dart';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/BloodGroup/BloodGropDropDownModel.dart';
 import 'package:bb/BloodGroup/BloodGroupWidget.dart';
+import 'package:bb/Header.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/app_colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +21,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Updateprofile extends StatefulWidget { 
+class Updateprofile extends StatefulWidget {
   const Updateprofile({super.key});
 
   @override
@@ -300,6 +302,9 @@ class _UpdateprofileState extends State<Updateprofile> {
       options: Options(headers: Header),
     );
 
+    SharedPreferences FontEmpTypeName = await SharedPreferences.getInstance();
+    await FontEmpTypeName.setString("FirstName", firstnameController.text);
+
     if (response.statusCode == 200) {
       print("done");
       print(response);
@@ -337,6 +342,7 @@ class _UpdateprofileState extends State<Updateprofile> {
 
     return Scaffold(
       backgroundColor: const Color(0xffF4F6FA),
+      appBar: const CommonAppBar(),
 
       body: CustomScrollView(
         slivers: [
@@ -419,6 +425,29 @@ class _UpdateprofileState extends State<Updateprofile> {
                       hint: "Last Name",
                       icon: Icons.person_outline,
                     ),
+
+                    const SizedBox(height: 18),
+                    // Organization and Normal
+                    _label("User Type"),
+                    Row(
+                      children: [
+                        _userTypeButton("Individual"),
+                        const SizedBox(width: 10),
+                        _userTypeButton("Organization"),
+                      ],
+                    ),
+
+                    if (selectedUserType == "Organization") ...[
+                      const SizedBox(height: 18),
+                      _label("Organization Name"),
+                      _inputField(
+                        controller: organizationNameController,
+                        hint: "Enter organization name",
+                        icon: Icons.business,
+                      ),
+                    ],
+
+                    const SizedBox(height: 18),
                     _gap(),
                     _label("Email"),
                     _inputField(controller: emailController, hint: "Email", icon: Icons.email),

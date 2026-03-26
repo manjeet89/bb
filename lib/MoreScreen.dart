@@ -435,6 +435,7 @@
 // }
 
 import 'dart:convert';
+import 'package:bb/Header.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/main.dart';
@@ -500,11 +501,16 @@ class _MorescreenState extends State<Morescreen> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xffF5F6FA),
-        appBar: AppBar(
-          backgroundColor: AppColors.primarycolor,
-          title: const Text("Profile", style: TextStyle(fontWeight: FontWeight.bold)),
-          centerTitle: true,
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: AppColors.primarycolor,
+        //   title: const Text(
+        //     "Profile",
+        //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        //   ),
+        //   centerTitle: true,
+        // ),
+              appBar: const CommonAppBar(),
+
         body: RefreshIndicator(
           onRefresh: () async => _fetchProfile(),
           child: SingleChildScrollView(
@@ -580,6 +586,7 @@ class _MorescreenState extends State<Morescreen> {
         _menuCard(Icons.note, "Terms & Conditions", "termsConditions"),
         _menuCard(Icons.money, "Refunds & Cancellation", "refundCalcilcation"),
         _menuCard(Icons.local_shipping, "Shipping Policies", "shinpingPolicy"),
+        _menuCard(Icons.align_vertical_bottom_rounded, "About Us", "Aboutsus"),
         if (isLoggedIn) _menuCard(Icons.logout, "Logout", "", color: Colors.red, onTap: _logout),
       ].animate(interval: 120.ms).fadeIn().slideX(),
     );

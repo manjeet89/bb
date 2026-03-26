@@ -525,6 +525,7 @@
 //   );
 // }
 
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/main.dart';
 import 'package:flutter/material.dart';
@@ -548,6 +549,7 @@ class PetDetailScreen extends StatelessWidget {
     print(formattedDate); // 05-October-2021
     return Scaffold(
       backgroundColor: const Color(0xffF4F6FA),
+      appBar: const CommonAppBar(),
 
       /// 🔝 HEADER
       body: CustomScrollView(
@@ -627,7 +629,7 @@ class PetDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        pet.petCategoryName.toString(),
+                        pet.petName.toString(),
                         style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ],
@@ -702,21 +704,18 @@ class PetDetailScreen extends StatelessWidget {
                           arguments: pet,
                         ),
                       ),
-                      statusTile(
+                      petstatusTile(
                         "Is Pet Alive",
-                        pet.veterinarian,
+                        pet.petExpireDate,
                         Icons.heart_broken_sharp,
-                        () => navigatorKey.currentState?.pushNamed(
-                          '/Expiredate',
-                          arguments: pet,
-                        ),
+                        () => navigatorKey.currentState?.pushNamed('/Expiredate', arguments: pet),
                       ),
                       statusTile(
                         "Last Blood Donate date",
                         pet.veterinarian,
                         Icons.bloodtype_sharp,
                         () => navigatorKey.currentState?.pushNamed(
-                          '/petveterinarianinfo',
+                          '/BloodDonatePetInfo',
                           arguments: pet,
                         ),
                       ),
@@ -823,6 +822,22 @@ class PetDetailScreen extends StatelessWidget {
       trailing: const Icon(Icons.arrow_forward_ios, size: 16),
     );
   }
+}
+
+/// 🩺 STATUS TILE
+Widget petstatusTile(String title, dynamic value, IconData icon, VoidCallback onTap) {
+  bool done = value.toString() == "null";
+
+  return ListTile(
+    onTap: onTap,
+    leading: CircleAvatar(
+      backgroundColor: done ? AppColors.successGreen : AppColors.mediumRed,
+      child: Icon(icon, color: Colors.white),
+    ),
+    title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+    subtitle: Text(done ? "Yes" : "No"),
+    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+  );
 }
 
 /// ---------- Widgets ----------

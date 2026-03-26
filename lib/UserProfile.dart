@@ -277,6 +277,7 @@
 
 import 'dart:convert';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/main.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -294,6 +295,7 @@ class Userprofile extends StatefulWidget {
 class _UserprofileState extends State<Userprofile> {
   String formattedDate = "-";
   String firstName = "",
+      orgName = "",
       lastName = "",
       email = "",
       number = "",
@@ -325,6 +327,7 @@ class _UserprofileState extends State<Userprofile> {
 
       setState(() {
         firstName = data['user_first_name'] ?? "";
+        orgName = data['organisation_name'] ?? "";
         lastName = data['user_last_name'] ?? "";
         email = data['user_email_id'] ?? "";
         number = data['user_mobile_number'] ?? "";
@@ -355,6 +358,8 @@ class _UserprofileState extends State<Userprofile> {
 
     return Scaffold(
       backgroundColor: AppColors.white,
+      appBar: const CommonAppBar(),
+
       body: RefreshIndicator(
         onRefresh: fetchData,
         child: CustomScrollView(
@@ -367,6 +372,7 @@ class _UserprofileState extends State<Userprofile> {
                   children: [
                     _infoCard([
                       _infoRow(Icons.phone, "Mobile", number),
+                      _infoRow(Icons.groups_2, "Organization Name", orgName),
                       _infoRow(Icons.email, "Email", email),
                       _infoRow(Icons.cake, "DOB", formattedDate),
                       _infoRow(Icons.person, "Gender", gender == "0" ? "Female" : "Male"),

@@ -311,6 +311,7 @@
 // }
 
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/PetListController.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/PetInfo/petWeightHistoryModel.dart';
@@ -340,11 +341,15 @@ class _WeightupdateState extends State<Weightupdate> {
 
     return Scaffold(
       backgroundColor: const Color(0xffF5F6FA),
-      appBar: AppBar(
-        backgroundColor: AppColors.primarycolor,
-        title: const Text("Update Weight", style: TextStyle(fontWeight: FontWeight.bold,color: AppColors.white)),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: AppColors.primarycolor,
+      //   title: const Text(
+      //     "Update Weight",
+      //     style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.white),
+      //   ),
+      //   centerTitle: true,
+      // ),
+      appBar: const CommonAppBar(),
 
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -420,7 +425,7 @@ class _WeightupdateState extends State<Weightupdate> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(pet.petCategoryName.toString(), style: const TextStyle(color: Colors.white70)),
+              Text(pet.petName.toString(), style: const TextStyle(color: Colors.white70)),
             ],
           ),
         ],

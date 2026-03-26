@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bb/ApiFolder/AllapiScreen.dart';
+import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -158,14 +159,16 @@ class _PetvaccinationdetailsState extends State<Petvaccinationdetails> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-      appBar: AppBar(
-        title: Text(
-          "Vaccination Details",
-          style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: AppColors.primarycolor,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     "Vaccination Details",
+      //     style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+      //   ),
+      //   centerTitle: true,
+      //   backgroundColor: AppColors.primarycolor,
+      // ),
+            appBar: const CommonAppBar(),
+
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
