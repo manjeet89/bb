@@ -520,6 +520,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                     Statewidget(
                       selectedLocation: selecteState,
                       categoryId: selectCountryId.toString(),
+                      stateid: selectStateId,
                       onChanged: (value) {
                         setState(() {
                           selecteState = value;

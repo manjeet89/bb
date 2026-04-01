@@ -572,6 +572,12 @@
 // }
 
 import 'dart:io';
+import 'package:bb/AddressModule/Country/CountryModel.dart';
+import 'package:bb/AddressModule/Country/CountryWidget.dart';
+import 'package:bb/AddressModule/District/DistricModel.dart';
+import 'package:bb/AddressModule/District/DistrictWidget.dart';
+import 'package:bb/AddressModule/State/StateModel.dart';
+import 'package:bb/AddressModule/State/StateWidget.dart';
 import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/Breed/BreedModel.dart';
 import 'package:bb/Breed/Breedwidget.dart';
@@ -591,6 +597,53 @@ class PetFormScreen extends StatefulWidget {
 }
 
 class _PetFormScreenState extends State<PetFormScreen> {
+  // address
+  final TextEditingController firstnameController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController pincodeController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController organizationNameController =
+      TextEditingController(); // Controller for organization name
+
+  var FirstName = "";
+  var LastName = "";
+  var Email = "";
+  var Number = "";
+  var Gender = "";
+  var Dateofbirth = "";
+  var Bloodname = "";
+  var UserAddress = "";
+  var Country = "";
+  var State = "";
+  var District = "";
+  var City = "";
+  var Pincode = "";
+  var ImageGet = "";
+  String selectedGender = "Male";
+  String selectedUserType = "Individual"; // State for user type
+
+  String selectedCountry = "India";
+  String selectedblood = "A+";
+
+  List<String> countries = ["India", "USA", "UK", "Canada", "Australia"];
+  List<String> bloodgroup = ["A+", "A_", "B+", "B-", "0+", "0-", "AB+", "AB-"];
+
+  CountryDropDownModel? selecteCountry;
+  String? selectCountryId;
+
+  StateModel? selecteState;
+  String? selectStateId;
+
+  DistrictModelDropDown? selecteDistrict;
+  String? selectDistrictId;
+
+  //================
+  //End addres
+  //================
+
   final _FirstName = TextEditingController();
   final _LastName = TextEditingController();
   final _mobilenumb = TextEditingController();
@@ -644,7 +697,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
       //   backgroundColor: AppColors.primarycolor,
       //   centerTitle: true,
       // ),
-            appBar: const CommonAppBar(),
+      appBar: const CommonAppBar(),
 
       body: Container(
         decoration: const BoxDecoration(
@@ -824,6 +877,62 @@ class _PetFormScreenState extends State<PetFormScreen> {
 
               const SizedBox(height: 20),
 
+              _sectionCard(
+                title: "Address Information",
+                children: [
+                  _label("Country"),
+                  Countrywidget(
+                    selectedLocation: selecteCountry,
+                    countryid: "",
+                    onChanged: (value) {
+                      setState(() {
+                        selecteCountry = value;
+                        selectCountryId = value?.countryId;
+                        selecteState = null;
+                        selecteDistrict = null;
+                      });
+                    },
+                  ),
+                  _gap(),
+                  _label("State"),
+                  Statewidget(
+                    selectedLocation: selecteState,
+                    categoryId: selectCountryId.toString(),
+                    stateid: "",
+                    onChanged: (value) {
+                      setState(() {
+                        selecteState = value;
+                        selectStateId = value?.stateId;
+                        selecteDistrict = null;
+                      });
+                    },
+                  ),
+                  _gap(),
+                  _label("District"),
+                  Districtwidget(
+                    selectedLocation: selecteDistrict,
+                    categoryId: selectStateId.toString(),
+                    districtId: "",
+                    onChanged: (value) {
+                      setState(() {
+                        selecteDistrict = value;
+                        selectDistrictId = value?.districtId;
+                      });
+                    },
+                  ),
+                  _gap(),
+                  _label("City"),
+                  _inputField(controller: cityController, hint: "City", icon: Icons.location_city),
+                  _gap(),
+                  _label("Address"),
+                  _inputField(controller: addressController, hint: "Address", icon: Icons.home),
+                  _gap(),
+                  _label("Pincode"),
+                  _inputField(controller: pincodeController, hint: "Pincode", icon: Icons.pin_drop),
+                ],
+              ),
+              const SizedBox(height: 20),
+
               /// ✅ CONSENTS
               _card(
                 title: "Consent",
@@ -875,6 +984,67 @@ class _PetFormScreenState extends State<PetFormScreen> {
   }
 
   /// ---------------- UI HELPERS ----------------
+  ///
+
+  Widget _sectionCard({required String title, required List<Widget> children}) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 12),
+          ...children,
+        ],
+      ),
+    );
+  }
+
+  Widget _gap() => const SizedBox(height: 14);
+
+  Widget _label(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Text(
+        text,
+        style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Widget _inputField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    bool readOnly = false,
+    VoidCallback? onTap,
+  }) {
+    // Make first name, last name, and email fields read-only if already filled
+    // bool isReadOnly =
+    //     readOnly ||
+    //     (controller == firstnameController && firstnameController.text.isNotEmpty) ||
+    //     (controller == lastnameController && lastnameController.text.isNotEmpty);
+    // ||(controller == emailController && emailController.text.isNotEmpty);
+
+    return TextField(
+      controller: controller,
+      // readOnly: isReadOnly,
+      onTap: onTap,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: AppColors.secondrycolor),
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(borderSide: BorderSide(color: AppColors.dividerGrey)),
+      ),
+    );
+  }
 
   Widget _card({required String title, required Widget child}) {
     return Container(
@@ -1080,7 +1250,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
           if (petImage != null) "pet_image": await MultipartFile.fromFile(petImage!.path),
           "pet_name": _petName.text,
           "pet_gender": gender == "Male" ? "1" : "0",
-          // "pet_gender": sterilization == "Intact" ? "1" : "0",
+          "sterilization_status": sterilization == "Intact" ? "1" : "0",
           "pet_birth_date": "${date[2]}-${date[1]}-${date[0]}",
           "pet_breed_id": breedId,
           "pet_category_id": petCategoryId,
@@ -1090,6 +1260,13 @@ class _PetFormScreenState extends State<PetFormScreen> {
           "user_first_name": _FirstName.text,
           "user_last_name": _LastName.text,
           "user_mobile_number": _mobilenumb.text,
+
+          "pet_country": selectCountryId.toString(),
+          "pet_state": selectStateId.toString(),
+          "pet_district": selectDistrictId.toString(),
+          "pet_city": cityController.text.toString(),
+          "pet_address": addressController.text.toString(),
+          "pet_pin_code": pincodeController.text.toString(),
         });
 
         await dio.post(
@@ -1109,7 +1286,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
         if (petImage != null) "pet_image": await MultipartFile.fromFile(petImage!.path),
         "pet_name": _petName.text,
         "pet_gender": gender == "Male" ? "1" : "0",
-        // "pet_gender": sterilization == "Intact" ? "1" : "0",
+        "sterilization_status": sterilization == "Intact" ? "1" : "0",
         "pet_birth_date": "${date[2]}-${date[1]}-${date[0]}",
         "pet_breed_id": breedId,
         "pet_category_id": petCategoryId,
@@ -1119,6 +1296,13 @@ class _PetFormScreenState extends State<PetFormScreen> {
         "user_first_name": _FirstName.text,
         "user_last_name": _LastName.text,
         "user_mobile_number": _mobilenumb.text,
+
+        "pet_country": selectCountryId.toString(),
+        "pet_state": selectStateId.toString(),
+        "pet_district": selectDistrictId.toString(),
+        "pet_city": cityController.text.toString(),
+        "pet_address": addressController.text.toString(),
+        "pet_pin_code": pincodeController.text.toString(),
       });
 
       await dio.post(

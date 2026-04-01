@@ -8,13 +8,15 @@ class Statewidget extends StatefulWidget {
   final Function(StateModel?) onChanged;
   final StateModel? selectedLocation;
   final String categoryId;
+  String? stateid;
   // final String label;
 
-  const Statewidget({
+  Statewidget({
     super.key,
     required this.onChanged,
     this.selectedLocation,
     required this.categoryId,
+    required this.stateid,
     // this.label = "stock category",
   });
 
@@ -25,6 +27,7 @@ class Statewidget extends StatefulWidget {
 class _StatewidgetState extends State<Statewidget> {
   List<StateModel> locations = [];
   bool isLoading = true;
+  StateModel? matched;
 
   @override
   void initState() {
@@ -50,7 +53,32 @@ class _StatewidgetState extends State<Statewidget> {
     } catch (e) {
       print("Error loading stock types: $e");
     }
-    setState(() => isLoading = false);
+
+    // FIND MATCHED ITEM
+    if (widget.stateid != null && widget.stateid!.isNotEmpty) {
+      for (var loc in locations) {
+        if (loc.stateId == widget.stateid) {
+          matched = loc;
+          print("Matched ID = ${matched?.stateId}");
+          print("Matched Name = ${matched?.stateName}");
+
+          break;
+        }
+      }
+    }
+
+    // UPDATE UI
+    setState(() {
+      isLoading = false;
+    });
+
+    // CALL PARENT onChanged AFTER UI UPDATE
+    if (matched != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onChanged(matched!);
+      });
+    }
+    // setState(() => isLoading = false);
   }
 
   @override

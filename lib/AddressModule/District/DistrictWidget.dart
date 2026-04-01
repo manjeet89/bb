@@ -8,13 +8,15 @@ class Districtwidget extends StatefulWidget {
   final Function(DistrictModelDropDown?) onChanged;
   final DistrictModelDropDown? selectedLocation;
   final String categoryId;
+  String? districtId;
   // final String label;
 
-  const Districtwidget({
+  Districtwidget({
     super.key,
     required this.onChanged,
     this.selectedLocation,
     required this.categoryId,
+    this.districtId,
     // this.label = "stock category",
   });
 
@@ -25,6 +27,7 @@ class Districtwidget extends StatefulWidget {
 class _DistrictwidgetState extends State<Districtwidget> {
   List<DistrictModelDropDown> locations = [];
   bool isLoading = true;
+  DistrictModelDropDown? matched;
 
   @override
   void initState() {
@@ -50,7 +53,31 @@ class _DistrictwidgetState extends State<Districtwidget> {
     } catch (e) {
       print("Error loading stock types: $e");
     }
-    setState(() => isLoading = false);
+    // FIND MATCHED ITEM
+    if (widget.districtId != null && widget.districtId!.isNotEmpty) {
+      for (var loc in locations) {
+        if (loc.districtId == widget.districtId) {
+          matched = loc;
+          print("Matched ID = ${matched?.districtId}");
+          print("Matched Name = ${matched?.districtName}");
+
+          break;
+        }
+      }
+    }
+
+    // UPDATE UI
+    setState(() {
+      isLoading = false;
+    });
+
+    // CALL PARENT onChanged AFTER UI UPDATE
+    if (matched != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onChanged(matched!);
+      });
+    }
+    // setState(() => isLoading = false);
   }
 
   @override

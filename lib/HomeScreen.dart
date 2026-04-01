@@ -621,6 +621,11 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
 
             const SizedBox(height: 20),
 
+            /// ---------- LEADER BOARD (CATS / DOGS) ----------
+            _sectionTitle("Leaderboard"),
+            const LeaderboardSection().animate().fadeIn(delay: 200.ms).slideX(),
+            const SizedBox(height: 26),
+
             CarouselSlider(
               items: [
                 _sliderImage("https://images.pexels.com/photos/8730617/pexels-photo-8730617.jpeg"),
@@ -643,22 +648,6 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
             ),
             const SizedBox(height: 26),
 
-            /// ---------- LEADER BOARD (CATS / DOGS) ----------
-            _sectionTitle("Leaderboard"),
-           const LeaderboardSection() .animate().fadeIn(delay: 200.ms).slideX(),
-
-            const SizedBox(height: 26),
-
-            /// ---------- YOUR DATA (CATS / DOGS) ----------
-            _sectionTitle("Available Blood Donors"),
-            Row(
-              children: [
-                _countCard(title: "Cats", value: "$totalCats k", image: "assest/petcat.png"),
-                _countCard(title: "Dogs", value: "$totalDogs k", image: "assest/petdog.png"),
-              ],
-            ).animate().fadeIn(delay: 200.ms).slideX(),
-
-            const SizedBox(height: 26),
             _sectionTitle("Best pet quotes"),
             RotatingQuotes(
               quotes: [
@@ -673,6 +662,16 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
                 "“Animals are such agreeable friends — they ask no questions, they pass no criticism.” — George Eliot",
               ],
             ),
+            const SizedBox(height: 26),
+
+            /// ---------- YOUR DATA (CATS / DOGS) ----------
+            _sectionTitle("Available Blood Donors"),
+            Row(
+              children: [
+                _countCard(title: "Cats", value: "$totalCats k", image: "assest/petcat.png"),
+                _countCard(title: "Dogs", value: "$totalDogs k", image: "assest/petdog.png"),
+              ],
+            ).animate().fadeIn(delay: 200.ms).slideX(),
 
             const SizedBox(height: 24),
             _sectionTitle('Pet Care Tips'),

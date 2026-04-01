@@ -7,12 +7,13 @@ import 'package:dropdown_search/dropdown_search.dart';
 class Countrywidget extends StatefulWidget {
   final Function(CountryDropDownModel?) onChanged;
   final CountryDropDownModel? selectedLocation;
-  // final String label;
+  String? countryid;
 
-  const Countrywidget({
+  Countrywidget({
     super.key,
     required this.onChanged,
     this.selectedLocation,
+    this.countryid,
     // this.label = "stock category",
   });
 
@@ -23,6 +24,7 @@ class Countrywidget extends StatefulWidget {
 class _CountrywidgetState extends State<Countrywidget> {
   List<CountryDropDownModel> locations = [];
   bool isLoading = true;
+  CountryDropDownModel? matched;
 
   @override
   void initState() {
@@ -32,8 +34,36 @@ class _CountrywidgetState extends State<Countrywidget> {
 
   Future<void> _loadLocations() async {
     locations = await Countrycontroller.fetchLocations();
-    setState(() => isLoading = false);
+
+    // FIND MATCHED ITEM
+    if (widget.countryid != null && widget.countryid!.isNotEmpty) {
+      for (var loc in locations) {
+        if (loc.countryId == widget.countryid) {
+          matched = loc;
+          print("Matched ID = ${matched?.countryId}");
+          print("Matched Name = ${matched?.countryName}");
+
+          break;
+        }
+      }
+    }
+
+    // UPDATE UI
+    setState(() {
+      isLoading = false;
+    });
+
+    // CALL PARENT onChanged AFTER UI UPDATE
+    if (matched != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onChanged(matched!);
+      });
+    }
   }
+  // Future<void> _loadLocations() async {
+  //   locations = await Countrycontroller.fetchLocations();
+  //   setState(() => isLoading = false);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +83,13 @@ class _CountrywidgetState extends State<Countrywidget> {
           labelStyle: TextStyle(
             color: AppColors.darkRed, // label color when not focused
           ),
+
           // floatingLabelStyle: TextStyle(
           //   color: Color.fromARGB(255, 23, 10, 138), // label color when focused
           //   fontWeight: FontWeight.bold,
           // ),
 
           // border: OutlineInputBorder(),
-
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(
               color: AppColors.darkRed, // border when not focused

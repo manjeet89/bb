@@ -63,26 +63,33 @@ class _PetListScreenState extends State<PetListScreen> {
   }
 
   Map<String, dynamic> getDonationStatus(String date) {
-    final parts = date.split('-');
-
-    DateTime petDate = DateTime(
-      int.parse(parts[2]), // year
-      int.parse(parts[1]), // month
-      int.parse(parts[0]), // day
-    );
-
-    DateTime nextDonationDate = petDate.add(const Duration(days: 90));
-    DateTime today = DateTime.now();
-
-    if (today.isAfter(nextDonationDate) || today.isAtSameMomentAs(nextDonationDate)) {
-      return {"text": "Now you can donate today", "color": Colors.green};
-    } else {
-      int remainingDays = nextDonationDate.difference(today).inDays;
-
+    if (date == null || date.isEmpty) {
       return {
-        "text": "$remainingDays days left",
-        "color": Colors.orange, // or Colors.red
+        "text": "Never Donate, \nPlease Donate ",
+        "color": Colors.red, // or Colors.red
       };
+    } else {
+      final parts = date.split('-');
+
+      DateTime petDate = DateTime(
+        int.parse(parts[0]), // year
+        int.parse(parts[1]), // month
+        int.parse(parts[2]), // day
+      );
+
+      DateTime nextDonationDate = petDate.add(const Duration(days: 90));
+      DateTime today = DateTime.now();
+
+      if (today.isAfter(nextDonationDate) || today.isAtSameMomentAs(nextDonationDate)) {
+        return {"text": "Now you can donate today", "color": Colors.green};
+      } else {
+        int remainingDays = nextDonationDate.difference(today).inDays;
+
+        return {
+          "text": "$remainingDays days left",
+          "color": Colors.orange, // or Colors.red
+        };
+      }
     }
   }
 
@@ -321,7 +328,7 @@ class _PetListScreenState extends State<PetListScreen> {
 
     Map<String, dynamic>? donationStatus;
     if (!isDead) {
-      donationStatus = getDonationStatus(pet.petBirthDate.toString());
+      donationStatus = getDonationStatus(pet.lastDonateDate.toString());
     }
     return GestureDetector(
       onTap: () {

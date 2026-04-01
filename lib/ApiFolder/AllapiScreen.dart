@@ -16,6 +16,8 @@ class allapiscreen {
       "https://pashuraktkosh.lyferp.com/api/pet/microchip_detail_update";
   static const String petcategory = "https://pashuraktkosh.lyferp.com/api/pet/pet_category";
   static const String petadd = "https://pashuraktkosh.lyferp.com/api/pet/add_pet";
+  static const String petupdate = "https://pashuraktkosh.lyferp.com/api/pet/update_pet_profile";
+  static const String petdetails = "https://pashuraktkosh.lyferp.com/api/pet/my_pet_profile";
   static const String sosblood = "https://pashuraktkosh.lyferp.com/api/pet/need_blood_donor";
   static const String breed = "https://pashuraktkosh.lyferp.com/api/pet/breed_list";
   static const String petweight = "https://pashuraktkosh.lyferp.com/api/pet/update_pet_weight";

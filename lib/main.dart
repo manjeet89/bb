@@ -3,11 +3,14 @@ import 'package:bb/AnimalCategory/screen/animal_category_screen.dart';
 import 'package:bb/Credential/loginScreen.dart';
 import 'package:bb/Credential/otpScreen.dart';
 import 'package:bb/DonateNow.dart';
+import 'package:bb/LeaderBoard.dart';
+import 'package:bb/LeaderBoardPage.dart';
 import 'package:bb/Navigation/navigationScreen.dart';
 import 'package:bb/Notification.dart';
 import 'package:bb/PetInfo/Blood_Donate.dart';
 import 'package:bb/PetInfo/ExpireDate.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
+import 'package:bb/PetInfo/UpdatePetDetails.dart';
 import 'package:bb/PetInfo/WeightUpdate.dart';
 import 'package:bb/PetInfo/petCategoryScreen.dart';
 import 'package:bb/PetInfo/petDetails.dart';
@@ -63,6 +66,7 @@ void main() async {
         '/home2': (context) => NavigationBarApp(indexvalue: 2),
         '/profile': (context) => Userprofile(),
         '/petRegistration': (context) => PetFormScreen(),
+        '/updatepetDetails': (context) => Updatepetdetails(),
         '/petList': (context) => PetListScreen(),
         '/userRegistration': (context) => Updateprofile(),
         '/petDetails': (context) => PetDetailScreen(),
@@ -85,6 +89,7 @@ void main() async {
         '/BloodDonatePetInfo': (context) => BloodDonatePetInfo(),
         '/Notification': (context) => NotificationApp(),
         '/Donatenow': (context) => Donatenow(),
+        '/LeaderboardSection': (context) => LeaderboardScreen(),
       },
       debugShowCheckedModeBanner: false,
       navigatorObservers: [observer],

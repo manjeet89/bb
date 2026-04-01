@@ -8,13 +8,15 @@ class Breedwidget extends StatefulWidget {
   final Function(BreedModel?) onChanged;
   final BreedModel? selectedLocation;
   String? spidiesId;
+  String? breedId;
   // final String label;
 
-  Breedwidget({
+  Breedwidget({ 
     super.key,
     required this.onChanged,
     this.selectedLocation,
     this.spidiesId,
+    this.breedId,
     // this.label = "stock category",
   });
 
@@ -25,6 +27,7 @@ class Breedwidget extends StatefulWidget {
 class _BreedwidgetState extends State<Breedwidget> {
   List<BreedModel> locations = [];
   bool isLoading = true;
+  BreedModel? matched;
 
   @override
   void initState() {
@@ -34,8 +37,35 @@ class _BreedwidgetState extends State<Breedwidget> {
 
   Future<void> _loadLocations() async {
     locations = await Breedcontroller.fetchLocations(widget.spidiesId.toString());
-    setState(() => isLoading = false);
+
+     // FIND MATCHED ITEM
+    if (widget.breedId != null && widget.breedId!.isNotEmpty) {
+      for (var loc in locations) {
+        if (loc.breedId == widget.breedId) {
+          matched = loc;
+          print("Matched ID = ${matched?.breedId}");
+          print("Matched Name = ${matched?.breedName}");
+
+          break;
+        }
+      }
+    }
+
+    // UPDATE UI
+    setState(() {
+      isLoading = false;
+    });
+
+    // CALL PARENT onChanged AFTER UI UPDATE
+    if (matched != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onChanged(matched!);
+      });
+    }
   }
+    
+  //   setState(() => isLoading = false);
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -246,14 +246,24 @@ class _SosscreenState extends State<Sosscreen> {
                     return const Center(child: Text("No pets found"));
                   }
 
-                  final pets = snapshot.data!;
+                  final petss = snapshot.data!;
+
+                  /// ✅ Split Lists
+                  final alivePets = petss
+                      .where(
+                        (pet) =>
+                            pet.petExpireDate == null ||
+                            pet.petExpireDate.toString().isEmpty ||
+                            pet.petExpireDate.toString() == "null",
+                      )
+                      .toList();
 
                   return AnimatedList(
                     key: _listKey,
                     padding: const EdgeInsets.all(12),
-                    initialItemCount: pets.length,
+                    initialItemCount: alivePets.length,
                     itemBuilder: (context, index, animation) {
-                      final pet = pets[index];
+                      final pet = alivePets[index];
 
                       String image = pet.petImage.toString();
                       List dateSplit = pet.petBirthDate.toString().split(" ");
@@ -1459,6 +1469,7 @@ class _SosscreenState extends State<Sosscreen> {
                           child: Statewidget(
                             categoryId: selecteCountry!.countryId!,
                             selectedLocation: selecteState,
+                            stateid: "",
                             onChanged: (value) {
                               dialogSetState(() {
                                 selecteState = value;

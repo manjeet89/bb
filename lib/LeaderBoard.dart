@@ -9,7 +9,7 @@ class LeaderboardSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        navigatorKey.currentState?.pushNamed('/leaderboard');
+        navigatorKey.currentState?.pushNamed('/LeaderboardSection');
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(

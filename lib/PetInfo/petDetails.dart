@@ -525,6 +525,9 @@
 //   );
 // }
 
+import 'dart:convert';
+
+import 'package:bb/ApiFolder/AllapiScreen.dart';
 import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/main.dart';
@@ -532,9 +535,166 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../utils/app_colors.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
-class PetDetailScreen extends StatelessWidget {
+class PetDetailScreen extends StatefulWidget {
   const PetDetailScreen({super.key});
+
+  @override
+  State<PetDetailScreen> createState() => _PetDetailScreenState();
+}
+
+class _PetDetailScreenState extends State<PetDetailScreen> {
+  String BreeedName = "";
+  static String countryName = "";
+  String districtName = "";
+  String stateName = "";
+  bool onetime = true;
+  bool countryonetime = true;
+  bool districtonetime = true;
+  bool stateonetime = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  Future<String> fetchData(String id) async {
+    final url = allapiscreen.petdetails.toString();
+    final header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header, body: {"pet_id": id});
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data'];
+      print(data);
+
+      setState(() {
+        BreeedName = data['breed_name'] ?? "";
+        onetime = false;
+      });
+    }
+    return BreeedName;
+  }
+
+  country(String id) async {
+    final url = allapiscreen.country.toString();
+    final header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header);
+
+    if (response.statusCode == 200) {
+      try {
+        final decodedResponse = json.decode(response.body);
+        if (decodedResponse is Map && decodedResponse['data'] is List) {
+          final dataList = decodedResponse['data'] as List;
+
+          for (var item in dataList) {
+            if (item is Map && item['country_id'].toString() == id) {
+              setState(() {
+                countryName = item['country_name'] ?? "";
+                countryonetime = false;
+              });
+              break;
+            }
+          }
+        } else {
+          print("Unexpected response structure: $decodedResponse");
+        }
+      } catch (e) {
+        print("Error decoding response: $e");
+      }
+    } else {
+      print("Failed to fetch country data. Status code: ${response.statusCode}");
+    }
+    return countryName;
+  }
+
+  state(String stateid, String contid) async {
+    final url = allapiscreen.state.toString();
+    final header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header, body: {"country_id": contid});
+
+    if (response.statusCode == 200) {
+      try {
+        final decodedResponse = json.decode(response.body);
+        if (decodedResponse is Map && decodedResponse['data'] is List) {
+          final dataList = decodedResponse['data'] as List;
+
+          for (var item in dataList) {
+            if (item is Map && item['state_id'].toString() == stateid) {
+              setState(() {
+                stateName = item['state_name'] ?? "";
+                stateonetime = false;
+              });
+              break;
+            }
+          }
+        } else {
+          print("Unexpected response structure: $decodedResponse");
+        }
+      } catch (e) {
+        print("Error decoding response: $e");
+      }
+    } else {
+      print("Failed to fetch country data. Status code: ${response.statusCode}");
+    }
+    return stateName;
+  }
+
+  district(String state, String dist) async {
+    final url = allapiscreen.district.toString();
+    final header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header, body: {"state_id": state});
+
+    if (response.statusCode == 200) {
+      try {
+        final decodedResponse = json.decode(response.body);
+        if (decodedResponse is Map && decodedResponse['data'] is List) {
+          final dataList = decodedResponse['data'] as List;
+
+          for (var item in dataList) {
+            if (item is Map && item['district_id'].toString() == dist) {
+              setState(() {
+                districtName = item['district_name'] ?? "";
+                districtonetime = false;
+              });
+              break;
+            }
+          }
+        } else {
+          print("Unexpected response structure: $decodedResponse");
+        }
+      } catch (e) {
+        print("Error decoding response: $e");
+      }
+    } else {
+      print("Failed to fetch country data. Status code: ${response.statusCode}");
+    }
+    return districtName;
+  }
+
+  // Future<String> district(String state, String dist) async {
+  //   final url = allapiscreen.district.toString();
+  //   final header = await allapiscreen.headerFunction();
+
+  //   final response = await http.post(Uri.parse(url), headers: header, body: {"state_id": state});
+
+  //   if (response.statusCode == 200) {
+  //     final data = json.decode(response.body)['data'];
+  //     print(data);
+
+  //     setState(() {
+  //       if (data['district_id'].toString() == dist) {
+  //         districtName = data['district_name'] ?? "";
+  //         districtonetime = false;
+  //       }
+  //     });
+  //   }
+  //   return districtName;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -545,6 +705,21 @@ class PetDetailScreen extends StatelessWidget {
 
     DateTime date = inputFormat.parse(pet.petBirthDate.toString());
     String formattedDate = outputFormat.format(date);
+    if (onetime == true) {
+      // fetchData updates the state variable BreeedName via setState; call it without assigning the Future here
+      fetchData(pet.petId.toString());
+    }
+
+    if (countryonetime == true) {
+      country(pet.petCountry.toString());
+    }
+
+    if (stateonetime == true) {
+      state(pet.petState.toString(), pet.petCountry.toString());
+    }
+    if (districtonetime == true) {
+      district(pet.petState.toString(), pet.petDistrict.toString());
+    }
 
     print(formattedDate); // 05-October-2021
     return Scaffold(
@@ -605,16 +780,49 @@ class PetDetailScreen extends StatelessWidget {
                             ),
                           );
                         },
-                        child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.white,
-                          backgroundImage:
-                              pet.petImage.toString() == "null" || pet.petImage.toString().isEmpty
-                              ? AssetImage("assest/bblogo.png") as ImageProvider
-                              : NetworkImage(
-                                  "https://pashuraktkosh.lyferp.com/${pet.petImage.toString()}",
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.white,
+                              backgroundImage:
+                                  pet.petImage.toString() == "null" ||
+                                      pet.petImage.toString().isEmpty
+                                  ? AssetImage("assest/bblogo.png") as ImageProvider
+                                  : NetworkImage(
+                                      "https://pashuraktkosh.lyferp.com/${pet.petImage.toString()}",
+                                    ),
+                            ).animate().fadeIn(duration: 400.ms).scale(),
+                            Positioned(
+                              bottom: 4,
+                              right: 4,
+                              child: GestureDetector(
+                                onTap: () async {
+                                  navigatorKey.currentState?.pushNamed(
+                                    '/updatepetDetails',
+                                    arguments: pet,
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primarycolor,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.25),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(Icons.edit, color: Colors.white, size: 18),
                                 ),
-                        ).animate().fadeIn(duration: 400.ms).scale(),
+                              ).animate().fadeIn(delay: 300.ms).scale(),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 12),
 
@@ -629,7 +837,7 @@ class PetDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        pet.petName.toString(),
+                        pet.petCategoryId.toString() == "1" ? "Dog" : "Cat",
                         style: const TextStyle(color: Colors.white70, fontSize: 16),
                       ),
                     ],
@@ -654,9 +862,33 @@ class PetDetailScreen extends StatelessWidget {
                         pet.petBirthDate.toString().replaceAll("-", "") + pet.petId.toString(),
                       ),
                       infoRow("Gender", pet.petGender == "1" ? "Male" : "Female"),
+                      infoRow("Breeed Name", BreeedName),
                       infoRow("Date of Birth", formattedDate),
+                      
+                      infoRow(
+                        "Is Pet Alive",
+                        pet.petExpireDate.toString() == "null" ? "Yes" : "No",
+                      ),
                       if (pet.petWeightInKg.toString() != "null")
                         infoRow("Weight", "${pet.petWeightInKg} KG"),
+                      infoRow(
+                        "Last Donate Date",
+                        pet.lastDonateDate.toString().replaceAll("-", "-"),
+                      ),
+                      infoRowforaddress(
+                        "Address",
+                        pet.petAddress.toString() +
+                            " " +
+                            pet.petCity.toString() +
+                            "," +
+                            districtName +
+                            "," +
+                            stateName +
+                            "," +
+                          countryName   +
+                            "," +
+                            pet.petPinCode.toString(),
+                      ),
                     ],
                   ),
 
@@ -798,9 +1030,34 @@ class PetDetailScreen extends StatelessWidget {
               style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
             ),
           ),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondrycolor),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondrycolor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget infoRowforaddress(String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.secondrycolor),
+            ),
           ),
         ],
       ),
