@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class allapiscreen {
   static String imageapi = "https://pashuraktkosh.lyferp.com/";
   static String login = "https://pashuraktkosh.lyferp.com/api/login";
+  static String deactivate = "https://pashuraktkosh.lyferp.com/api/user/user_deactivate";
   static String otp = "https://pashuraktkosh.lyferp.com/api/login/verification";
   static const String mypetlist = "https://pashuraktkosh.lyferp.com/api/pet/my_pet_list";
   static const String userprofile = "https://pashuraktkosh.lyferp.com/api/user/user_profile";

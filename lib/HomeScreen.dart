@@ -587,7 +587,7 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
       final decoded = json.decode(response.body);
       setState(() async {
         SharedPreferences FontEmpTypeName = await SharedPreferences.getInstance();
-        await FontEmpTypeName.setString("FirstName", decoded['data']['user_first_name'] ?? "");
+        await FontEmpTypeName.setString("DateOfBirth", decoded['data']['user_date_of_birth'] ?? "");
       });
     }
   }

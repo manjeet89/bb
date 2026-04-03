@@ -43,6 +43,7 @@ class _ExpiredateState extends State<Expiredate> {
   // ================= SUBMIT =================
   Future<void> submitForm() async {
     final pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
+    print("hihad9ufboa");
     final header = await allapiscreen.headerFunction();
     final url = allapiscreen.expiredate.toString();
 
@@ -77,7 +78,7 @@ class _ExpiredateState extends State<Expiredate> {
       //   ),
       //   backgroundColor: AppColors.primarycolor,
       // ),
-            appBar: const CommonAppBar(),
+      appBar: const CommonAppBar(),
 
       body: Container(
         decoration: const BoxDecoration(
@@ -96,7 +97,7 @@ class _ExpiredateState extends State<Expiredate> {
                 title: "Expire date",
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_label("Insertion Date"), _dateField()],
+                  children: [_label("Date of Passing Away"), _dateField()],
                 ),
               ),
 
@@ -105,7 +106,9 @@ class _ExpiredateState extends State<Expiredate> {
               SizedBox(
                 height: 52,
                 child: ElevatedButton(
-                  onPressed: () => submitForm,
+                  onPressed: () {
+                    submitForm();
+                  },
 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primarycolor,

@@ -45,7 +45,7 @@ class _PetListScreenState extends State<PetListScreen> {
   Future<void> LoginCheck() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    String isName = prefs.getString("FirstName") ?? "";
+    String isName = prefs.getString("DateOfBirth") ?? "";
     if (isName == "") {
       setState(() {
         sessionset = true;
@@ -65,7 +65,7 @@ class _PetListScreenState extends State<PetListScreen> {
   Map<String, dynamic> getDonationStatus(String date) {
     if (date == null || date.isEmpty) {
       return {
-        "text": "Never Donate, \nPlease Donate ",
+        "text": "Never Donated, Can Donate Today",
         "color": Colors.red, // or Colors.red
       };
     } else {
@@ -81,12 +81,12 @@ class _PetListScreenState extends State<PetListScreen> {
       DateTime today = DateTime.now();
 
       if (today.isAfter(nextDonationDate) || today.isAtSameMomentAs(nextDonationDate)) {
-        return {"text": "Now you can donate today", "color": Colors.green};
+        return {"text": "Can donate today", "color": Colors.green};
       } else {
         int remainingDays = nextDonationDate.difference(today).inDays;
 
         return {
-          "text": "$remainingDays days left",
+          "text": " Can donate in $remainingDays days",
           "color": Colors.orange, // or Colors.red
         };
       }
@@ -142,78 +142,101 @@ class _PetListScreenState extends State<PetListScreen> {
               child: const Icon(Icons.add, color: Colors.white),
             ),
 
-      body: FutureBuilder<List<Petlistmodel>>(
-        future: PetService.fetchPets(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final pets = snapshot.data!;
-
-          /// ✅ Split Lists
-          final alivePets = pets
-              .where(
-                (pet) =>
-                    pet.petExpireDate == null ||
-                    pet.petExpireDate.toString().isEmpty ||
-                    pet.petExpireDate.toString() == "null",
-              )
-              .toList();
-
-          final deadPets = pets
-              .where(
-                (pet) =>
-                    pet.petExpireDate != null &&
-                    pet.petExpireDate.toString().isNotEmpty &&
-                    pet.petExpireDate.toString() != "null",
-              )
-              .toList();
-
-          return ListView(
-            padding: const EdgeInsets.all(12),
-            children: [
-              /// 🐾 ALIVE PETS
-              ...alivePets.map((pet) {
-                String image = pet.petImage.toString();
-                List dateSplit = pet.petBirthDate.toString().split(" ");
-                String petId = "${dateSplit[0].replaceAll("-", "")}${pet.petId}";
-
-                return petCard(pet, petId, image);
-              }),
-
-              /// 💔 REST IN PEACE SECTION
-              if (deadPets.isNotEmpty) ...[
-                const SizedBox(height: 20),
-
-                Row(
-                  children: [
-                    const Icon(Icons.favorite, color: Colors.red),
-                    const SizedBox(width: 6),
-                    Text(
-                      "Rest in Peace (${deadPets.length})",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 10),
-
-                ...deadPets.map((pet) {
-                  String image = pet.petImage.toString();
-                  List dateSplit = pet.petBirthDate.toString().split(" ");
-                  String petId = "${dateSplit[0].replaceAll("-", "")}${pet.petId}";
-
-                  return petCard(pet, petId, image);
-                }),
-              ],
-            ],
-          );
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await PetService.fetchPets();
+          setState(() {});
         },
+        child: _loginCheck
+            ? Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primarycolor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () {
+                    navigatorKey.currentState?.pushNamed('/login');
+                  },
+                  child: const Text("Go to Login", style: TextStyle(color: Colors.white)),
+                ),
+              )
+            : FutureBuilder<List<Petlistmodel>>(
+                future: PetService.fetchPets(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text("Complete your profile to add your first pet"));
+                  }
+
+                  final pets = snapshot.data!;
+
+                  /// ✅ Split Lists
+                  final alivePets = pets
+                      .where(
+                        (pet) =>
+                            pet.petExpireDate == null ||
+                            pet.petExpireDate.toString().isEmpty ||
+                            pet.petExpireDate.toString() == "null",
+                      )
+                      .toList();
+
+                  final deadPets = pets
+                      .where(
+                        (pet) =>
+                            pet.petExpireDate != null &&
+                            pet.petExpireDate.toString().isNotEmpty &&
+                            pet.petExpireDate.toString() != "null",
+                      )
+                      .toList();
+
+                  return ListView(
+                    padding: const EdgeInsets.all(12),
+                    children: [
+                      /// 🐾 ALIVE PETS
+                      ...alivePets.map((pet) {
+                        String image = pet.petImage.toString();
+                        List dateSplit = pet.petBirthDate.toString().split(" ");
+                        String petId = "${dateSplit[0].replaceAll("-", "")}${pet.petId}";
+
+                        return petCard(pet, petId, image);
+                      }),
+
+                      /// 💔 REST IN PEACE SECTION
+                      if (deadPets.isNotEmpty) ...[
+                        const SizedBox(height: 20),
+
+                        Row(
+                          children: [
+                            const Icon(Icons.favorite, color: Colors.red),
+                            const SizedBox(width: 6),
+                            Text(
+                              "Rest in Peace (${deadPets.length})",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        ...deadPets.map((pet) {
+                          String image = pet.petImage.toString();
+                          List dateSplit = pet.petBirthDate.toString().split(" ");
+                          String petId = "${dateSplit[0].replaceAll("-", "")}${pet.petId}";
+
+                          return petCard(pet, petId, image);
+                        }),
+                      ],
+                    ],
+                  );
+                },
+              ),
       ),
     );
   }
@@ -414,14 +437,6 @@ class _PetListScreenState extends State<PetListScreen> {
                       //     color: donationStatus != null ? donationStatus["color"] : Colors.grey,
                       //   ),
                       // ),
-                      Text(
-                        donationStatus != null ? donationStatus["text"] : "No donation info",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: donationStatus != null ? donationStatus["color"] : Colors.grey,
-                        ),
-                      ),
                     ],
                   ),
 
@@ -432,6 +447,14 @@ class _PetListScreenState extends State<PetListScreen> {
                     style: const TextStyle(fontSize: 12, color: AppColors.fontGrey),
                   ),
 
+                  Text(
+                    donationStatus != null ? donationStatus["text"] : "No donation info",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: donationStatus != null ? donationStatus["color"] : Colors.grey,
+                    ),
+                  ),
                   const SizedBox(height: 10),
 
                   /// STATUS CHIPS

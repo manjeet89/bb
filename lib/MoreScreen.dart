@@ -509,7 +509,7 @@ class _MorescreenState extends State<Morescreen> {
         //   ),
         //   centerTitle: true,
         // ),
-              appBar: const CommonAppBar(),
+        appBar: const CommonAppBar(),
 
         body: RefreshIndicator(
           onRefresh: () async => _fetchProfile(),
@@ -582,6 +582,8 @@ class _MorescreenState extends State<Morescreen> {
   Widget _menuSection() {
     return Column(
       children: [
+        if (isLoggedIn)
+          _menuCardDeactivate(Icons.disabled_visible_outlined, "Deactivate Account", ""),
         _menuCard(Icons.policy, "Privacy Policy", "privacyPolicy"),
         _menuCard(Icons.note, "Terms & Conditions", "termsConditions"),
         _menuCard(Icons.money, "Refunds & Cancellation", "refundCalcilcation"),
@@ -615,6 +617,101 @@ class _MorescreenState extends State<Morescreen> {
             () {
               navigatorKey.currentState?.pushNamed('/$route');
             },
+      ),
+    );
+  }
+
+  Widget _menuCardDeactivate(
+    IconData icon,
+    String title,
+    String route, {
+    Color? color,
+    VoidCallback? onTap,
+  }) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(.05), blurRadius: 10)],
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: AppColors.warningOrange.withOpacity(.15),
+          child: Icon(icon, color: AppColors.warningOrange),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.w600, color: color ?? Colors.black87),
+        ),
+        trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap:
+            onTap ??
+            () {
+              ShowDigiPin(context);
+              // navigatorKey.currentState?.pushNamed('/$route');
+            },
+      ),
+    );
+  }
+
+  void ShowDigiPin(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: AppColors.primarycolor,
+        title: Column(
+          children: [
+            CircleAvatar(
+              radius: 26,
+              backgroundColor: AppColors.darkRed.withOpacity(.15),
+              child: Icon(Icons.bloodtype, color: AppColors.darkRed, size: 30),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "You want to deactivate your account",
+              style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+          ],
+        ),
+
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          TextButton(
+            onPressed: () {},
+            child: Text("Cancel", style: TextStyle(color: AppColors.darkRed)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.successGreen,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () async {
+              var url = allapiscreen.deactivate.toString();
+              var header = await allapiscreen.headerFunction();
+
+              final response = await http.post(Uri.parse(url), headers: header);
+              print(jsonDecode(response.body).toString());
+
+              if (response.statusCode == 200) {
+                _logout();
+                final data = jsonDecode(response.body);
+                print(data);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Deactivate Account."),
+                    backgroundColor: AppColors.successGreen,
+                  ),
+                );
+              } else {
+                // Handle error (e.g., show a snackbar)
+                print('Login failed: ${response.body}');
+              }
+            },
+            child: const Text("Proceed"),
+          ),
+        ],
       ),
     );
   }

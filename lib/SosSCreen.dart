@@ -39,6 +39,8 @@ class _SosscreenState extends State<Sosscreen> {
   final TextEditingController stateCtrl = TextEditingController();
   final TextEditingController districtCtrl = TextEditingController();
   final TextEditingController pincodeCtrl = TextEditingController();
+  final TextEditingController cityCtrl = TextEditingController();
+  final TextEditingController addressCtrl = TextEditingController();
 
   bool progressindication = false;
 
@@ -77,7 +79,12 @@ class _SosscreenState extends State<Sosscreen> {
     String stateId,
     String distid,
     String pincode,
+    String city,
+    String address,
   ) async {
+    Navigator.pop(context); // close DigiPin dialog
+    // 🔹 Show loader
+    // showLoaderDialog(context);
     // if (_formKey.currentState!.validate() && certificateFile != null) {
     //   final data = {
     //     "microchip_number": microchipNumberCtrl.text,
@@ -116,6 +123,8 @@ class _SosscreenState extends State<Sosscreen> {
       "user_state_id": stateId.toString(),
       "user_district_id": distid.toString(),
       "user_pin_code": pincode.toString(),
+      "user_city": city.toString(),
+      "user_address": address.toString(),
     });
 
     Response response = await dio.post(
@@ -141,6 +150,8 @@ class _SosscreenState extends State<Sosscreen> {
           // ),
         ),
       );
+      // 🔹 Hide loader after API complete
+      Navigator.pop(context);
       // Navigator.pop(context);
     }
   }
@@ -152,6 +163,9 @@ class _SosscreenState extends State<Sosscreen> {
   var digiPin;
 
   Future<String> _listenLocation(Petlistmodel pet) async {
+    // 🔹 Show loader first
+    showLoaderDialog(context);
+
     await Geolocator.requestPermission();
 
     try {
@@ -174,7 +188,9 @@ class _SosscreenState extends State<Sosscreen> {
       // });
       setState(() {
         isLoading = false;
-        submitForm(pet, pin, lat.toString(), lng.toString(), "", "", "", "");
+
+        ShowDigiPin(context, pet, pin, lat.toString(), lng.toString(), "", "", "", "");
+        // submitForm(pet, pin, lat.toString(), lng.toString(), "", "", "", "");
       });
 
       return "$pin/$lat/$lng";
@@ -182,6 +198,72 @@ class _SosscreenState extends State<Sosscreen> {
       print('Error getting location: $e');
       return '';
     }
+  }
+
+  void showLoaderDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+  void ShowDigiPin(
+    BuildContext context,
+    Petlistmodel pet,
+    String pin,
+    String lat,
+    String lng,
+    String s1,
+    String s2,
+    String s3,
+    String s4,
+  ) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: AppColors.primarycolor,
+        title: Column(
+          children: [
+            CircleAvatar(
+              radius: 26,
+              backgroundColor: AppColors.darkRed.withOpacity(.15),
+              child: Icon(Icons.bloodtype, color: AppColors.darkRed, size: 30),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              "Your current digipi  is:",
+              style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            Text(
+              pin,
+              style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+
+        actionsAlignment: MainAxisAlignment.spaceBetween,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel", style: TextStyle(color: AppColors.darkRed)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.successGreen,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              submitForm(pet, pin, lat.toString(), lng.toString(), "", "", "", "", "", "");
+            },
+            child: const Text("Proceed"),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _loadCheckboxStates() async {
@@ -243,7 +325,7 @@ class _SosscreenState extends State<Sosscreen> {
                   }
 
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text("No pets found"));
+                    return const Center(child: Text("Complete your profile to add your first pet"));
                   }
 
                   final petss = snapshot.data!;
@@ -1179,7 +1261,7 @@ class _SosscreenState extends State<Sosscreen> {
                 onPressed: () {
                   Navigator.pop(context);
                   if (selected == "Use Digipin") {
-                    setState(() => isLoading = true);
+                    // setState(() => isLoading = true);
                     _listenLocation(pet);
                   }
                 },
@@ -1291,7 +1373,7 @@ class _SosscreenState extends State<Sosscreen> {
                   Navigator.pop(context, selectedOption);
                   if ("Use Digipin" == selectedOption) {
                     // String digiPin = await
-                    setState(() => isLoading = true);
+                    // setState(() => isLoading = true);
                     _listenLocation(pet);
                     // List divi = digiPin.split("/");
                     // String digi = divi[0];
@@ -1504,6 +1586,25 @@ class _SosscreenState extends State<Sosscreen> {
                           ),
                         ),
                       ],
+                      if (selecteState != null) ...[
+                        const SizedBox(height: 6),
+                        _label("Pincode"),
+
+                        /// PINCODE
+                        _inputField("Pin Code", pincodeCtrl),
+                      ],
+                      if (selecteState != null) ...[
+                        _label("City"),
+
+                        /// PINCODE
+                        _TextinputField("City", cityCtrl),
+                      ],
+                      if (selecteState != null) ...[
+                        _label("Address"),
+
+                        /// PINCODE
+                        _TextinputField("Address", addressCtrl),
+                      ],
                     ],
 
                     /// ================= STEP 2 =================
@@ -1542,8 +1643,13 @@ class _SosscreenState extends State<Sosscreen> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
                 onPressed: () {
-                  if (!showForm) {
-                    if (selecteCountry != null && selecteState != null && selecteDistrict != null) {
+                  // main component
+                  // if (!showForm) {
+                  if (showForm) {
+                    if (selecteCountry != null &&
+                        selecteState != null &&
+                        selecteDistrict != null &&
+                        pincodeCtrl.text.isNotEmpty) {
                       dialogSetState(() {
                         countryCtrl.text = selecteCountry!.countryName!;
                         stateCtrl.text = selecteState!.stateName!;
@@ -1580,6 +1686,8 @@ class _SosscreenState extends State<Sosscreen> {
                           stateid.toString(),
                           distid.toString(),
                           pincodeCtrl.text,
+                          cityCtrl.text,
+                          addressCtrl.text,
                         );
                       });
                     });
@@ -1588,7 +1696,8 @@ class _SosscreenState extends State<Sosscreen> {
                     print("District: ${districtCtrl.text}");
                     print("Pincode: ${pincodeCtrl.text}");
 
-                    // Navigator.pop(context);
+                    // Navigator.pop(context);  // 🔹 Hide loader after API complete
+                    Navigator.pop(context);
                   }
                 },
                 child: Text(showForm ? "Submit" : "Proceed"),
@@ -1609,9 +1718,11 @@ class _SosscreenState extends State<Sosscreen> {
         readOnly: true,
         decoration: InputDecoration(
           labelText: label,
+          hintStyle: TextStyle(color: Colors.white),
+
           labelStyle: TextStyle(color: Colors.white),
-          filled: true,
-          fillColor: Colors.black,
+          // filled: true,
+          fillColor: Colors.white,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         ),
       ),
@@ -1629,10 +1740,32 @@ class _SosscreenState extends State<Sosscreen> {
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: Colors.grey),
+          hintStyle: TextStyle(color: Colors.white),
 
-          filled: true,
-          fillColor: Colors.black,
+          labelStyle: TextStyle(color: Colors.white),
+
+          // filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+    );
+  }
+
+  Widget _TextinputField(String label, TextEditingController ctrl) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        style: TextStyle(color: Colors.white),
+
+        controller: ctrl,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white),
+          hintStyle: TextStyle(color: Colors.white),
+
+          // filled: true,
+          fillColor: Colors.white,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         ),
       ),

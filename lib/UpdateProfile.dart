@@ -303,7 +303,7 @@ class _UpdateprofileState extends State<Updateprofile> {
     );
 
     SharedPreferences FontEmpTypeName = await SharedPreferences.getInstance();
-    await FontEmpTypeName.setString("FirstName", firstnameController.text);
+    await FontEmpTypeName.setString("DateOfBirth", "$year - $month - $day");
 
     if (response.statusCode == 200) {
       print("done");
@@ -339,6 +339,8 @@ class _UpdateprofileState extends State<Updateprofile> {
   @override
   Widget build(BuildContext context) {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    selecteCountry = CountryDropDownModel(countryId: '101', countryName: 'India');
+    selectCountryId = '101';
 
     return Scaffold(
       backgroundColor: const Color(0xffF4F6FA),
@@ -412,21 +414,22 @@ class _UpdateprofileState extends State<Updateprofile> {
                 _sectionCard(
                   title: "Personal Information",
                   children: [
-                    _label("First Name"),
-                    _inputField(
-                      controller: firstnameController,
-                      hint: "First Name",
-                      icon: Icons.person,
-                    ),
-                    _gap(),
-                    _label("Last Name"),
-                    _inputField(
-                      controller: lastnameController,
-                      hint: "Last Name",
-                      icon: Icons.person_outline,
-                    ),
-
-                    const SizedBox(height: 18),
+                    if (FirstName == "null") _label("First Name"),
+                    if (FirstName == "null")
+                      _inputField(
+                        controller: firstnameController,
+                        hint: "First Name",
+                        icon: Icons.person,
+                      ),
+                    if (FirstName == "null") _gap(),
+                    if (LastName == "null") _label("Last Name"),
+                    if (LastName == "null")
+                      _inputField(
+                        controller: lastnameController,
+                        hint: "Last Name",
+                        icon: Icons.person_outline,
+                      ),
+                    if (LastName == "null") const SizedBox(height: 18),
                     // Organization and Normal
                     _label("User Type"),
                     Row(
@@ -452,35 +455,38 @@ class _UpdateprofileState extends State<Updateprofile> {
                     _label("Email"),
                     _inputField(controller: emailController, hint: "Email", icon: Icons.email),
                     _gap(),
-                    _label("Gender"),
-                    Row(
-                      children: [
-                        _genderButton("Male", Icons.male),
-                        const SizedBox(width: 10),
-                        _genderButton("Female", Icons.female),
-                      ],
-                    ),
-                    _gap(),
-                    _label("Date of Birth"),
-                    _inputField(
-                      controller: dobController,
-                      hint: "Date of Birth",
-                      icon: Icons.calendar_today,
-                      readOnly: true,
-                      onTap: dobController.text.isNotEmpty
-                          ? null
-                          : () async {
-                              DateTime? picked = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime.now(),
-                              );
-                              if (picked != null) {
-                                dobController.text = "${picked.day}-${picked.month}-${picked.year}";
-                              }
-                            },
-                    ),
+                    if (Dateofbirth == "null") _label("Gender"),
+                    if (Dateofbirth == "null")
+                      Row(
+                        children: [
+                          _genderButton("Male", Icons.male),
+                          const SizedBox(width: 10),
+                          _genderButton("Female", Icons.female),
+                        ],
+                      ),
+                    if (Dateofbirth == "null") _gap(),
+                    if (Dateofbirth == "null") _label("Date of Birth"),
+                    if (Dateofbirth == "null")
+                      _inputField(
+                        controller: dobController,
+                        hint: "Date of Birth",
+                        icon: Icons.calendar_today,
+                        readOnly: true,
+                        onTap: dobController.text.isNotEmpty
+                            ? null
+                            : () async {
+                                DateTime? picked = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime.now(),
+                                );
+                                if (picked != null) {
+                                  dobController.text =
+                                      "${picked.day}-${picked.month}-${picked.year}";
+                                }
+                              },
+                      ),
                   ],
                 ),
 
@@ -534,6 +540,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                     Districtwidget(
                       selectedLocation: selecteDistrict,
                       categoryId: selectStateId.toString(),
+                      districtId: selectDistrictId,
                       onChanged: (value) {
                         setState(() {
                           selecteDistrict = value;

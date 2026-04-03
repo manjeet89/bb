@@ -75,6 +75,7 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
                 crossAxisCount: 1,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
+                mainAxisExtent: 200, // 👈 FIXED HEIGHT HERE
               ),
               padding: const EdgeInsets.all(12),
               itemCount: pets.length,
@@ -90,9 +91,10 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
                     );
                   },
                   child: Container(
-                    // color: AppColors.backgrounLightGrey,
-                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    height: 250,
 
+                    // color: AppColors.backgrounLightGrey,
+                    // margin: const EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
                       color: AppColors.cardBackgroundWhite,
 
@@ -103,7 +105,7 @@ class _PetcategoryscreenState extends State<Petcategoryscreen> {
 
                           // color: Colors.redAccent.withOpacity(0.4),
                           blurRadius: 14,
-                          offset: const Offset(0, 6),
+                          // offset: const Offset(0, 6),
                         ),
                       ],
                     ),

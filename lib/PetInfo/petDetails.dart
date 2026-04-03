@@ -794,33 +794,34 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                       "https://pashuraktkosh.lyferp.com/${pet.petImage.toString()}",
                                     ),
                             ).animate().fadeIn(duration: 400.ms).scale(),
-                            Positioned(
-                              bottom: 4,
-                              right: 4,
-                              child: GestureDetector(
-                                onTap: () async {
-                                  navigatorKey.currentState?.pushNamed(
-                                    '/updatepetDetails',
-                                    arguments: pet,
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primarycolor,
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.25),
-                                        blurRadius: 6,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
+                            if (pet.petExpireDate.toString() == "null")
+                              Positioned(
+                                bottom: 4,
+                                right: 4,
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    navigatorKey.currentState?.pushNamed(
+                                      '/updatepetDetails',
+                                      arguments: pet,
+                                    );
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primarycolor,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.25),
+                                          blurRadius: 6,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: const Icon(Icons.edit, color: Colors.white, size: 18),
                                   ),
-                                  child: const Icon(Icons.edit, color: Colors.white, size: 18),
-                                ),
-                              ).animate().fadeIn(delay: 300.ms).scale(),
-                            ),
+                                ).animate().fadeIn(delay: 300.ms).scale(),
+                              ),
                           ],
                         ),
                       ),
@@ -864,7 +865,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       infoRow("Gender", pet.petGender == "1" ? "Male" : "Female"),
                       infoRow("Breeed Name", BreeedName),
                       infoRow("Date of Birth", formattedDate),
-                      
+
                       infoRow(
                         "Is Pet Alive",
                         pet.petExpireDate.toString() == "null" ? "Yes" : "No",
@@ -875,20 +876,21 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                         "Last Donate Date",
                         pet.lastDonateDate.toString().replaceAll("-", "-"),
                       ),
-                      infoRowforaddress(
-                        "Address",
-                        pet.petAddress.toString() +
-                            " " +
-                            pet.petCity.toString() +
-                            "," +
-                            districtName +
-                            "," +
-                            stateName +
-                            "," +
-                          countryName   +
-                            "," +
-                            pet.petPinCode.toString(),
-                      ),
+                      if (pet.petAddress.toString() != "null")
+                        infoRowforaddress(
+                          "Address",
+                          pet.petAddress.toString() +
+                              " " +
+                              pet.petCity.toString() +
+                              ", " +
+                              districtName +
+                              ", " +
+                              stateName +
+                              ", " +
+                              countryName +
+                              ", " +
+                              pet.petPinCode.toString(),
+                        ),
                     ],
                   ),
 
@@ -902,54 +904,69 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                         "Microchip",
                         pet.microchipNumber,
                         Icons.memory,
-                        () => navigatorKey.currentState?.pushNamed('/petmicrochip', arguments: pet),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed('/petmicrochip', arguments: pet)
+                            : null,
                       ),
                       statusTile(
                         "Health Information",
                         pet.healthinfo,
                         Icons.favorite,
-                        () =>
-                            navigatorKey.currentState?.pushNamed('/petHealthinfo', arguments: pet),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed('/petHealthinfo', arguments: pet)
+                            : null,
                       ),
                       statusTile(
                         "Vaccination",
                         pet.vaccinationinfo,
                         Icons.vaccines,
-                        () => navigatorKey.currentState?.pushNamed(
-                          '/petvaccinationdetails',
-                          arguments: pet,
-                        ),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed(
+                                '/petvaccinationdetails',
+                                arguments: pet,
+                              )
+                            : null,
                       ),
                       statusTile(
                         "Medications",
                         pet.medicationinfo,
                         Icons.medication,
-                        () =>
-                            navigatorKey.currentState?.pushNamed('/petmedications', arguments: pet),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed(
+                                '/petmedications',
+                                arguments: pet,
+                              )
+                            : null,
                       ),
                       statusTile(
                         "Veterinarian",
                         pet.veterinarian,
                         Icons.local_hospital,
-                        () => navigatorKey.currentState?.pushNamed(
-                          '/petveterinarianinfo',
-                          arguments: pet,
-                        ),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed(
+                                '/petveterinarianinfo',
+                                arguments: pet,
+                              )
+                            : null,
                       ),
                       petstatusTile(
                         "Is Pet Alive",
                         pet.petExpireDate,
                         Icons.heart_broken_sharp,
-                        () => navigatorKey.currentState?.pushNamed('/Expiredate', arguments: pet),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed('/Expiredate', arguments: pet)
+                            : null,
                       ),
                       statusTile(
                         "Last Blood Donate date",
                         pet.veterinarian,
                         Icons.bloodtype_sharp,
-                        () => navigatorKey.currentState?.pushNamed(
-                          '/BloodDonatePetInfo',
-                          arguments: pet,
-                        ),
+                        () => pet.petExpireDate.toString() == "null"
+                            ? navigatorKey.currentState?.pushNamed(
+                                '/BloodDonatePetInfo',
+                                arguments: pet,
+                              )
+                            : null,
                       ),
                     ],
                   ),
@@ -963,6 +980,9 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       ),
 
       /// 🔘 BOTTOM ACTION
+      ///
+      ///
+      ///
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16),
         child: ElevatedButton.icon(
@@ -1040,6 +1060,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       ),
     );
   }
+
   Widget infoRowforaddress(String title, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
