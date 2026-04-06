@@ -594,141 +594,161 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffF6F7FB),
-      floatingActionButton: MovingDonateButton(
-        onTap: () {
-          navigatorKey.currentState?.pushNamed('/Donatenow');
-        },
-      ),
+    return WillPopScope(
+      onWillPop: () async {
+        final shouldExit = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Exit App'),
+            content: Text('Are you sure you want to exit?'),
+            actions: [
+              TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text('Cancel')),
+              TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text('Exit')),
+            ],
+          ),
+        );
+        return shouldExit ?? false;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xffF6F7FB),
+        floatingActionButton: MovingDonateButton(
+          onTap: () {
+            navigatorKey.currentState?.pushNamed('/Donatenow');
+          },
+        ),
 
-      /// ================= APP BAR =================
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Image.asset("assest/bblogo.png", scale: 3),
-        actions: [Padding(padding: const EdgeInsets.only(right: 12), child: _sosBellWidget())],
-      ),
+        /// ================= APP BAR =================
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: Image.asset("assest/bblogo.png", scale: 3),
+          actions: [Padding(padding: const EdgeInsets.only(right: 12), child: _sosBellWidget())],
+        ),
 
-      /// ================= BODY =================
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// ---------- HERO ----------
-            _heroCard().animate().fadeIn().slideY(),
+        /// ================= BODY =================
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// ---------- HERO ----------
+              _heroCard().animate().fadeIn().slideY(),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            /// ---------- LEADER BOARD (CATS / DOGS) ----------
-            _sectionTitle("Leaderboard"),
-            const LeaderboardSection().animate().fadeIn(delay: 200.ms).slideX(),
-            const SizedBox(height: 26),
+              /// ---------- LEADER BOARD (CATS / DOGS) ----------
+              _sectionTitle("Leaderboard"),
+              const LeaderboardSection().animate().fadeIn(delay: 200.ms).slideX(),
+              const SizedBox(height: 26),
 
-            CarouselSlider(
-              items: [
-                _sliderImage("https://images.pexels.com/photos/8730617/pexels-photo-8730617.jpeg"),
-                _sliderImage("https://images.pexels.com/photos/89028/pexels-photo-89028.png"),
-                _sliderImage("https://images.pexels.com/photos/33287/dog-viszla-close.jpg"),
-                _sliderImage("https://images.pexels.com/photos/2194261/pexels-photo-2194261.jpeg"),
-                _sliderImage(
-                  "https://images.pexels.com/photos/31440974/pexels-photo-31440974.jpeg",
+              CarouselSlider(
+                items: [
+                  _sliderImage(
+                    "https://images.pexels.com/photos/8730617/pexels-photo-8730617.jpeg",
+                  ),
+                  _sliderImage("https://images.pexels.com/photos/89028/pexels-photo-89028.png"),
+                  _sliderImage("https://images.pexels.com/photos/33287/dog-viszla-close.jpg"),
+                  _sliderImage(
+                    "https://images.pexels.com/photos/2194261/pexels-photo-2194261.jpeg",
+                  ),
+                  _sliderImage(
+                    "https://images.pexels.com/photos/31440974/pexels-photo-31440974.jpeg",
+                  ),
+                ],
+                options: CarouselOptions(
+                  height: 140,
+                  enlargeCenterPage: true,
+                  autoPlay: true,
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enableInfiniteScroll: true,
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  viewportFraction: 0.8,
                 ),
-              ],
-              options: CarouselOptions(
-                height: 140,
-                enlargeCenterPage: true,
-                autoPlay: true,
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enableInfiniteScroll: true,
-                autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                viewportFraction: 0.8,
               ),
-            ),
-            const SizedBox(height: 26),
+              const SizedBox(height: 26),
 
-            _sectionTitle("Best pet quotes"),
-            RotatingQuotes(
-              quotes: [
-                "“Animals are a window to your soul and a doorway to your spiritual destiny.” — Kim Shotola",
-                "“The bond with a dog is as lasting as the ties of this Earth can ever be.” — Konrad Lorenz",
-                "“I had been told that the training procedure for cats was difficult. It isn’t. Mine had me trained in two days.” — Bill Dana",
+              _sectionTitle("Best pet quotes"),
+              RotatingQuotes(
+                quotes: [
+                  "“Animals are a window to your soul and a doorway to your spiritual destiny.” — Kim Shotola",
+                  "“The bond with a dog is as lasting as the ties of this Earth can ever be.” — Konrad Lorenz",
+                  "“I had been told that the training procedure for cats was difficult. It isn’t. Mine had me trained in two days.” — Bill Dana",
 
-                "“Happiness is a warm puppy.” — Charles M. Schulz",
-                "“A kitten is, in the animal world, what a rosebud is in the garden.” — Robert Southey",
-                "“To love and be loved is to feel the sun from both sides.” — David Viscott",
-                "“Friendship isn’t a big thing — it’s a million little things.” — Paulo Coelho",
-                "“Animals are such agreeable friends — they ask no questions, they pass no criticism.” — George Eliot",
-              ],
-            ),
-            const SizedBox(height: 26),
+                  "“Happiness is a warm puppy.” — Charles M. Schulz",
+                  "“A kitten is, in the animal world, what a rosebud is in the garden.” — Robert Southey",
+                  "“To love and be loved is to feel the sun from both sides.” — David Viscott",
+                  "“Friendship isn’t a big thing — it’s a million little things.” — Paulo Coelho",
+                  "“Animals are such agreeable friends — they ask no questions, they pass no criticism.” — George Eliot",
+                ],
+              ),
+              const SizedBox(height: 26),
 
-            /// ---------- YOUR DATA (CATS / DOGS) ----------
-            _sectionTitle("Available Blood Donors"),
-            Row(
-              children: [
-                _countCard(title: "Cats", value: "$totalCats k", image: "assest/petcat.png"),
-                _countCard(title: "Dogs", value: "$totalDogs k", image: "assest/petdog.png"),
-              ],
-            ).animate().fadeIn(delay: 200.ms).slideX(),
+              /// ---------- YOUR DATA (CATS / DOGS) ----------
+              _sectionTitle("Available Blood Donors"),
+              Row(
+                children: [
+                  _countCard(title: "Cats", value: "$totalCats k", image: "assest/petcat.png"),
+                  _countCard(title: "Dogs", value: "$totalDogs k", image: "assest/petdog.png"),
+                ],
+              ).animate().fadeIn(delay: 200.ms).slideX(),
 
-            const SizedBox(height: 24),
-            _sectionTitle('Pet Care Tips'),
-            const SizedBox(height: 12),
-            Column(
-              children: [
-                _adviceCard(
-                  'Regular Vet Checkups',
-                  'Ensure your pet gets regular checkups to stay healthy and catch any issues early.',
-                ),
-                // const SizedBox(height: 12),
-                // _adviceCard(
-                //   'Balanced Diet',
-                //   'Provide a balanced diet with the right nutrients for your pet’s age and breed.',
-                // ),
-                // const SizedBox(height: 12),
-                // _adviceCard(
-                //   'Exercise',
-                //   'Keep your pet active with regular exercise to maintain their physical and mental health.',
-                // ),
-                // const SizedBox(height: 12),
-                _adviceCard(
-                  'Grooming',
-                  'Regular grooming helps keep your pet clean and prevents skin issues.',
-                ),
-              ],
-            ),
+              const SizedBox(height: 24),
+              _sectionTitle('Pet Care Tips'),
+              const SizedBox(height: 12),
+              Column(
+                children: [
+                  _adviceCard(
+                    'Regular Vet Checkups',
+                    'Ensure your pet gets regular checkups to stay healthy and catch any issues early.',
+                  ),
+                  // const SizedBox(height: 12),
+                  // _adviceCard(
+                  //   'Balanced Diet',
+                  //   'Provide a balanced diet with the right nutrients for your pet’s age and breed.',
+                  // ),
+                  // const SizedBox(height: 12),
+                  // _adviceCard(
+                  //   'Exercise',
+                  //   'Keep your pet active with regular exercise to maintain their physical and mental health.',
+                  // ),
+                  // const SizedBox(height: 12),
+                  _adviceCard(
+                    'Grooming',
+                    'Regular grooming helps keep your pet clean and prevents skin issues.',
+                  ),
+                ],
+              ),
 
-            const SizedBox(height: 24),
-            // _sectionTitle('More Happy Pets'),
-            // const SizedBox(height: 12),
-            // CarouselSlider(
-            //   items: [
-            //     _sliderImage("https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg"),
-            //     _sliderImage("https://images.pexels.com/photos/4564564/pexels-photo-4564564.jpeg"),
-            //     _sliderImage("https://images.pexels.com/photos/7897897/pexels-photo-7897897.jpeg"),
-            //     _sliderImage("https://images.pexels.com/photos/1010101/pexels-photo-1010101.jpeg"),
-            //     _sliderImage("https://images.pexels.com/photos/2020202/pexels-photo-2020202.jpeg"),
-            //   ],
-            //   options: CarouselOptions(
-            //     height: 180,
-            //     enlargeCenterPage: true,
-            //     autoPlay: true,
-            //     autoPlayCurve: Curves.fastOutSlowIn,
-            //     enableInfiniteScroll: true,
-            //     autoPlayAnimationDuration: const Duration(milliseconds: 800),
-            //     viewportFraction: 0.8,
-            //   ),
-            // ),
+              const SizedBox(height: 24),
+              // _sectionTitle('More Happy Pets'),
+              // const SizedBox(height: 12),
+              // CarouselSlider(
+              //   items: [
+              //     _sliderImage("https://images.pexels.com/photos/1231231/pexels-photo-1231231.jpeg"),
+              //     _sliderImage("https://images.pexels.com/photos/4564564/pexels-photo-4564564.jpeg"),
+              //     _sliderImage("https://images.pexels.com/photos/7897897/pexels-photo-7897897.jpeg"),
+              //     _sliderImage("https://images.pexels.com/photos/1010101/pexels-photo-1010101.jpeg"),
+              //     _sliderImage("https://images.pexels.com/photos/2020202/pexels-photo-2020202.jpeg"),
+              //   ],
+              //   options: CarouselOptions(
+              //     height: 180,
+              //     enlargeCenterPage: true,
+              //     autoPlay: true,
+              //     autoPlayCurve: Curves.fastOutSlowIn,
+              //     enableInfiniteScroll: true,
+              //     autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              //     viewportFraction: 0.8,
+              //   ),
+              // ),
 
-            /// ---------- ADDITIONAL DATA ----------
-            // _sectionTitle("Nearby Blood Donors"),
-            // const SizedBox(height: 12),
+              /// ---------- ADDITIONAL DATA ----------
+              // _sectionTitle("Nearby Blood Donors"),
+              // const SizedBox(height: 12),
 
-            //  nearbyBloodDonorsSection(context),
-            // ...donors.map((d) => _donorCard(d)).toList(),
-          ],
+              //  nearbyBloodDonorsSection(context),
+              // ...donors.map((d) => _donorCard(d)).toList(),
+            ],
+          ),
         ),
       ),
     );

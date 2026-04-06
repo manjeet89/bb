@@ -295,6 +295,7 @@ class Userprofile extends StatefulWidget {
 class _UserprofileState extends State<Userprofile> {
   String formattedDate = "-";
   String firstName = "",
+      orgtype = "",
       orgName = "",
       lastName = "",
       email = "",
@@ -328,6 +329,7 @@ class _UserprofileState extends State<Userprofile> {
       setState(() {
         firstName = data['user_first_name'] ?? "";
         orgName = data['organisation_name'] ?? "";
+        orgtype = data['owner_type'] ?? "";
         lastName = data['user_last_name'] ?? "";
         email = data['user_email_id'] ?? "";
         number = data['user_mobile_number'] ?? "";
@@ -372,7 +374,7 @@ class _UserprofileState extends State<Userprofile> {
                   children: [
                     _infoCard([
                       _infoRow(Icons.phone, "Mobile", number),
-                      _infoRow(Icons.groups_2, "Organization Name", orgName),
+                      if (orgtype == "1") _infoRow(Icons.groups_2, "Organization Name", orgName),
                       _infoRow(Icons.email, "Email", email),
                       _infoRow(Icons.cake, "DOB", formattedDate),
                       _infoRow(Icons.person, "Gender", gender == "0" ? "Female" : "Male"),

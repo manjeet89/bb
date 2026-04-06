@@ -41,6 +41,8 @@ class _UpdateprofileState extends State<Updateprofile> {
 
   var FirstName = "";
   var LastName = "";
+  var organistaionName = "";
+  var orgtype = "";
   var Email = "";
   var Number = "";
   var Gender = "";
@@ -145,6 +147,19 @@ class _UpdateprofileState extends State<Updateprofile> {
         if (Dateofbirth != "null") {
           dobController.value = TextEditingValue(text: Dateofbirth);
         }
+
+        //Auto fill organisation name
+        organistaionName = decoded['data']['organisation_name'] ?? "null";
+        if (organistaionName != "null") {
+          organizationNameController.value = TextEditingValue(text: organistaionName);
+        }
+
+        //Auto fill organisation type
+        selectedUserType = decoded['data']['owner_type'].toString() != "1" ?"Individual":"Organization";
+
+       
+          // selectedUserType =orgtype  "Individual"; // State for user type
+    
 
         //Auto fill blood name and id
         Bloodname = decoded['data']['blood_name'] ?? "null";
@@ -284,8 +299,7 @@ class _UpdateprofileState extends State<Updateprofile> {
       "user_email_id": emailController.text,
       "organisation_name": organizationNameController.text,
       "user_gender": selectedGender == "Male" ? "1" : "0",
-      "owner_type": "1",
-      //selectedUserType == "Individual" ? "0" : "1",
+      "owner_type": selectedUserType == "Individual" ? "0" : "1",
       "user_date_of_birth": "$year-$month-$day",
       "user_blood_group": selectBloodGroupId,
       "user_country": selectCountryId,

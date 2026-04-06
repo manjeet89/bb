@@ -144,16 +144,16 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
                       value: agree1,
                       onChanged: (v) => setState(() => agree1 = v!),
                       title: const Text(
-                        "I agree to indemnify and hold the organization harmless.",
-                        style: TextStyle(fontSize: 13),
+                         "I confirm that I am the owner or authorized caretaker of this pet and voluntarily consent to the collection, testing, storage, and use of my pet’s blood for donation related purposes, and to the collection and use of my personal information and my pet’s health information in accordance with the privacy policy and applicable veterinary and regulatory guidelines.",
+                        style: TextStyle(fontSize: 10),
                       ),
                     ),
                     CheckboxListTile(
                       value: agree2,
                       onChanged: (v) => setState(() => agree2 = v!),
                       title: const Text(
-                        "I certify that the information provided is true.",
-                        style: TextStyle(fontSize: 13),
+                       "I certify that the information provided in this form is true, accurate, and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of this application or termination of membership.",
+                        style: TextStyle(fontSize: 10),
                       ),
                     ),
                   ],
@@ -187,36 +187,25 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
 
   // ================= REUSABLE =================
 
-  Widget _card({String? title, required Widget child}) {
+  
+  Widget _card({required String title, required Widget child}) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [BoxShadow(blurRadius: 12, color: Colors.black.withOpacity(.05))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (title != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.secondrycolor,
-                ),
-              ),
-            ),
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 16),
           child,
         ],
       ),
     );
   }
-
   Widget _label(String t) => Padding(
     padding: const EdgeInsets.only(bottom: 6),
     child: Text(

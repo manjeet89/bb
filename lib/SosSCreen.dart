@@ -235,7 +235,7 @@ class _SosscreenState extends State<Sosscreen> {
             ),
             const SizedBox(height: 12),
             Text(
-              "Your current digipi  is:",
+              "Your current DigiPIN  is:",
               style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold, fontSize: 20),
             ),
             Text(
@@ -1162,7 +1162,7 @@ class _SosscreenState extends State<Sosscreen> {
                 // TODO: Open Digipin picker / API
               },
               icon: Icon(Icons.qr_code, color: AppColors.white),
-              label: Text('Use Digipin', style: TextStyle(color: AppColors.white)),
+              label: Text('Use DigiPIN', style: TextStyle(color: AppColors.white)),
             ),
           ],
         ),
@@ -1195,7 +1195,7 @@ class _SosscreenState extends State<Sosscreen> {
         //       // TODO: Open Digipin picker / API
         //     },
         //     icon: Icon(Icons.qr_code, color: AppColors.white),
-        //     label: Text('Use Digipin', style: TextStyle(color: AppColors.white)),
+        //     label: Text('Use DigiPIN', style: TextStyle(color: AppColors.white)),
         //   ),
         // ],
       ),
@@ -1203,7 +1203,7 @@ class _SosscreenState extends State<Sosscreen> {
   }
 
   void showLocationOptionDialog(BuildContext context, Petlistmodel pet) {
-    String selected = "Use Digipin";
+    String selected = "Use DigiPIN";
 
     showDialog(
       context: context,
@@ -1226,10 +1226,10 @@ class _SosscreenState extends State<Sosscreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _optionTile(
-                  title: "Use Digipin",
+                  title: "Use DigiPIN",
                   icon: Icons.qr_code,
-                  isSelected: selected == "Use Digipin",
-                  onTap: () => setDialogState(() => selected = "Use Digipin"),
+                  isSelected: selected == "Use DigiPIN",
+                  onTap: () => setDialogState(() => selected = "Use DigiPIN"),
                 ),
                 _optionTile(
                   title: "Manual Address",
@@ -1260,7 +1260,7 @@ class _SosscreenState extends State<Sosscreen> {
                 ),
                 onPressed: () {
                   Navigator.pop(context);
-                  if (selected == "Use Digipin") {
+                  if (selected == "Use DigiPIN") {
                     // setState(() => isLoading = true);
                     _listenLocation(pet);
                   }
@@ -1307,7 +1307,7 @@ class _SosscreenState extends State<Sosscreen> {
   }
 
   void _askingcurrentLocationDialogs(BuildContext context, Petlistmodel pet) {
-    String selectedOption = "Use Digipin";
+    String selectedOption = "Use DigiPIN";
 
     showDialog(
       context: context,
@@ -1334,7 +1334,7 @@ class _SosscreenState extends State<Sosscreen> {
 
                   Column(
                     children: [
-                      _genderButton("Use Digipin", Icons.qr_code, selectedOption, (value) {
+                      _genderButton("Use DigiPIN", Icons.qr_code, selectedOption, (value) {
                         dialogSetState(() {
                           selectedOption = value;
                         });
@@ -1371,7 +1371,7 @@ class _SosscreenState extends State<Sosscreen> {
               TextButton(
                 onPressed: () async {
                   Navigator.pop(context, selectedOption);
-                  if ("Use Digipin" == selectedOption) {
+                  if ("Use DigiPIN" == selectedOption) {
                     // String digiPin = await
                     // setState(() => isLoading = true);
                     _listenLocation(pet);

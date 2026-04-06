@@ -145,7 +145,7 @@ class _OtpscreenState extends State<Otpscreen> {
         // Navigate to Home Screen
         // Navigate to SecondPage
         // Navigator.push(context, MaterialPageRoute(builder: (context) => Otpscreen()));
-        navigatorKey.currentState?.pushReplacementNamed('/home');
+        navigatorKey.currentState?.pushNamedAndRemoveUntil('/home', (route) => false);
       }
     } else {
       // Handle error (e.g., show a snackbar)

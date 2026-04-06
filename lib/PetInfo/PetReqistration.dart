@@ -686,6 +686,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
   @override
   Widget build(BuildContext context) {
     final petCategoryId = ModalRoute.of(context)!.settings.arguments;
+    selecteCountry = CountryDropDownModel(countryId: '101', countryName: 'India');
+    selectCountryId = '101';
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F7FB),
@@ -1245,6 +1247,8 @@ class _PetFormScreenState extends State<PetFormScreen> {
         final dio = Dio();
         final headers = await allapiscreen.headerFunction();
 
+        print(_FirstName.text.toString() + "firstname");
+
         final date = _dob.text.split("-");
         final formData = FormData.fromMap({
           if (petImage != null) "pet_image": await MultipartFile.fromFile(petImage!.path),
@@ -1255,11 +1259,12 @@ class _PetFormScreenState extends State<PetFormScreen> {
           "pet_breed_id": breedId,
           "pet_category_id": petCategoryId,
           "pet_weight_in_kg": _weight.text,
+          "is_address_same": "1",
 
           "is_secondary_gardian_available": yesno == "Yes" ? "1" : "0",
-          "user_first_name": _FirstName.text,
-          "user_last_name": _LastName.text,
-          "user_mobile_number": _mobilenumb.text,
+          "user_first_name": _FirstName.text.toString(),
+          "user_last_name": _LastName.text.toString(),
+          "user_mobile_number": _mobilenumb.text.toString(),
 
           "pet_country": selectCountryId.toString(),
           "pet_state": selectStateId.toString(),
@@ -1291,11 +1296,12 @@ class _PetFormScreenState extends State<PetFormScreen> {
         "pet_breed_id": breedId,
         "pet_category_id": petCategoryId,
         "pet_weight_in_kg": _weight.text,
+        "is_address_same": "1",
 
         "is_secondary_gardian_available": yesno == "Yes" ? "1" : "0",
-        "user_first_name": _FirstName.text,
-        "user_last_name": _LastName.text,
-        "user_mobile_number": _mobilenumb.text,
+        "user_first_name": _FirstName.text.toString(),
+        "user_last_name": _LastName.text.toString(),
+        "user_mobile_number": _mobilenumb.text.toString(),
 
         "pet_country": selectCountryId.toString(),
         "pet_state": selectStateId.toString(),

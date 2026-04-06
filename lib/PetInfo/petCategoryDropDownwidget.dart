@@ -77,8 +77,16 @@ class _PetcategorydropdownwidgetState extends State<Petcategorydropdownwidget> {
         ),
       ),
       popupProps: PopupProps.menu(
-        showSearchBox: true,
+         showSearchBox: true, // Always show search bar
+        fit: FlexFit.loose, // ✅ IMPORTANT (makes popup wrap content)
 
+        constraints: BoxConstraints(
+          maxHeight: 250, // only max limit, no manual calculation
+        ),
+
+        listViewProps: ListViewProps(
+          shrinkWrap: true, // ✅ THIS FIXES EMPTY SPACE
+        ),
         searchFieldProps: TextFieldProps(
           decoration: InputDecoration(
             hintText: "Search ...",

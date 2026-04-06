@@ -133,13 +133,15 @@ class _DonatenowState extends State<Donatenow> {
                 value: consent1,
                 onChanged: (v) => setState(() => consent1 = v!),
                 text:
-                    "I confirm that I am the owner or authorized caretaker...",
+                     "I confirm that I am the owner or authorized caretaker of this pet and voluntarily consent to the collection, testing, storage, and use of my pet’s blood for donation related purposes, and to the collection and use of my personal information and my pet’s health information in accordance with the privacy policy and applicable veterinary and regulatory guidelines.",
+                       
               ),
               _niceCheckbox(
                 value: consent2,
                 onChanged: (v) => setState(() => consent2 = v!),
                 text:
-                    "I certify that the information provided is true...",
+                    "I certify that the information provided in this form is true, accurate, and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of this application or termination of membership.",
+                       
               ),
             ],
           ),
