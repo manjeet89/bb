@@ -31,17 +31,14 @@ class _SplashscreenState extends State<Splashscreen> {
             child: SizedBox(
               width: 190,
               height: 190,
+              // child: Image.asset('assest/CFBBI.png'),
               child: Lottie.asset('assest/blooddonneranime.json'),
             ),
           ),
           Center(
             child: Text(
-              "Welcome to PashuRaktKosh",
-              style: TextStyle(
-                color: AppColors.darkRed,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+              "Welcome to CFBBI",
+              style: TextStyle(color: AppColors.darkRed, fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           // Image.asset("assest/bblogo.png", scale: 2),

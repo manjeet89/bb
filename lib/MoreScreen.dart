@@ -530,7 +530,8 @@ class _MorescreenState extends State<Morescreen> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [AppColors.primarycolor, AppColors.secondrycolor],
+          colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+          //[AppColors.primarycolor, AppColors.secondrycolor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -550,7 +551,7 @@ class _MorescreenState extends State<Morescreen> {
             backgroundColor: Colors.white,
             backgroundImage: image.isNotEmpty
                 ? NetworkImage(allapiscreen.imageapi + image)
-                : const AssetImage("assest/petbird.png") as ImageProvider,
+                : const AssetImage("assest/catdog.jpeg") as ImageProvider,
           ),
           const SizedBox(height: 12),
           Text(
@@ -570,7 +571,7 @@ class _MorescreenState extends State<Morescreen> {
               final result = await navigatorKey.currentState?.pushNamed(route);
               if (result == null) _fetchProfile();
             },
-            child: Text(isLoggedIn ? "View Profile" : "Go to Login"),
+            child: Text(isLoggedIn ? "View Profile" : "Go to Login",style: TextStyle(color: AppColors.AddButtonColor),),
           ),
         ],
       ),
@@ -604,12 +605,12 @@ class _MorescreenState extends State<Morescreen> {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: AppColors.warningOrange.withOpacity(.15),
-          child: Icon(icon, color: AppColors.warningOrange),
+          backgroundColor: AppColors.CatSilhouter.withOpacity(.15),
+          child: Icon(icon, color: AppColors.CatSilhouter),
         ),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.w600, color: color ?? Colors.black87),
+          style: TextStyle(fontWeight: FontWeight.w600, color: color ?? AppColors.AddButtonColor),
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap:
@@ -637,12 +638,12 @@ class _MorescreenState extends State<Morescreen> {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: AppColors.warningOrange.withOpacity(.15),
-          child: Icon(icon, color: AppColors.warningOrange),
+          backgroundColor: AppColors.CatSilhouter.withOpacity(.15),
+          child: Icon(icon, color: AppColors.CatSilhouter),
         ),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.w600, color: color ?? Colors.black87),
+          style: TextStyle(fontWeight: FontWeight.w600, color: color ?? AppColors.AddButtonColor),
         ),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
         onTap:

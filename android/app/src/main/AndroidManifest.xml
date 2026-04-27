@@ -8,7 +8,7 @@
 
 
     <application
-        android:label="PashuRaktkosh"
+        android:label="CFBBI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -112,7 +112,8 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.secondrycolor],
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+            //[AppColors.white, AppColors.secondrycolor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -135,6 +136,7 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
                   ],
                 ),
               ),
+              SizedBox(height: 10,),
 
               _card(
                 title: "Declaration",
@@ -169,12 +171,12 @@ class _BloodDonatePetInfoState extends State<BloodDonatePetInfo> {
                       ? submitForm
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primarycolor,
+                    backgroundColor: AppColors.AddButtonColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  child: const Text(
+                  child:  Text(
                     "SUBMIT",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: AppColors.white),
                   ),
                 ),
               ),

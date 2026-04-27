@@ -53,7 +53,7 @@ class LeaderboardScreen extends StatelessWidget {
       style: const TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
-        color: AppColors.primarycolor,
+        color: AppColors.AddButtonColor,
       ),
     );
   }
@@ -106,8 +106,8 @@ class LeaderboardScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         gradient: LinearGradient(
           colors: [
-            AppColors.primarycolor.withOpacity(0.9),
-            AppColors.secondrycolor.withOpacity(0.9),
+            AppColors.AddButtonColor.withOpacity(0.9),
+            AppColors.CatSilhouter.withOpacity(0.9),
           ],
         ),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.15), blurRadius: 10)],
@@ -151,7 +151,7 @@ class LeaderboardScreen extends StatelessWidget {
                 child: Text(
                   name,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  style:  TextStyle(color: AppColors.AddButtonColor, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -160,7 +160,7 @@ class LeaderboardScreen extends StatelessWidget {
           const SizedBox(height: 4),
 
           /// ❤️ LIVES
-          Text("$lives lives saved", style: const TextStyle(color: Colors.white70, fontSize: 12)),
+          Text("$lives lives saved", style: const TextStyle(color: Colors.white, fontSize: 12)),
         ],
       ),
     );

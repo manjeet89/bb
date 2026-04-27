@@ -620,8 +620,8 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
         /// ================= APP BAR =================
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.white,
-          title: Image.asset("assest/bblogo.png", scale: 3),
+          backgroundColor: const Color(0xFFf7f7f7),
+          title: Image.asset("assest/CFBBI.png", scale: 5,height: 70,),
           actions: [Padding(padding: const EdgeInsets.only(right: 12), child: _sosBellWidget())],
         ),
 
@@ -925,7 +925,7 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
                   },
                   child: const Icon(
                     Icons.notifications_active,
-                    color: AppColors.secondrycolor,
+                    color: AppColors.AddButtonColor,
                     size: 22,
                   ),
                 ),
@@ -1071,7 +1071,7 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
   }
 
   Widget _sectionTitle(String title) {
-    return Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold));
+    return Text(title, style:  TextStyle(fontSize: 18,color: AppColors.AddButtonColor, fontWeight: FontWeight.bold));
   }
 
   Widget _sliderImage(String url) {
@@ -1109,7 +1109,7 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          gradient: const LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
+          gradient: const LinearGradient(colors: [AppColors.AddButtonColor, AppColors.CatSilhouter]),
           boxShadow: [BoxShadow(color: AppColors.secondrycolor.withOpacity(0.4), blurRadius: 20)],
         ),
         child: Padding(

@@ -401,19 +401,25 @@ class _UserprofileState extends State<Userprofile> {
   /// ---------------- HEADER ----------------
   SliverAppBar _buildHeader() {
     return SliverAppBar(
-      expandedHeight: 200,
+      expandedHeight: 220,
       pinned: true,
-      backgroundColor: AppColors.primarycolor,
+      backgroundColor: AppColors.CatSilhouter,
+      automaticallyImplyLeading: false,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         title: Text(
           "$firstName $lastName",
-          style: const TextStyle(fontSize: 16, color: AppColors.white, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 16, color: AppColors.AddButtonColor, fontWeight: FontWeight.bold),
         ),
         background: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [AppColors.primarycolor, AppColors.secondrycolor],
+              colors: [
+                // AppColors.primarycolor
+                AppColors.AddButtonColor,
+                AppColors. CatSilhouter,
+                // , AppColors.secondrycolor
+              ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -437,7 +443,7 @@ class _UserprofileState extends State<Userprofile> {
                     radius: 60,
                     backgroundColor: Colors.white,
                     backgroundImage: image.isEmpty
-                        ? const AssetImage("assest/petbird.png")
+                        ? const AssetImage("assest/catdog.jpeg")
                         : NetworkImage(allapiscreen.imageapi + image) as ImageProvider,
                   ).animate().fadeIn(duration: 400.ms).scale(),
 
@@ -458,7 +464,9 @@ class _UserprofileState extends State<Userprofile> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
+                              color:  AppColors.CatSilhouter
+                            
+                              .withOpacity(0.25),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
@@ -495,12 +503,13 @@ Widget _infoRow(IconData icon, String label, String value) {
   return ListTile(
     leading: CircleAvatar(
       backgroundColor: AppColors.secondrycolor.withOpacity(.1),
-      child: Icon(icon, color: AppColors.secondrycolor),
+      child: Icon(icon, color: AppColors.CatSilhouter),
     ),
     title: Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
     subtitle: Text(
       value.isEmpty ? "-" : value,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600,color: AppColors.AddButtonColor,
+      ),
     ),
   );
 }

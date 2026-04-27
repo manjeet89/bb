@@ -249,17 +249,17 @@ class _SosscreenState extends State<Sosscreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel", style: TextStyle(color: AppColors.darkRed)),
+            child: Text("Cancel", style: TextStyle(color: AppColors.AddButtonColor)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.successGreen,
+              backgroundColor: AppColors.CatSilhouter,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () {
               submitForm(pet, pin, lat.toString(), lng.toString(), "", "", "", "", "", "");
             },
-            child: const Text("Proceed"),
+            child: const Text("Proceed", style: TextStyle(color: AppColors.AddButtonColor)),
           ),
         ],
       ),
@@ -926,12 +926,12 @@ class _SosscreenState extends State<Sosscreen> {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.successGreen,
+          backgroundColor: AppColors.AddButtonColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           minimumSize: const Size(double.infinity, 48),
         ),
         onPressed: onTap,
-        icon: Icon(icon, color: AppColors.white),
+        icon: Icon(icon, color: AppColors.CatSilhouter),
         label: Text(title, style: TextStyle(color: AppColors.white)),
       ),
     );
@@ -1016,7 +1016,7 @@ class _SosscreenState extends State<Sosscreen> {
         actions: [
           if (pet.healthinfo.toString() == "null")
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.AddButtonColor),
               onPressed: () {
                 navigatorKey.currentState?.pushNamed('/petHealthinfo', arguments: pet);
                 // TODO: Open Digipin picker / API
@@ -1026,7 +1026,7 @@ class _SosscreenState extends State<Sosscreen> {
             ),
           if (pet.vaccinationinfo.toString() == "null")
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.AddButtonColor),
               onPressed: () {
                 navigatorKey.currentState?.pushNamed(
                   '/petvaccinationdetails',
@@ -1038,7 +1038,7 @@ class _SosscreenState extends State<Sosscreen> {
             ),
           if (pet.medicationinfo.toString() == "null")
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.AddButtonColor),
               onPressed: () {
                 navigatorKey.currentState?.pushNamed('/petmedications', arguments: pet);
                 // TODO: Open Digipin picker / API
@@ -1048,7 +1048,7 @@ class _SosscreenState extends State<Sosscreen> {
             ),
           if (pet.veterinarian.toString() == "null")
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.AddButtonColor),
               onPressed: () {
                 navigatorKey.currentState?.pushNamed(
                   '/petveterinarianinfo',
@@ -1156,7 +1156,7 @@ class _SosscreenState extends State<Sosscreen> {
             const SizedBox(height: 8),
             Text('Location of ${pet.petName}', style: TextStyle(color: AppColors.white)),
             ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.CatSilhouter),
               onPressed: () {
                 Navigator.pop(context);
                 // TODO: Open Digipin picker / API
@@ -1184,7 +1184,7 @@ class _SosscreenState extends State<Sosscreen> {
               Navigator.pop(context); // close first dialog
               // _showLocationDialog(context); // open second dialog
             },
-            child: Text('Proceed', style: TextStyle(color: AppColors.successGreen)),
+            child: Text('Proceed', style: TextStyle(color: AppColors.CatSilhouter)),
           ),
         ],
         // actions: [
@@ -1251,11 +1251,11 @@ class _SosscreenState extends State<Sosscreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Cancel", style: TextStyle(color: AppColors.darkRed)),
+                child: Text("Cancel", style: TextStyle(color: AppColors.AddButtonColor)),
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.successGreen,
+                  backgroundColor: AppColors.CatSilhouter,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () {
@@ -1265,7 +1265,7 @@ class _SosscreenState extends State<Sosscreen> {
                     _listenLocation(pet);
                   }
                 },
-                child: const Text("Proceed"),
+                child: const Text("Proceed", style: TextStyle(color: AppColors.AddButtonColor)),
               ),
             ],
           );
@@ -1366,7 +1366,7 @@ class _SosscreenState extends State<Sosscreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel', style: TextStyle(color: AppColors.darkRed)),
+                child: Text('Cancel', style: TextStyle(color: AppColors.AddButtonColor)),
               ),
               TextButton(
                 onPressed: () async {
@@ -1390,7 +1390,7 @@ class _SosscreenState extends State<Sosscreen> {
 
                   // Navigator.pop(context, selectedOption);
                 },
-                child: Text('Proceed', style: TextStyle(color: AppColors.successGreen)),
+                child: Text('Proceed', style: TextStyle(color: AppColors.CatSilhouter)),
               ),
             ],
           );
@@ -1636,12 +1636,12 @@ class _SosscreenState extends State<Sosscreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Cancel", style: TextStyle(color: AppColors.darkRed)),
+                child: Text("Cancel", style: TextStyle(color: AppColors.AddButtonColor)),
               ),
 
               /// NEXT / SUBMIT
               ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.successGreen),
+                style: ElevatedButton.styleFrom(backgroundColor: AppColors.CatSilhouter),
                 onPressed: () {
                   // main component
                   // if (!showForm) {
@@ -1700,7 +1700,7 @@ class _SosscreenState extends State<Sosscreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text(showForm ? "Submit" : "Proceed"),
+                child: Text(showForm ? "Submit" : "Proceed",style: TextStyle(color: AppColors.AddButtonColor),),
               ),
             ],
           );
@@ -1734,20 +1734,29 @@ class _SosscreenState extends State<Sosscreen> {
       padding: const EdgeInsets.all(8.0),
       child: TextField(
         maxLength: 6,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
 
         controller: ctrl,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          labelText: label,
-          hintStyle: TextStyle(color: Colors.white),
-
-          labelStyle: TextStyle(color: Colors.white),
-
-          // filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+         
+          filled: true,
+          fillColor: AppColors.white,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            // borderSide: BorderSide.none,
+          ),
         ),
+        // decoration: InputDecoration(
+        //   labelText: label,
+        //   hintStyle: TextStyle(color: Colors.white),
+
+        //   labelStyle: TextStyle(color: Colors.white),
+
+        //   // filled: true,
+        //   fillColor: Colors.white,
+        //   border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        // ),
       ),
     );
   }
@@ -1756,16 +1765,21 @@ class _SosscreenState extends State<Sosscreen> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: TextField(
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.black),
 
         controller: ctrl,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyle(color: Colors.white),
-          hintStyle: TextStyle(color: Colors.white),
+        // decoration: InputDecoration(
+        //   labelText: label,
+        //   labelStyle: TextStyle(color: Colors.white),
+        //   hintStyle: TextStyle(color: Colors.white),
 
-          // filled: true,
-          fillColor: Colors.white,
+        //   // filled: true,
+        //   fillColor: Colors.white,
+        //   border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        // ),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: AppColors.white,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
         ),
       ),
@@ -1814,11 +1828,11 @@ class _SosscreenState extends State<Sosscreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("No", style: TextStyle(color: AppColors.darkRed)),
+            child: Text("No", style: TextStyle(color: AppColors.AddButtonColor)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.successGreen,
+              backgroundColor: AppColors.CatSilhouter,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () {
@@ -1897,20 +1911,44 @@ class _SosscreenState extends State<Sosscreen> {
         child: Row(
           children: [
             /// IMAGE
+            // Container(
+            //   padding: const EdgeInsets.all(4),
+            //   decoration: BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     gradient: LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
+            //   ),
+            //   child: CircleAvatar(
+            //     radius: 34,
+            //     backgroundColor: Colors.white,
+            //     backgroundImage: image == "null" || image.isEmpty
+            //         ? const AssetImage("assest/bblogo.png") as ImageProvider
+            //         : NetworkImage("https://pashuraktkosh.lyferp.com/$image"),
+            //   ),
+            // ),
             Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
-              ),
-              child: CircleAvatar(
-                radius: 34,
-                backgroundColor: Colors.white,
-                backgroundImage: image == "null" || image.isEmpty
-                    ? const AssetImage("assest/bblogo.png") as ImageProvider
-                    : NetworkImage("https://pashuraktkosh.lyferp.com/$image"),
-              ),
-            ),
+  padding: const EdgeInsets.all(4),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(12),
+    gradient: LinearGradient(
+      colors: [AppColors.primarycolor, AppColors.secondrycolor],
+    ),
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(10),
+    child: Container(
+      width: 68,
+      height: 68,
+      color: Colors.white,
+      child: Image(
+        fit: BoxFit.cover,
+        image: image == "null" || image.isEmpty
+            ? const AssetImage("assest/bblogo.png")
+            : NetworkImage("https://pashuraktkosh.lyferp.com/$image")
+                as ImageProvider,
+      ),
+    ),
+  ),
+),
 
             const SizedBox(width: 14),
 
@@ -1927,7 +1965,7 @@ class _SosscreenState extends State<Sosscreen> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primarycolor,
+                          color: AppColors.AddButtonColor,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -1938,15 +1976,20 @@ class _SosscreenState extends State<Sosscreen> {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 4),
-
                   Text(
-                    pet.petName.toString(),
+                    pet.petCategoryId.toString() == "1" ? "Dog" : "Cat",
                     style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
                   ),
+                  const SizedBox(width: 6),
 
-                  const SizedBox(height: 4),
+                  // const SizedBox(height: 4),
+
+                  // Text(
+                  //   pet.petName.toString(),
+                  //   style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
+                  // ),
+
+                  // const SizedBox(height: 4),
 
                   Text(
                     "ID: $petId",
@@ -1994,7 +2037,8 @@ class _SosscreenState extends State<Sosscreen> {
         gradient: LinearGradient(
           colors: done
               ? [AppColors.secondrycolor, AppColors.successGreen]
-              : [AppColors.darkRed, AppColors.mediumRed],
+              : [AppColors.AddButtonColor, AppColors.CatSilhouter],
+              // [AppColors.darkRed, AppColors.mediumRed],
         ),
         boxShadow: [
           BoxShadow(

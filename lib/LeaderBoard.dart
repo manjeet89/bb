@@ -17,7 +17,7 @@ class LeaderboardSection extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          gradient: LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
+          gradient: LinearGradient(colors: [AppColors.AddButtonColor, AppColors.CatSilhouter]),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.15),

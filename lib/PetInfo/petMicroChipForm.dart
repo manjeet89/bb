@@ -691,7 +691,8 @@ class _MicrochipFormState extends State<MicrochipForm> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.secondrycolor],
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+            //[AppColors.white, AppColors.secondrycolor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -742,29 +743,54 @@ class _MicrochipFormState extends State<MicrochipForm> {
                 ),
               ),
 
+              // _card(
+              //   title: "Declaration",
+              //   child: Column(
+              //     children: [
+              //       CheckboxListTile(
+              //         value: agree1,
+              //         onChanged: (v) => setState(() => agree1 = v!),
+              //         title: const Text(
+              //           "I agree to indemnify and hold the organization harmless.",
+              //           style: TextStyle(fontSize: 13),
+              //         ),
+              //       ),
+              //       CheckboxListTile(
+              //         value: agree2,
+              //         onChanged: (v) => setState(() => agree2 = v!),
+              //         title: const Text(
+              //           "I certify that the information provided is true.",
+              //           style: TextStyle(fontSize: 13),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              /// ✅ CONSENTS
               _card(
-                title: "Declaration",
+                title: "Consent",
                 child: Column(
                   children: [
                     CheckboxListTile(
                       value: agree1,
                       onChanged: (v) => setState(() => agree1 = v!),
                       title: const Text(
-                        "I agree to indemnify and hold the organization harmless.",
-                        style: TextStyle(fontSize: 13),
+                        "I confirm that I am the owner or authorized caretaker of this pet and voluntarily consent to the collection, testing, storage, and use of my pet’s blood for donation related purposes, and to the collection and use of my personal information and my pet’s health information in accordance with the privacy policy and applicable veterinary and regulatory guidelines.",
+                        style: TextStyle(fontSize: 10),
                       ),
                     ),
                     CheckboxListTile(
                       value: agree2,
                       onChanged: (v) => setState(() => agree2 = v!),
                       title: const Text(
-                        "I certify that the information provided is true.",
-                        style: TextStyle(fontSize: 13),
+                        "I certify that the information provided in this form is true, accurate, and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of this application or termination of membership.",
+                        style: TextStyle(fontSize: 10),
                       ),
                     ),
                   ],
                 ),
               ),
+
 
               const SizedBox(height: 24),
 
@@ -775,12 +801,12 @@ class _MicrochipFormState extends State<MicrochipForm> {
                       ? submitForm
                       : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primarycolor,
+                    backgroundColor: AppColors.AddButtonColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                   child: const Text(
                     "SUBMIT",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.white),
                   ),
                 ),
               ),

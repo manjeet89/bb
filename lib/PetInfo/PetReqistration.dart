@@ -571,6 +571,7 @@
 //   }
 // }
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:bb/AddressModule/Country/CountryModel.dart';
 import 'package:bb/AddressModule/Country/CountryWidget.dart';
@@ -588,6 +589,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../utils/app_colors.dart';
+import 'package:http/http.dart' as http;
 
 class PetFormScreen extends StatefulWidget {
   const PetFormScreen({super.key});
@@ -655,12 +657,46 @@ class _PetFormScreenState extends State<PetFormScreen> {
   String gender = "Male";
   String sterilization = "Intact";
   String yesno = "No";
+  String pet_address_yesno = "Another address";
   BreedModel? selectedBreed;
   String? breedId;
 
   File? petImage;
   bool consent1 = false;
   bool consent2 = false;
+
+  String User_address = "",
+      User_country = "",
+      User_state = "",
+      User_district = "",
+      User_city = "",
+      User_pincode = "";
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final url = allapiscreen.userprofile.toString();
+    final header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data'];
+
+      setState(() {
+        User_address = data['user_address'] ?? "";
+        User_country = data['user_country'] ?? "";
+        User_state = data['user_state'] ?? "";
+        User_district = data['user_district'] ?? "";
+        User_city = data['user_city'] ?? "";
+        User_pincode = data['user_pin_code'] ?? "";
+      });
+    }
+  }
 
   /// IMAGE PICK
   Future<void> pickImage() async {
@@ -878,61 +914,92 @@ class _PetFormScreenState extends State<PetFormScreen> {
               ),
 
               const SizedBox(height: 20),
+              _card(
+                title: "Pet Address",
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Pet Address", style: _labelStyle()),
+                    ),
 
-              _sectionCard(
-                title: "Address Information",
-                children: [
-                  _label("Country"),
-                  Countrywidget(
-                    selectedLocation: selecteCountry,
-                    countryid: "",
-                    onChanged: (value) {
-                      setState(() {
-                        selecteCountry = value;
-                        selectCountryId = value?.countryId;
-                        selecteState = null;
-                        selecteDistrict = null;
-                      });
-                    },
-                  ),
-                  _gap(),
-                  _label("State"),
-                  Statewidget(
-                    selectedLocation: selecteState,
-                    categoryId: selectCountryId.toString(),
-                    stateid: "",
-                    onChanged: (value) {
-                      setState(() {
-                        selecteState = value;
-                        selectStateId = value?.stateId;
-                        selecteDistrict = null;
-                      });
-                    },
-                  ),
-                  _gap(),
-                  _label("District"),
-                  Districtwidget(
-                    selectedLocation: selecteDistrict,
-                    categoryId: selectStateId.toString(),
-                    districtId: "",
-                    onChanged: (value) {
-                      setState(() {
-                        selecteDistrict = value;
-                        selectDistrictId = value?.districtId;
-                      });
-                    },
-                  ),
-                  _gap(),
-                  _label("City"),
-                  _inputField(controller: cityController, hint: "City", icon: Icons.location_city),
-                  _gap(),
-                  _label("Address"),
-                  _inputField(controller: addressController, hint: "Address", icon: Icons.home),
-                  _gap(),
-                  _label("Pincode"),
-                  _inputField(controller: pincodeController, hint: "Pincode", icon: Icons.pin_drop),
-                ],
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        pet_address("Same as the address in my profile", Icons.cancel),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+
+                    Row(children: [pet_address("Another address", Icons.check)]),
+                  ],
+                ),
               ),
+              const SizedBox(height: 20),
+              if (pet_address_yesno.toString() == "Another address")
+                _sectionCard(
+                  title: "Address Information",
+                  children: [
+                    _label("Country"),
+                    Countrywidget(
+                      selectedLocation: selecteCountry,
+                      countryid: "",
+                      onChanged: (value) {
+                        setState(() {
+                          selecteCountry = value;
+                          selectCountryId = value?.countryId;
+                          selecteState = null;
+                          selecteDistrict = null;
+                        });
+                      },
+                    ),
+                    _gap(),
+                    _label("State"),
+                    Statewidget(
+                      selectedLocation: selecteState,
+                      categoryId: selectCountryId.toString(),
+                      stateid: "",
+                      onChanged: (value) {
+                        setState(() {
+                          selecteState = value;
+                          selectStateId = value?.stateId;
+                          selecteDistrict = null;
+                        });
+                      },
+                    ),
+                    _gap(),
+                    _label("District"),
+                    Districtwidget(
+                      selectedLocation: selecteDistrict,
+                      categoryId: selectStateId.toString(),
+                      districtId: "",
+                      onChanged: (value) {
+                        setState(() {
+                          selecteDistrict = value;
+                          selectDistrictId = value?.districtId;
+                        });
+                      },
+                    ),
+                    _gap(),
+                    _label("City"),
+                    _inputField(
+                      controller: cityController,
+                      hint: "City",
+                      icon: Icons.location_city,
+                    ),
+                    _gap(),
+                    _label("Address"),
+                    _inputField(controller: addressController, hint: "Address", icon: Icons.home),
+                    _gap(),
+                    _label("Pincode"),
+                    _inputField(
+                      controller: pincodeController,
+                      hint: "Pincode",
+                      icon: Icons.pin_drop,
+                    ),
+                  ],
+                ),
               const SizedBox(height: 20),
 
               /// ✅ CONSENTS
@@ -1207,6 +1274,38 @@ class _PetFormScreenState extends State<PetFormScreen> {
     );
   }
 
+  Widget pet_address(String value, IconData icon) {
+    final selected = pet_address_yesno == value;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => pet_address_yesno = value),
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: selected ? AppColors.primarycolor : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.primarycolor),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: selected ? Colors.white : AppColors.primarycolor),
+              const SizedBox(width: 6),
+              Text(
+                value,
+                style: TextStyle(
+                  color: selected ? Colors.white : AppColors.primarycolor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   TextStyle _labelStyle() => const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey);
 
   /// ---------------- API SUBMIT ----------------
@@ -1259,19 +1358,38 @@ class _PetFormScreenState extends State<PetFormScreen> {
           "pet_breed_id": breedId,
           "pet_category_id": petCategoryId,
           "pet_weight_in_kg": _weight.text,
-          "is_address_same": "1",
+          "is_address_same": pet_address_yesno.toString() == "Another address" ? "1" : "0",
 
           "is_secondary_gardian_available": yesno == "Yes" ? "1" : "0",
           "user_first_name": _FirstName.text.toString(),
           "user_last_name": _LastName.text.toString(),
           "user_mobile_number": _mobilenumb.text.toString(),
 
-          "pet_country": selectCountryId.toString(),
-          "pet_state": selectStateId.toString(),
-          "pet_district": selectDistrictId.toString(),
-          "pet_city": cityController.text.toString(),
-          "pet_address": addressController.text.toString(),
-          "pet_pin_code": pincodeController.text.toString(),
+          "pet_country": pet_address_yesno.toString() == "Another address"
+              ? selectCountryId.toString()
+              : User_country,
+          "pet_state": pet_address_yesno.toString() == "Another address"
+              ? selectStateId.toString()
+              : User_state,
+          "pet_district": pet_address_yesno.toString() == "Another address"
+              ? selectDistrictId.toString()
+              : User_district,
+          "pet_city": pet_address_yesno.toString() == "Another address"
+              ? cityController.text.toString()
+              : User_city,
+          "pet_address": pet_address_yesno.toString() == "Another address"
+              ? addressController.text.toString()
+              : User_address,
+          "pet_pin_code": pet_address_yesno.toString() == "Another address"
+              ? pincodeController.text.toString()
+              : User_pincode,
+
+          // "pet_country": selectCountryId.toString(),
+          // "pet_state": selectStateId.toString(),
+          // "pet_district": selectDistrictId.toString(),
+          // "pet_city": cityController.text.toString(),
+          // "pet_address": addressController.text.toString(),
+          // "pet_pin_code": pincodeController.text.toString(),
         });
 
         await dio.post(
@@ -1296,19 +1414,31 @@ class _PetFormScreenState extends State<PetFormScreen> {
         "pet_breed_id": breedId,
         "pet_category_id": petCategoryId,
         "pet_weight_in_kg": _weight.text,
-        "is_address_same": "1",
+        "is_address_same": pet_address_yesno.toString() == "Another address" ? "1" : "0",
 
         "is_secondary_gardian_available": yesno == "Yes" ? "1" : "0",
         "user_first_name": _FirstName.text.toString(),
         "user_last_name": _LastName.text.toString(),
         "user_mobile_number": _mobilenumb.text.toString(),
 
-        "pet_country": selectCountryId.toString(),
-        "pet_state": selectStateId.toString(),
-        "pet_district": selectDistrictId.toString(),
-        "pet_city": cityController.text.toString(),
-        "pet_address": addressController.text.toString(),
-        "pet_pin_code": pincodeController.text.toString(),
+        "pet_country": pet_address_yesno.toString() == "Another address"
+            ? selectCountryId.toString()
+            : User_country,
+        "pet_state": pet_address_yesno.toString() == "Another address"
+            ? selectStateId.toString()
+            : User_state,
+        "pet_district": pet_address_yesno.toString() == "Another address"
+            ? selectDistrictId.toString()
+            : User_district,
+        "pet_city": pet_address_yesno.toString() == "Another address"
+            ? cityController.text.toString()
+            : User_city,
+        "pet_address": pet_address_yesno.toString() == "Another address"
+            ? addressController.text.toString()
+            : User_address,
+        "pet_pin_code": pet_address_yesno.toString() == "Another address"
+            ? pincodeController.text.toString()
+            : User_pincode,
       });
 
       await dio.post(

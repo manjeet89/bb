@@ -381,7 +381,7 @@ class _PetmedicationsState extends State<Petmedications> {
                     height: 52,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primarycolor,
+                        backgroundColor: AppColors.AddButtonColor,
                         foregroundColor: AppColors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
@@ -520,7 +520,7 @@ class _PetmedicationsState extends State<Petmedications> {
       readOnly: readOnly,
       onTap: onTap,
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.secondrycolor),
+        prefixIcon: Icon(icon, color: AppColors.CatSilhouter),
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
@@ -601,7 +601,7 @@ class _PetmedicationsState extends State<Petmedications> {
           value: value,
           onChanged: onChanged,
           title: Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
-          activeColor: AppColors.primarycolor,
+          activeColor: AppColors.AddButtonColor,
         ),
         // if (value)
         //   Padding(

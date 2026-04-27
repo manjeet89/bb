@@ -10,8 +10,13 @@ class AppColors {
   static const Color white = Colors.white;
   static const Color bgGrey = Color(0xffF5F5F5);
 
+  // Add registration Color
+  static const Color AddButtonColor = Color(0xff4a2863);
+  static const Color CatSilhouter = Color(0xfff7a1a1);
+
   // 🖤 Text
-  static const Color textDark = Color(0xff212121);
+  static const Color textDark = Color(0xff414042);
+  // static const Color textDark = Color(0xff212121);
 
   ///Border
   static const Color border = Color(0xFFE0E0E0);

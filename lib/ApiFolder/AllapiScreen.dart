@@ -22,6 +22,7 @@ class allapiscreen {
   static const String sosblood = "https://pashuraktkosh.lyferp.com/api/pet/need_blood_donor";
   static const String breed = "https://pashuraktkosh.lyferp.com/api/pet/breed_list";
   static const String petweight = "https://pashuraktkosh.lyferp.com/api/pet/update_pet_weight";
+  static const String petmenstrul = "https://pashuraktkosh.lyferp.com/api/pet/update_menstrual_cycle";
   static const String vaccination =
       "https://pashuraktkosh.lyferp.com/api/pet/update_vaccination_info";
   static const String medication =

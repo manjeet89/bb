@@ -31,7 +31,7 @@ class NavigationExample extends StatefulWidget {
 
   @override
   State<NavigationExample> createState() => _NavigationExampleState();
-}
+} 
 
 class _NavigationExampleState extends State<NavigationExample> {
   late int currentPageIndex;
@@ -68,7 +68,7 @@ class _NavigationExampleState extends State<NavigationExample> {
               currentPageIndex = index;
             });
           },
-          indicatorColor: AppColors.secondrycolor,
+          indicatorColor: AppColors.AddButtonColor,
           backgroundColor: Colors.white,
           selectedIndex: currentPageIndex,
           labelTextStyle: WidgetStateProperty.all(

@@ -408,7 +408,7 @@ class _WeightupdateState extends State<Weightupdate> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
+        gradient: const LinearGradient(colors: [AppColors.AddButtonColor, AppColors.CatSilhouter]),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -456,12 +456,12 @@ class _WeightupdateState extends State<Weightupdate> {
             controller: weightController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.monitor_weight),
+              prefixIcon:  Icon(Icons.monitor_weight,color: AppColors.CatSilhouter,),
               filled: true,
-              fillColor: AppColors.border,
+              fillColor: AppColors.white,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
+                // borderSide: BorderSide.none,
               ),
             ),
           ),
@@ -473,7 +473,7 @@ class _WeightupdateState extends State<Weightupdate> {
             height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primarycolor,
+                backgroundColor: AppColors.AddButtonColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               ),
               onPressed: () async {
@@ -571,7 +571,7 @@ class _WeightupdateState extends State<Weightupdate> {
                     width: 10,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: AppColors.successGreen,
+                      color: AppColors.CatSilhouter,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

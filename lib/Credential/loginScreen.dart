@@ -62,7 +62,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
             children: <Widget>[
               SizedBox(height: 80),
               // Logo/Icon Placeholder
-              Image.asset("assest/bblogo.png"),
+              Image.asset("assest/CFBBI.png",height: 120,),
               // Icon(
               //   Icons.favorite,
               //   color: Color(0xFFC62828), // Primary red color
@@ -70,7 +70,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
               // ),
               SizedBox(height: 30),
               Text(
-                'Welcome to PashuRaktKosh', // Example App Name
+                'Welcome to CFBBI', // Example App Name
                 textAlign: TextAlign.center, // Centers each line
                 style: TextStyle(
                   fontSize: 20,

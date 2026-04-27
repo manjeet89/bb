@@ -155,11 +155,11 @@ class _UpdateprofileState extends State<Updateprofile> {
         }
 
         //Auto fill organisation type
-        selectedUserType = decoded['data']['owner_type'].toString() != "1" ?"Individual":"Organization";
+        selectedUserType = decoded['data']['owner_type'].toString() != "1"
+            ? "Individual"
+            : "Organization";
 
-       
-          // selectedUserType =orgtype  "Individual"; // State for user type
-    
+        // selectedUserType =orgtype  "Individual"; // State for user type
 
         //Auto fill blood name and id
         Bloodname = decoded['data']['blood_name'] ?? "null";
@@ -364,15 +364,17 @@ class _UpdateprofileState extends State<Updateprofile> {
         slivers: [
           /// 🔴 HEADER WITH IMAGE
           SliverAppBar(
+            automaticallyImplyLeading: false,
             expandedHeight: 200,
             pinned: true,
-            backgroundColor: AppColors.primarycolor,
+            backgroundColor: AppColors.CatSilhouter,
             flexibleSpace: FlexibleSpaceBar(
               // title: const Text("Edit Profile", style: TextStyle(fontWeight: FontWeight.bold)),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.primarycolor, AppColors.secondrycolor],
+                    colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+                    //[AppColors.primarycolor, AppColors.secondrycolor],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -598,12 +600,12 @@ class _UpdateprofileState extends State<Updateprofile> {
           width: double.infinity,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primarycolor,
+              backgroundColor: AppColors.AddButtonColor,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             ),
             onPressed: UploadValue,
             child: const Text(
-              "Update Profile",
+              "Update",
               style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
@@ -1132,7 +1134,7 @@ class _UpdateprofileState extends State<Updateprofile> {
       readOnly: isReadOnly,
       onTap: onTap,
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.secondrycolor),
+        prefixIcon: Icon(icon, color: AppColors.CatSilhouter),
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
@@ -1193,7 +1195,7 @@ class _UpdateprofileState extends State<Updateprofile> {
         child: Container(
           height: 48,
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primarycolor : AppColors.border.withOpacity(0.8),
+            color: isSelected ? AppColors.AddButtonColor : AppColors.border.withOpacity(0.8),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Row(
@@ -1201,7 +1203,7 @@ class _UpdateprofileState extends State<Updateprofile> {
             children: [
               Icon(
                 type == "Organization" ? Icons.business : Icons.person,
-                color: isSelected ? AppColors.white : AppColors.secondrycolor.withOpacity(0.8),
+                color: isSelected ? AppColors.white : AppColors.CatSilhouter.withOpacity(0.8),
               ),
               const SizedBox(width: 6),
               Text(

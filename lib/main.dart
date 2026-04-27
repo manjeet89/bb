@@ -9,6 +9,7 @@ import 'package:bb/Navigation/navigationScreen.dart';
 import 'package:bb/Notification.dart';
 import 'package:bb/PetInfo/Blood_Donate.dart';
 import 'package:bb/PetInfo/ExpireDate.dart';
+import 'package:bb/PetInfo/Mensuration.dart';
 import 'package:bb/PetInfo/PetReqistration.dart';
 import 'package:bb/PetInfo/UpdatePetDetails.dart';
 import 'package:bb/PetInfo/WeightUpdate.dart';
@@ -72,6 +73,7 @@ void main() async {
         '/petDetails': (context) => PetDetailScreen(),
         '/petCategory': (context) => AnimalCategoryScreen(),
         '/petmicrochip': (context) => MicrochipForm(),
+        '/mensuration': (context) => Mensuration(),
         '/sos': (context) => Sosscreen(),
         '/petCategoryScreen': (context) => Petcategoryscreen(),
         '/petHealthinfo': (context) => Pethealthinfo(),

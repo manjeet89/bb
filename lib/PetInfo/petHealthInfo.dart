@@ -454,7 +454,8 @@ class _PethealthinfoState extends State<Pethealthinfo> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.secondrycolor],
+            colors:[AppColors.AddButtonColor, AppColors.CatSilhouter],
+            //  [AppColors.white, AppColors.secondrycolor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -509,7 +510,7 @@ class _PethealthinfoState extends State<Pethealthinfo> {
                 height: 54,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primarycolor,
+                    backgroundColor: AppColors.AddButtonColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                   onPressed: _submit,
@@ -627,7 +628,7 @@ class _PethealthinfoState extends State<Pethealthinfo> {
         child: Container(
           height: 46,
           decoration: BoxDecoration(
-            color: selected ? AppColors.primarycolor : Colors.grey.shade100,
+            color: selected ? AppColors.AddButtonColor : Colors.grey.shade100,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Center(
@@ -635,7 +636,7 @@ class _PethealthinfoState extends State<Pethealthinfo> {
               text,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: selected ? Colors.white : AppColors.primarycolor,
+                color: selected ? Colors.white : AppColors.CatSilhouter,
               ),
             ),
           ),

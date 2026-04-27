@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:bb/AddressModule/Country/CountryModel.dart';
 import 'package:bb/AddressModule/Country/CountryWidget.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../utils/app_colors.dart';
+import 'package:http/http.dart' as http;
 
 class Updatepetdetails extends StatefulWidget {
   const Updatepetdetails({super.key});
@@ -80,6 +82,8 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
   final _weight = TextEditingController();
 
   String gender = "Male";
+  String pet_address_yesno = "Another address";
+
   String sterilization = "Intact";
   String yesno = "No";
   BreedModel? selectedBreed;
@@ -88,6 +92,15 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
   File? petImage;
   bool consent1 = false;
   bool consent2 = false;
+
+  bool isCountryChanged = false;
+  bool isStateChanged = false;
+  String User_address = "",
+      User_country = "",
+      User_state = "",
+      User_district = "",
+      User_city = "",
+      User_pincode = "";
 
   /// IMAGE PICK
   Future<void> pickImage() async {
@@ -113,6 +126,7 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final Petlistmodel pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
       setState(() {
@@ -133,8 +147,41 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
 
         // selectedBreed = BreedModel();
         yesno = pet.isSecondaryGardianAvailable == "1" ? "Yes" : "No";
+
+        // Only set initial values ONCE
+        selecteCountry ??= pet.petCountry;
+        selecteState ??= pet.petState;
+        selecteDistrict ??= pet.petDistrict;
       });
     });
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final url = allapiscreen.userprofile.toString();
+    final header = await allapiscreen.headerFunction();
+
+    final response = await http.post(Uri.parse(url), headers: header);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data'];
+
+      setState(() {
+        User_address = data['user_address'] ?? "";
+        User_country = data['user_country'] ?? "";
+        User_state = data['user_state'] ?? "";
+        User_district = data['user_district'] ?? "";
+        User_city = data['user_city'] ?? "";
+        User_pincode = data['user_pin_code'] ?? "";
+
+        //   // Initialize state and district objects with full data
+        //   selecteState = StateModel(stateId: data['user_state_id'], stateName: data['user_state']);
+        //   selecteDistrict = DistrictModelDropDown(
+        //     districtId: data['user_district_id'],
+        //     districtName: data['user_district'],
+        //   );
+      });
+    }
   }
 
   @override
@@ -157,7 +204,8 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primarycolor, AppColors.secondrycolor],
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+            //[AppColors.primarycolor, AppColors.secondrycolor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -331,60 +379,101 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
               ),
 
               const SizedBox(height: 20),
-              _sectionCard(
-                title: "Address Information",
-                children: [
-                  _label("Country"),
-                  Countrywidget(
-                    selectedLocation: selecteCountry,
-                    countryid: pet.petCountry.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        selecteCountry = value;
-                        selectCountryId = value?.countryId;
-                        selecteState = null;
-                        selecteDistrict = null;
-                      });
-                    },
-                  ),
-                  _gap(),
-                  _label("State"),
-                  Statewidget(
-                    selectedLocation: selecteState,
-                    categoryId: selectCountryId.toString(),
-                    stateid: pet.petState.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        selecteState = value;
-                        selectStateId = value?.stateId;
-                        selecteDistrict = null;
-                      });
-                    },
-                  ),
-                  _gap(),
-                  _label("District"),
-                  Districtwidget(
-                    selectedLocation: selecteDistrict,
-                    categoryId: selectStateId.toString(),
-                    districtId: pet.petDistrict.toString(),
-                    onChanged: (value) {
-                      setState(() {
-                        selecteDistrict = value;
-                        selectDistrictId = value?.districtId;
-                      });
-                    },
-                  ),
-                  _gap(),
-                  _label("City"),
-                  _inputField(controller: cityController, hint: "City", icon: Icons.location_city),
-                  _gap(),
-                  _label("Address"),
-                  _inputField(controller: addressController, hint: "Address", icon: Icons.home),
-                  _gap(),
-                  _label("Pincode"),
-                  _inputField(controller: pincodeController, hint: "Pincode", icon: Icons.pin_drop),
-                ],
+
+              const SizedBox(height: 20),
+              _card(
+                title: "Pet Address",
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Pet Address", style: _labelStyle()),
+                    ),
+
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        pet_address("Same as the address in my profile", Icons.cancel),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+
+                    Row(children: [pet_address("Another address", Icons.check)]),
+                  ],
+                ),
               ),
+              const SizedBox(height: 20),
+              if (pet_address_yesno.toString() == "Another address")
+                _sectionCard(
+                  title: "Address Information",
+                  children: [
+                    _label("Country"),
+                    Countrywidget(
+                      selectedLocation: selecteCountry,
+                      countryid: pet.petCountry.toString(),
+                      onChanged: (value) {
+                        if (value?.countryId != selectCountryId) {
+                          setState(() {
+                            isCountryChanged = true; // ✅ mark user action
+                            selecteCountry = value;
+                            selectCountryId = value?.countryId;
+
+                            selecteState = null;
+                            selecteDistrict = null;
+                          });
+                        }
+                      },
+                    ),
+                    _gap(),
+                    _label("State"),
+                    Statewidget(
+                      selectedLocation: selecteState,
+                      categoryId: selectCountryId.toString(),
+                      stateid: pet.petState.toString(),
+                      onChanged: (value) {
+                        if (value?.stateId != selectStateId) {
+                          setState(() {
+                            isStateChanged = true; // ✅ mark user action
+                            selecteState = value;
+                            selectStateId = value?.stateId;
+                            selecteDistrict = null;
+                          });
+                        }
+                      },
+                    ),
+                    _gap(),
+                    _label("District"),
+                    Districtwidget(
+                      selectedLocation: selecteDistrict,
+                      categoryId: selectStateId.toString(),
+                      districtId: pet.petDistrict.toString(),
+                      onChanged: (value) {
+                        setState(() {
+                          selecteDistrict = value;
+                          selectDistrictId = value?.districtId;
+                        });
+                      },
+                    ),
+                    _gap(),
+                    _label("City"),
+                    _inputField(
+                      controller: cityController,
+                      hint: "City",
+                      icon: Icons.location_city,
+                    ),
+                    _gap(),
+                    _label("Address"),
+                    _inputField(controller: addressController, hint: "Address", icon: Icons.home),
+                    _gap(),
+                    _label("Pincode"),
+                    _inputField(
+                      controller: pincodeController,
+                      hint: "Pincode",
+                      icon: Icons.pin_drop,
+                    ),
+                  ],
+                ),
               const SizedBox(height: 20),
 
               /// ✅ CONSENTS
@@ -442,6 +531,45 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
   /// ---------------- UI HELPERS ----------------
   ///
 
+  Widget pet_address(String value, IconData icon) {
+    final selected = pet_address_yesno == value;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          // print(value);
+          // if (value == "Another address")
+          //   addressStorebool = true;
+          // else
+          //   addressStorebool = true;
+          setState(() => pet_address_yesno = value);
+        },
+        child: Container(
+          height: 48,
+          decoration: BoxDecoration(
+            color: selected ? AppColors.AddButtonColor : Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.primarycolor),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: selected ? Colors.white : AppColors.CatSilhouter),
+              const SizedBox(width: 6),
+              Text(
+                value,
+                style: TextStyle(
+                  color: selected ? Colors.white : AppColors.primarycolor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _sectionCard({required String title, required List<Widget> children}) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -493,7 +621,7 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
       // readOnly: isReadOnly,
       onTap: onTap,
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.secondrycolor),
+        prefixIcon: Icon(icon, color: AppColors.CatSilhouter),
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
@@ -605,14 +733,14 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
         child: Container(
           height: 48,
           decoration: BoxDecoration(
-            color: selected ? AppColors.primarycolor : Colors.white,
+            color: selected ? AppColors.AddButtonColor : Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: AppColors.primarycolor),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: selected ? Colors.white : AppColors.primarycolor),
+              Icon(icon, color: selected ? Colors.white : AppColors.CatSilhouter),
               const SizedBox(width: 6),
               Text(
                 value,
@@ -637,14 +765,14 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
         child: Container(
           height: 48,
           decoration: BoxDecoration(
-            color: selected ? AppColors.primarycolor : Colors.white,
+            color: selected ? AppColors.AddButtonColor : Colors.white,
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: AppColors.primarycolor),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: selected ? Colors.white : AppColors.primarycolor),
+              Icon(icon, color: selected ? Colors.white : AppColors.CatSilhouter),
               const SizedBox(width: 6),
               Text(
                 value,
@@ -715,12 +843,33 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
           "user_last_name": _LastName.text.toString(),
           "user_mobile_number": _mobilenumb.text.toString(),
           "pet_id": pet.petId.toString(),
-          "pet_country": selectCountryId.toString(),
-          "pet_state": selectStateId.toString(),
-          "pet_district": selectDistrictId.toString(),
-          "pet_city": cityController.text.toString(),
-          "pet_address": addressController.text.toString(),
-          "pet_pin_code": pincodeController.text.toString(),
+
+          // "pet_country": selectCountryId.toString(),
+          // "pet_state": selectStateId.toString(),
+          // "pet_district": selectDistrictId.toString(),
+          // "pet_city": cityController.text.toString(),
+          // "pet_address": addressController.text.toString(),
+          // "pet_pin_code": pincodeController.text.toString(),
+          "is_address_same": pet_address_yesno.toString() == "Another address" ? "1" : "0",
+
+          "pet_country": pet_address_yesno.toString() == "Another address"
+              ? selectCountryId.toString()
+              : User_country,
+          "pet_state": pet_address_yesno.toString() == "Another address"
+              ? selectStateId.toString()
+              : User_state,
+          "pet_district": pet_address_yesno.toString() == "Another address"
+              ? selectDistrictId.toString()
+              : User_district,
+          "pet_city": pet_address_yesno.toString() == "Another address"
+              ? cityController.text.toString()
+              : User_city,
+          "pet_address": pet_address_yesno.toString() == "Another address"
+              ? addressController.text.toString()
+              : User_address,
+          "pet_pin_code": pet_address_yesno.toString() == "Another address"
+              ? pincodeController.text.toString()
+              : User_pincode,
         });
 
         final response = await dio.post(
@@ -750,12 +899,32 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
         "user_last_name": _LastName.text.toString(),
         "user_mobile_number": _mobilenumb.text.toString(),
         "pet_id": pet.petId.toString(),
-        "pet_country": selectCountryId.toString(),
-        "pet_state": selectStateId.toString(),
-        "pet_district": selectDistrictId.toString(),
-        "pet_city": cityController.text.toString(),
-        "pet_address": addressController.text.toString(),
-        "pet_pin_code": pincodeController.text.toString(),
+        // "pet_country": selectCountryId.toString(),
+        // "pet_state": selectStateId.toString(),
+        // "pet_district": selectDistrictId.toString(),
+        // "pet_city": cityController.text.toString(),
+        // "pet_address": addressController.text.toString(),
+        // "pet_pin_code": pincodeController.text.toString(),
+        "is_address_same": pet_address_yesno.toString() == "Another address" ? "1" : "0",
+
+        "pet_country": pet_address_yesno.toString() == "Another address"
+            ? selectCountryId.toString()
+            : User_country,
+        "pet_state": pet_address_yesno.toString() == "Another address"
+            ? selectStateId.toString()
+            : User_state,
+        "pet_district": pet_address_yesno.toString() == "Another address"
+            ? selectDistrictId.toString()
+            : User_district,
+        "pet_city": pet_address_yesno.toString() == "Another address"
+            ? cityController.text.toString()
+            : User_city,
+        "pet_address": pet_address_yesno.toString() == "Another address"
+            ? addressController.text.toString()
+            : User_address,
+        "pet_pin_code": pet_address_yesno.toString() == "Another address"
+            ? pincodeController.text.toString()
+            : User_pincode,
       });
 
       final response = await dio.post(

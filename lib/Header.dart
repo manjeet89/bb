@@ -17,7 +17,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       /// Title or Logo
       title: showLogo
-          ? Image.asset("assest/bblogo.png", scale: 3)
+          ? Image.asset("assest/CFBBI.png", scale: 3,height: 70,)
           : Text(title ?? "", style: const TextStyle(color: Colors.black)),
 
       /// Right Side Widget
@@ -64,7 +64,7 @@ class SosBellWidget extends StatelessWidget {
                   },
                   child: const Icon(
                     Icons.notifications_active,
-                    color: AppColors.secondrycolor,
+                    color: AppColors.AddButtonColor,
                     size: 22,
                   ),
                 ),

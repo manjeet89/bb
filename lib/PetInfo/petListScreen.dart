@@ -66,7 +66,7 @@ class _PetListScreenState extends State<PetListScreen> {
     if (date == null || date.isEmpty) {
       return {
         "text": "Never Donated, Can Donate Today",
-        "color": Colors.red, // or Colors.red
+        "color": AppColors.AddButtonColor, // or Colors.red
       };
     } else {
       final parts = date.split('-');
@@ -87,7 +87,7 @@ class _PetListScreenState extends State<PetListScreen> {
 
         return {
           "text": " Can donate in $remainingDays days",
-          "color": Colors.orange, // or Colors.red
+          "color": AppColors.CatSilhouter, // or Colors.red
         };
       }
     }
@@ -135,11 +135,11 @@ class _PetListScreenState extends State<PetListScreen> {
           : sessionset
           ? null
           : FloatingActionButton(
-              backgroundColor: AppColors.primarycolor,
+              backgroundColor: AppColors.AddButtonColor,
               onPressed: () {
                 navigatorKey.currentState?.pushNamed('/petCategoryScreen');
               },
-              child: const Icon(Icons.add, color: Colors.white),
+              child: const Icon(Icons.add, color: AppColors.white),
             ),
 
       body: RefreshIndicator(
@@ -374,21 +374,41 @@ class _PetListScreenState extends State<PetListScreen> {
         child: Row(
           children: [
             /// IMAGE
+            // Container(
+            //   padding: const EdgeInsets.all(4),
+            //   decoration: BoxDecoration(
+            //     shape: BoxShape.circle,
+            //     gradient: LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
+            //   ),
+            //   child: CircleAvatar(
+            //     radius: 34,
+            //     backgroundColor: Colors.white,
+            //     backgroundImage: image == "null" || image.isEmpty
+            //         ? const AssetImage("assest/bblogo.png") as ImageProvider
+            //         : NetworkImage("https://pashuraktkosh.lyferp.com/$image"),
+            //   ),
+            // ),
             Container(
               padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(12),
                 gradient: LinearGradient(colors: [AppColors.primarycolor, AppColors.secondrycolor]),
               ),
-              child: CircleAvatar(
-                radius: 34,
-                backgroundColor: Colors.white,
-                backgroundImage: image == "null" || image.isEmpty
-                    ? const AssetImage("assest/bblogo.png") as ImageProvider
-                    : NetworkImage("https://pashuraktkosh.lyferp.com/$image"),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  width: 68,
+                  height: 68,
+                  color: Colors.white,
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: image == "null" || image.isEmpty
+                        ? const AssetImage("assest/catdog.jpeg")
+                        : NetworkImage("https://pashuraktkosh.lyferp.com/$image") as ImageProvider,
+                  ),
+                ),
               ),
             ),
-
             const SizedBox(width: 14),
 
             /// DETAILS
@@ -404,7 +424,7 @@ class _PetListScreenState extends State<PetListScreen> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primarycolor,
+                          color: AppColors.AddButtonColor,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -501,7 +521,8 @@ class _PetListScreenState extends State<PetListScreen> {
         gradient: LinearGradient(
           colors: done
               ? [AppColors.secondrycolor, AppColors.successGreen]
-              : [AppColors.darkRed, AppColors.mediumRed],
+              : [AppColors.AddButtonColor, AppColors.CatSilhouter],
+              // [AppColors.darkRed, AppColors.mediumRed],
         ),
         boxShadow: [
           BoxShadow(

@@ -172,7 +172,8 @@ class _PetvaccinationdetailsState extends State<Petvaccinationdetails> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.secondrycolor],
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+            //[AppColors.white, AppColors.secondrycolor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -425,7 +426,7 @@ class _PetvaccinationdetailsState extends State<Petvaccinationdetails> {
                     height: 52,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primarycolor,
+                        backgroundColor: AppColors.AddButtonColor,
                         foregroundColor: AppColors.white,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
@@ -559,7 +560,7 @@ class _PetvaccinationdetailsState extends State<Petvaccinationdetails> {
       readOnly: readOnly,
       onTap: onTap,
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.secondrycolor),
+        prefixIcon: Icon(icon, color: AppColors.CatSilhouter),
         hintText: hint,
         filled: true,
         fillColor: Colors.white,
@@ -602,7 +603,7 @@ class _PetvaccinationdetailsState extends State<Petvaccinationdetails> {
           value: value,
           onChanged: onChanged,
           title: Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
-          activeColor: AppColors.primarycolor,
+          activeColor: AppColors.AddButtonColor,
         ),
       ],
     );

@@ -31,7 +31,7 @@ class _OtpscreenState extends State<Otpscreen> {
             children: <Widget>[
               SizedBox(height: 80),
               // Logo/Icon Placeholder
-              Image.asset("assest/bblogo.png"),
+              Image.asset("assest/CFBBI.png",height: 120,),
               // Icon(
               //   Icons.favorite,
               //   color: Color(0xFFC62828), // Primary red color
@@ -40,7 +40,7 @@ class _OtpscreenState extends State<Otpscreen> {
               SizedBox(height: 30),
 
               Text(
-                'Sign in to continue with PashuRaktkosh.',
+                'Sign in to continue with CFBBI.',
                 textAlign: TextAlign.center, // Centers each line
                 style: TextStyle(fontSize: 12, color: Color(0xFF757575)),
               ),

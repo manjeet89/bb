@@ -347,7 +347,8 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.white, AppColors.secondrycolor],
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+            //[AppColors.white, AppColors.secondrycolor],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -405,17 +406,18 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
       ),
       child: Row(
-        children: const [
+        children:  [
           CircleAvatar(
             radius: 28,
-            backgroundColor: AppColors.primarycolor,
-            child: Icon(Icons.pets, color: Colors.white, size: 30),
+            backgroundColor: AppColors.AddButtonColor,
+            child: Icon(Icons.pets, color: AppColors.CatSilhouter, size: 30),
           ),
           SizedBox(width: 14),
           Expanded(
             child: Text(
               "Veterinary Information",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color:  AppColors.AddButtonColor,
+              ),
             ),
           ),
         ],
@@ -437,7 +439,7 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
         children: [
           Row(
             children: [
-              Icon(icon, color: AppColors.primarycolor),
+              Icon(icon, color: AppColors.CatSilhouter),
               const SizedBox(width: 8),
               Text(title, style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
             ],
@@ -481,7 +483,7 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
       height: 54,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primarycolor,
+          backgroundColor: AppColors.AddButtonColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
         ),
         onPressed: () => uploadVetInfo(context),
@@ -508,10 +510,10 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
           prefixIcon: Icon(icon),
           hintText: hint,
           filled: true,
-          fillColor: AppColors.border,
+          fillColor: AppColors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none,
+            // borderSide: BorderSide.none,
           ),
         ),
       ),
@@ -528,18 +530,18 @@ class _PetveterinarianinfoState extends State<Petveterinarianinfo> {
           duration: 300.ms,
           height: 46,
           decoration: BoxDecoration(
-            color: active ? AppColors.primarycolor : AppColors.border,
+            color: active ? AppColors.AddButtonColor : AppColors.border,
             borderRadius: BorderRadius.circular(30),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: active ? Colors.white : AppColors.fontGrey),
+              Icon(icon, color: active ? Colors.white : AppColors.CatSilhouter),
               const SizedBox(width: 6),
               Text(
                 value,
                 style: TextStyle(
-                  color: active ? Colors.white : AppColors.fontGrey,
+                  color: active ? Colors.white : AppColors.CatSilhouter,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -699,12 +699,18 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final Petlistmodel pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
-
+    DateTime datemens;
+    String formattedDatemens = "";
     final inputFormat = DateFormat('yyyy-MM-d');
     final outputFormat = DateFormat('dd-MMMM-yyyy');
 
     DateTime date = inputFormat.parse(pet.petBirthDate.toString());
     String formattedDate = outputFormat.format(date);
+    if (pet.menstrualDate.toString() != "") {
+      datemens = inputFormat.parse(pet.menstrualDate.toString());
+      formattedDatemens = outputFormat.format(datemens);
+    }
+
     if (onetime == true) {
       // fetchData updates the state variable BreeedName via setState; call it without assigning the Future here
       fetchData(pet.petId.toString());
@@ -732,7 +738,8 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
           SliverAppBar(
             expandedHeight: 220,
             pinned: true,
-            backgroundColor: AppColors.primarycolor,
+            automaticallyImplyLeading: false,
+            backgroundColor: AppColors.CatSilhouter,
             centerTitle: true,
 
             title: LayoutBuilder(
@@ -759,7 +766,9 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [AppColors.primarycolor, AppColors.secondrycolor],
+                    colors: [ AppColors.AddButtonColor,
+                AppColors. CatSilhouter,],
+                    //[AppColors.primarycolor, AppColors.secondrycolor],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -789,7 +798,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                               backgroundImage:
                                   pet.petImage.toString() == "null" ||
                                       pet.petImage.toString().isEmpty
-                                  ? AssetImage("assest/bblogo.png") as ImageProvider
+                                  ? AssetImage("assest/catdog.jpeg") as ImageProvider
                                   : NetworkImage(
                                       "https://pashuraktkosh.lyferp.com/${pet.petImage.toString()}",
                                     ),
@@ -876,6 +885,12 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                         "Last Donate Date",
                         pet.lastDonateDate.toString().replaceAll("-", "-"),
                       ),
+                      if (pet.menstrualDate.toString() != "")
+                        infoRow(
+                          "Last Menstrual Cycle Date",
+                          formattedDatemens,
+                          //pet.menstrualDate.toString().replaceAll("-", "-"),
+                        ),
                       if (pet.petAddress.toString() != "null")
                         infoRowforaddress(
                           "Address",
@@ -908,6 +923,15 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                             ? navigatorKey.currentState?.pushNamed('/petmicrochip', arguments: pet)
                             : null,
                       ),
+                      if (pet.petGender.toString() == "0")
+                        statusTile(
+                          "Menstruation",
+                          pet.microchipNumber,
+                          Icons.bloodtype_sharp,
+                          () => pet.petExpireDate.toString() == "null"
+                              ? navigatorKey.currentState?.pushNamed('/mensuration', arguments: pet)
+                              : null,
+                        ),
                       statusTile(
                         "Health Information",
                         pet.healthinfo,
@@ -987,7 +1011,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
         padding: const EdgeInsets.all(16),
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primarycolor,
+            backgroundColor: AppColors.AddButtonColor ,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             minimumSize: const Size(double.infinity, 52),
           ),
@@ -1047,7 +1071,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
           Expanded(
             child: Text(
               title,
-              style: const TextStyle(color: AppColors.fontGrey, fontWeight: FontWeight.w600),
+              style: const TextStyle(color: AppColors.AddButtonColor, fontWeight: FontWeight.w600),
             ),
           ),
           Expanded(
@@ -1092,7 +1116,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     return ListTile(
       onTap: onTap,
       leading: CircleAvatar(
-        backgroundColor: done ? AppColors.successGreen : AppColors.mediumRed,
+        backgroundColor: done ? AppColors.successGreen : AppColors.CatSilhouter,
         child: Icon(icon, color: Colors.white),
       ),
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -1109,7 +1133,7 @@ Widget petstatusTile(String title, dynamic value, IconData icon, VoidCallback on
   return ListTile(
     onTap: onTap,
     leading: CircleAvatar(
-      backgroundColor: done ? AppColors.successGreen : AppColors.mediumRed,
+      backgroundColor: done ? AppColors.AddButtonColor : AppColors.CatSilhouter,
       child: Icon(icon, color: Colors.white),
     ),
     title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
