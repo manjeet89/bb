@@ -580,6 +580,7 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
   Future<void> _fetchProfile() async {
     var url = allapiscreen.userprofile.toString();
     var header = await allapiscreen.headerFunction();
+    print("iamheader" + header.toString());
 
     final response = await http.post(Uri.parse(url), headers: header);
 
@@ -612,8 +613,13 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
       child: Scaffold(
         backgroundColor: const Color(0xffF6F7FB),
         floatingActionButton: MovingDonateButton(
-          onTap: () {
-            navigatorKey.currentState?.pushNamed('/Donatenow');
+          onTap: () async {
+            var header = await allapiscreen.headerFunction();
+            print("iamheader" + header.toString());
+            if (header.toString() == "{Usertoken: , Userid: }")
+              navigatorKey.currentState?.pushNamed('/Donatenowwithoutlogin');
+            else
+              navigatorKey.currentState?.pushNamed('/Donatenow');
           },
         ),
 
@@ -621,7 +627,7 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
         appBar: AppBar(
           elevation: 0,
           backgroundColor: const Color(0xFFf7f7f7),
-          title: Image.asset("assest/CFBBI.png", scale: 5,height: 70,),
+          title: Image.asset("assest/CFBBI.png", scale: 5, height: 70),
           actions: [Padding(padding: const EdgeInsets.only(right: 12), child: _sosBellWidget())],
         ),
 
@@ -997,7 +1003,13 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
               ],
             ),
           ),
-          SizedBox(width: 90, height: 90, child: Lottie.asset("assest/blooddonneranime.json")),
+          SizedBox(
+            width: 90,
+            height: 90,
+            child: Image.asset('assest/cat.png', width: 140),
+
+            //Lottie.asset("assest/blooddonneranime.json")
+          ),
         ],
       ),
     );
@@ -1071,7 +1083,10 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
   }
 
   Widget _sectionTitle(String title) {
-    return Text(title, style:  TextStyle(fontSize: 18,color: AppColors.AddButtonColor, fontWeight: FontWeight.bold));
+    return Text(
+      title,
+      style: TextStyle(fontSize: 18, color: AppColors.AddButtonColor, fontWeight: FontWeight.bold),
+    );
   }
 
   Widget _sliderImage(String url) {
@@ -1109,7 +1124,9 @@ class _BloodBankHomeState extends State<BloodBankHome> with SingleTickerProvider
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          gradient: const LinearGradient(colors: [AppColors.AddButtonColor, AppColors.CatSilhouter]),
+          gradient: const LinearGradient(
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
+          ),
           boxShadow: [BoxShadow(color: AppColors.secondrycolor.withOpacity(0.4), blurRadius: 20)],
         ),
         child: Padding(

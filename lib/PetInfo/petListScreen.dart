@@ -86,7 +86,7 @@ class _PetListScreenState extends State<PetListScreen> {
         int remainingDays = nextDonationDate.difference(today).inDays;
 
         return {
-          "text": " Can donate in $remainingDays days",
+          "text": "Can donate in $remainingDays days",
           "color": AppColors.CatSilhouter, // or Colors.red
         };
       }
@@ -182,6 +182,8 @@ class _PetListScreenState extends State<PetListScreen> {
                             pet.petExpireDate.toString() == "null",
                       )
                       .toList();
+
+                  CallSpeciesCountFuncation(alivePets);
 
                   final deadPets = pets
                       .where(
@@ -522,7 +524,7 @@ class _PetListScreenState extends State<PetListScreen> {
           colors: done
               ? [AppColors.secondrycolor, AppColors.successGreen]
               : [AppColors.AddButtonColor, AppColors.CatSilhouter],
-              // [AppColors.darkRed, AppColors.mediumRed],
+          // [AppColors.darkRed, AppColors.mediumRed],
         ),
         boxShadow: [
           BoxShadow(
@@ -545,6 +547,26 @@ class _PetListScreenState extends State<PetListScreen> {
       ),
     );
   }
+}
+
+void CallSpeciesCountFuncation(List<Petlistmodel> alivePets) async {
+  int dogCount = 0;
+  int catCount = 0;
+
+  for (var pet in alivePets) {
+    if (pet.petCategoryId.toString() == "1") {
+      dogCount++;
+    } else if (pet.petCategoryId.toString() == "2") {
+      catCount++;
+    }
+  }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('Total_Dog', dogCount.toString());
+  await prefs.setString('Total_Cat', catCount.toString());
+
+  print("Dogs: $dogCount");
+  print("Cats: $catCount");
+  // pet.petCategoryId.toString() == "1" ? "Dog" : "Cat",
 }
 
 // import 'package:bb/PetInfo/PetListController.dart';

@@ -12,6 +12,7 @@ import 'package:bb/BloodGroup/BloodGroupWidget.dart';
 import 'package:bb/Header.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/app_colors.dart';
 import 'package:http/http.dart' as http;
@@ -388,16 +389,27 @@ class _UpdateprofileState extends State<Updateprofile> {
                     Stack(
                       alignment: Alignment.bottomRight,
                       children: [
+                        // CircleAvatar(
+                        //   radius: 55,
+                        //   backgroundColor: Colors.white,
+                        //   backgroundImage: _croppedImage != null
+                        //       ? FileImage(_croppedImage!)
+                        //       : (ImageGet != "null"
+                        //                 ? NetworkImage(allapiscreen.imageapi + ImageGet)
+                        //                 : const AssetImage("assest/petbird.png"))
+                        //             as ImageProvider,
+                        // ),
                         CircleAvatar(
-                          radius: 55,
+                          radius: 50,
                           backgroundColor: Colors.white,
                           backgroundImage: _croppedImage != null
                               ? FileImage(_croppedImage!)
-                              : (ImageGet != "null"
-                                        ? NetworkImage(allapiscreen.imageapi + ImageGet)
-                                        : const AssetImage("assest/petbird.png"))
-                                    as ImageProvider,
-                        ),
+                              : ImageGet.toString() == "null" || ImageGet.toString().isEmpty
+                              ? AssetImage("assest/catdog.jpeg") as ImageProvider
+                              : NetworkImage(
+                                  "https://pashuraktkosh.lyferp.com/${ImageGet.toString()}",
+                                ),
+                        ).animate().fadeIn(duration: 400.ms).scale(),
 
                         GestureDetector(
                           onTap: () => _pickAndCropcamera(ImageSource.gallery),

@@ -17,84 +17,23 @@ import 'package:image_picker/image_picker.dart';
 import '../utils/app_colors.dart';
 import 'package:http/http.dart' as http;
 
-class Donatenow extends StatefulWidget {
-  const Donatenow({super.key});
+class Donatenowwithoutlogin extends StatefulWidget {
+  const Donatenowwithoutlogin({super.key});
 
   @override
-  State<Donatenow> createState() => _DonatenowState();
+  State<Donatenowwithoutlogin> createState() => _DonatenowwithoutloginState();
 }
 
-class _DonatenowState extends State<Donatenow> {
+class _DonatenowwithoutloginState extends State<Donatenowwithoutlogin> {
   final _FirstName = TextEditingController();
   final _LastName = TextEditingController();
   final _mobilenumb = TextEditingController();
   final _petName = TextEditingController();
 
-  Petcategorymodel? species;
   String? speciesId;
-
-  Petlistmodel? selecteCountry;
-  String? selectCountryId;
 
   bool consent1 = false;
   bool consent2 = false;
-
-  String formattedDate = "-";
-  String firstName = "",
-      orgtype = "",
-      orgName = "",
-      lastName = "",
-      email = "",
-      number = "",
-      gender = "",
-      dob = "",
-      blood = "",
-      address = "",
-      country = "",
-      state = "",
-      district = "",
-      city = "",
-      pincode = "",
-      image = "";
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    final url = allapiscreen.userprofile.toString();
-    final header = await allapiscreen.headerFunction();
-
-    final response = await http.post(Uri.parse(url), headers: header);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body)['data'];
-
-      setState(() {
-        _FirstName.value = TextEditingValue(text: data['user_first_name'] ?? "");
-        _LastName.value = TextEditingValue(text: data['user_last_name'] ?? "");
-        _mobilenumb.value = TextEditingValue(text: data['user_mobile_number'] ?? "");
-        firstName = data['user_first_name'] ?? "";
-        orgName = data['organisation_name'] ?? "";
-        orgtype = data['owner_type'] ?? "";
-        lastName = data['user_last_name'] ?? "";
-        email = data['user_email_id'] ?? "";
-        number = data['user_mobile_number'] ?? "";
-        gender = data['user_gender'] ?? "";
-        dob = data['user_date_of_birth'] ?? "";
-        blood = data['blood_name'] ?? "";
-        address = data['user_address'] ?? "";
-        country = data['country_name'] ?? "";
-        state = data['state_name'] ?? "";
-        district = data['district_name'] ?? "";
-        city = data['user_city'] ?? "";
-        pincode = data['user_pin_code'] ?? "";
-        image = data['user_profile_image'] ?? "";
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,41 +99,36 @@ class _DonatenowState extends State<Donatenow> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // _niceField("First Name", _FirstName, Icons.person),
-                    // _niceField("Last Name", _LastName, Icons.person_2),
-                    // _niceField("Mobile Number", _mobilenumb, Icons.call),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Pet List", style: _labelStyle()),
-                    ),
-                    Petlistwidget(
-                      selectedLocation: selecteCountry,
-                      onChanged: (value) {
-                        setState(() {
-                          selecteCountry = value;
-                          selectCountryId = value?.petId;
-                        });
-                      },
-                    ),
+                    _niceField("First Name", _FirstName, Icons.person),
+                    _niceField("Last Name", _LastName, Icons.person_2),
+                    _niceField("Mobile Number", _mobilenumb, Icons.call),
 
-                    // _niceField("Pet Name", _petName, Icons.pets),
+                    _niceField("Pet Name", _petName, Icons.pets),
                     const SizedBox(height: 12),
 
-                    // Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Text("Species", style: _labelStyle()),
-                    // ),
-                    // const SizedBox(height: 6),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("Species", style: _labelStyle()),
+                    ),
+                    const SizedBox(height: 6),
 
-                    // Petcategorydropdownwidget(
-                    //   spidiesId: petCategoryId.toString(),
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       species = value;
-                    //       speciesId = value!.categoryId.toString();
-                    //     });
-                    //   },
-                    // ),
+                    DropdownButtonFormField<String>(
+                      value: speciesId,
+                      items: const [
+                        DropdownMenuItem(value: '1', child: Text('Dog')),
+                        DropdownMenuItem(value: '2', child: Text('Cat')),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          speciesId = value;
+                          print(speciesId);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Select Species',
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -253,125 +187,6 @@ class _DonatenowState extends State<Donatenow> {
           ),
         ),
       ),
-
-      //  Container(
-      //   decoration: const BoxDecoration(
-      //     gradient: LinearGradient(
-      //       colors: [AppColors.primarycolor, AppColors.secondrycolor],
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter,
-      //     ),
-      //   ),
-      //   child: SingleChildScrollView(
-      //     padding: const EdgeInsets.all(16),
-      //     child: Column(
-      //       children: [
-      //         /// 🧾 BASIC INFO CARD
-      //         _card(
-      //           title: "Donate Now",
-      //           child: Column(
-      //             children: [
-      //               const SizedBox(height: 16),
-
-      //               Align(
-      //                 alignment: Alignment.centerLeft,
-      //                 child: Text("First Name", style: _labelStyle()),
-      //               ),
-      //               const SizedBox(height: 8),
-      //               _field("First Name", _FirstName, Icons.person),
-      //               const SizedBox(height: 16),
-
-      //               Align(
-      //                 alignment: Alignment.centerLeft,
-      //                 child: Text("Last Name", style: _labelStyle()),
-      //               ),
-      //               const SizedBox(height: 8),
-      //               _field("Last Name", _LastName, Icons.person_2),
-      //               const SizedBox(height: 16),
-
-      //               Align(
-      //                 alignment: Alignment.centerLeft,
-      //                 child: Text("Mobile Number", style: _labelStyle()),
-      //               ),
-      //               const SizedBox(height: 8),
-      //               _field("Mobile Number", _mobilenumb, Icons.call),
-      //               const SizedBox(height: 16),
-
-      //               Align(
-      //                 alignment: Alignment.centerLeft,
-      //                 child: Text("Pet Name", style: _labelStyle()),
-      //               ),
-      //               const SizedBox(height: 8),
-      //               _field("Pet Name", _petName, Icons.pets),
-      //               const SizedBox(height: 16),
-
-      //               Align(
-      //                 alignment: Alignment.centerLeft,
-      //                 child: Text("Species", style: _labelStyle()),
-      //               ),
-      //               const SizedBox(height: 8),
-      //               Petcategorydropdownwidget(
-      //                 spidiesId: petCategoryId.toString(),
-      //                 onChanged: (value) {
-      //                   setState(() {
-      //                     species = value;
-      //                     speciesId = value!.categoryId.toString();
-      //                   });
-      //                 },
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-
-      //         const SizedBox(height: 20),
-
-      //         /// ✅ CONSENTS
-      //         _card(
-      //           title: "Consent",
-      //           child: Column(
-      //             children: [
-      //               CheckboxListTile(
-      //                 value: consent1,
-      //                 onChanged: (v) => setState(() => consent1 = v!),
-      //                 title: const Text(
-      //                   "I confirm that I am the owner or authorized caretaker of this pet and voluntarily consent to the collection, testing, storage, and use of my pet’s blood for donation related purposes, and to the collection and use of my personal information and my pet’s health information in accordance with the privacy policy and applicable veterinary and regulatory guidelines.",
-      //                   style: TextStyle(fontSize: 10),
-      //                 ),
-      //               ),
-      //               CheckboxListTile(
-      //                 value: consent2,
-      //                 onChanged: (v) => setState(() => consent2 = v!),
-      //                 title: const Text(
-      //                   "I certify that the information provided in this form is true, accurate, and complete to the best of my knowledge. I understand that providing false or misleading information may result in the rejection of this application or termination of membership.",
-      //                   style: TextStyle(fontSize: 10),
-      //                 ),
-      //               ),
-      //             ],
-      //           ),
-      //         ),
-
-      //         const SizedBox(height: 30),
-
-      //         /// 🚀 SUBMIT
-      //         SizedBox(
-      //           width: double.infinity,
-      //           height: 52,
-      //           child: ElevatedButton(
-      //             style: ElevatedButton.styleFrom(
-      //               backgroundColor: AppColors.primarycolor,
-      //               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      //             ),
-      //             onPressed: consent1 && consent2 ? () => submit(context, petCategoryId) : null,
-      //             child: const Text(
-      //               "Donate",
-      //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
     );
   }
 
@@ -481,45 +296,44 @@ class _DonatenowState extends State<Donatenow> {
   /// ---------------- API SUBMIT ----------------
 
   Future<void> submit(BuildContext context, petCategoryId) async {
-    // if (_petName.text.toString().isEmpty) {
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(const SnackBar(content: Text("pet name is required")));
-    // } else
-    //  if (_FirstName.text.toString().isEmpty) {
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(const SnackBar(content: Text("first name is required")));
-    // } else if (_LastName.text.toString().isEmpty) {
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(const SnackBar(content: Text("last name is required")));
-    // } else if (_mobilenumb.text.toString().isEmpty) {
-    //   ScaffoldMessenger.of(
-    //     context,
-    //   ).showSnackBar(const SnackBar(content: Text("mobile is required")));
-    // } else
-    print(selectCountryId);
-    if (selectCountryId.toString() == "null") {
+    if (_petName.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("pet name is required")));
+    } else if (_FirstName.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("first name is required")));
+    } else if (_LastName.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("last name is required")));
+    } else if (_mobilenumb.text.toString().isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("mobile is required")));
+    } else if (speciesId.toString() == "null") {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Select Pet")));
     } else {
       final dio = Dio();
       final headers = await allapiscreen.headerFunction();
 
       final formData = FormData.fromMap({
-        // "pet_name": _petName.text,
+        "pet_name": _petName.text,
         "user_first_name": _FirstName.text,
         "user_last_name": _LastName.text,
         "user_mobile_number": _mobilenumb.text,
-        "pet_id": selectCountryId,
+        "pet_species_id": speciesId,
       });
 
       await dio.post(
-        allapiscreen.donatenow,
+        allapiscreen.WithoutLogindonatenow,
         data: formData,
         options: Options(headers: headers),
       );
-
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Thank you for Donation.")));
       Navigator.pushNamed(context, '/home');
     }
   }

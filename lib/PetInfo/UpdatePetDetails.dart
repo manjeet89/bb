@@ -13,6 +13,7 @@ import 'package:bb/Header.dart';
 import 'package:bb/PetInfo/petListModel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
@@ -139,9 +140,9 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
         gender = pet.petGender == "1" ? "Male" : "Female";
         sterilization = pet.sterilizationStatus == "1" ? "Intact" : "Neutrered/Spayed";
 
-        cityController.text = pet.petCity != "null" ? pet.petCity.toString() : "";
-        addressController.text = pet.petAddress != "null" ? pet.petAddress.toString() : "";
-        pincodeController.text = pet.petPinCode != "null" ? pet.petPinCode.toString() : "";
+        cityController.text = pet.petCity != "null" ? pet.petCity.toString().replaceAll("null", "") : "";
+        addressController.text = pet.petAddress != "null" ? pet.petAddress.toString().replaceAll("null", "")  : "";
+        pincodeController.text = pet.petPinCode != "null" ? pet.petPinCode.toString().replaceAll("null", "")  : "";
         breedId = pet.petBreedId;
         print("brredid${pet.petBreedId}");
 
@@ -218,12 +219,27 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
               Center(
                 child: Stack(
                   children: [
+                    // CircleAvatar(
+                    //   radius: 55,
+                    //   backgroundColor: AppColors.white.withOpacity(.2),
+                    //   backgroundImage: petImage != null ? FileImage(petImage!) : null,
+                    //   child: petImage == null ? const Icon(Icons.pets, size: 50) : null,
+                    // ),
+
                     CircleAvatar(
-                      radius: 55,
-                      backgroundColor: AppColors.white.withOpacity(.2),
-                      backgroundImage: petImage != null ? FileImage(petImage!) : null,
-                      child: petImage == null ? const Icon(Icons.pets, size: 50) : null,
-                    ),
+                              radius: 50,
+                              backgroundColor: Colors.white,
+                              backgroundImage:
+                              petImage != null
+                          ? FileImage(petImage!)
+                          :
+                                  pet.petImage.toString() == "null" ||
+                                      pet.petImage.toString().isEmpty
+                                  ? AssetImage("assest/catdog.jpeg") as ImageProvider
+                                  : NetworkImage(
+                                      "https://pashuraktkosh.lyferp.com/${pet.petImage.toString()}",
+                                    ),
+                            ).animate().fadeIn(duration: 400.ms).scale(),
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -239,7 +255,16 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
                   ],
                 ),
               ),
+                            const SizedBox(height: 24),
 
+              Text(
+                pet.petName.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 24),
 
               /// 🧾 BASIC INFO CARD

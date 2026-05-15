@@ -80,7 +80,7 @@ class _BloodBankLoginPageState extends State<BloodBankLoginPage> {
               ),
               SizedBox(height: 10),
               Text(
-                'Enter your mobile number to begin your journey with PashuRaktkosh.',
+                'Enter your mobile number to begin your journey with CFBBI.',
                 textAlign: TextAlign.center, // Centers each line
                 style: TextStyle(fontSize: 12, color: Color(0xFF757575)),
               ),

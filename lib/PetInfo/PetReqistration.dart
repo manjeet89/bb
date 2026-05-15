@@ -740,7 +740,7 @@ class _PetFormScreenState extends State<PetFormScreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primarycolor, AppColors.secondrycolor],
+            colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

@@ -736,7 +736,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 220,
+            expandedHeight: 250,
             pinned: true,
             automaticallyImplyLeading: false,
             backgroundColor: AppColors.CatSilhouter,
@@ -766,8 +766,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [ AppColors.AddButtonColor,
-                AppColors. CatSilhouter,],
+                    colors: [AppColors.AddButtonColor, AppColors.CatSilhouter],
                     //[AppColors.primarycolor, AppColors.secondrycolor],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -803,34 +802,34 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                       "https://pashuraktkosh.lyferp.com/${pet.petImage.toString()}",
                                     ),
                             ).animate().fadeIn(duration: 400.ms).scale(),
-                            if (pet.petExpireDate.toString() == "null")
-                              Positioned(
-                                bottom: 4,
-                                right: 4,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    navigatorKey.currentState?.pushNamed(
-                                      '/updatepetDetails',
-                                      arguments: pet,
-                                    );
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primarycolor,
-                                      shape: BoxShape.circle,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.25),
-                                          blurRadius: 6,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: const Icon(Icons.edit, color: Colors.white, size: 18),
-                                  ),
-                                ).animate().fadeIn(delay: 300.ms).scale(),
-                              ),
+                            // if (pet.petExpireDate.toString() == "null")
+                            // Positioned(
+                            //   bottom: 4,
+                            //   right: 4,
+                            //   child: GestureDetector(
+                            //     onTap: () async {
+                            //       navigatorKey.currentState?.pushNamed(
+                            //         '/updatepetDetails',
+                            //         arguments: pet,
+                            //       );
+                            //     },
+                            //     child: Container(
+                            //       padding: const EdgeInsets.all(8),
+                            //       decoration: BoxDecoration(
+                            //         color: AppColors.primarycolor,
+                            //         shape: BoxShape.circle,
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //             color: Colors.black.withOpacity(0.25),
+                            //             blurRadius: 6,
+                            //             offset: const Offset(0, 3),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       child: const Icon(Icons.edit, color: Colors.white, size: 18),
+                            //     ),
+                            //   ).animate().fadeIn(delay: 300.ms).scale(),
+                            // ),
                           ],
                         ),
                       ),
@@ -845,10 +844,33 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+
                       const SizedBox(height: 6),
                       Text(
                         pet.petCategoryId.toString() == "1" ? "Dog" : "Cat",
                         style: const TextStyle(color: Colors.white70, fontSize: 16),
+                      ),
+                      const SizedBox(height: 6),
+                      Visibility(
+                        visible: pet.petExpireDate.toString() != "null" ? false : true,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.AddButtonColor,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                            // minimumSize: const Size(double.infinity, 52),
+                          ),
+                          onPressed: () {
+                            navigatorKey.currentState?.pushNamed(
+                              '/updatepetDetails',
+                              arguments: pet,
+                            );
+                          },
+                          icon: const Icon(Icons.edit, color: Colors.white),
+                          label: const Text(
+                            "Edit details",
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ).animate().slideX(duration: 400.ms).scale(),
                       ),
                     ],
                   ),
@@ -882,7 +904,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       if (pet.petWeightInKg.toString() != "null")
                         infoRow("Weight", "${pet.petWeightInKg} KG"),
                       infoRow(
-                        "Last Donate Date",
+                        "Last Blood Donation Date",
                         pet.lastDonateDate.toString().replaceAll("-", "-"),
                       ),
                       if (pet.menstrualDate.toString() != "")
@@ -976,13 +998,15 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       petstatusTile(
                         "Is Pet Alive",
                         pet.petExpireDate,
-                        Icons.heart_broken_sharp,
+                        pet.petExpireDate.toString() == "null"
+                            ? Icons.favorite
+                            : Icons.heart_broken_sharp,
                         () => pet.petExpireDate.toString() == "null"
                             ? navigatorKey.currentState?.pushNamed('/Expiredate', arguments: pet)
                             : null,
                       ),
                       statusTile(
-                        "Last Blood Donate date",
+                        "Last Blood Donation date",
                         pet.veterinarian,
                         Icons.bloodtype_sharp,
                         () => pet.petExpireDate.toString() == "null"
@@ -1007,21 +1031,33 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
       ///
       ///
       ///
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.AddButtonColor ,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            minimumSize: const Size(double.infinity, 52),
-          ),
-          onPressed: () {
-            navigatorKey.currentState?.pushNamed('/petWeightupdate', arguments: pet);
-          },
-          icon: const Icon(Icons.monitor_weight, color: Colors.white),
-          label: const Text(
-            "Update Weight",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      // floatingActionButton: Visibility(
+      //   visible: pet.petExpireDate.toString() != "null" ? false : true,
+      //   child: FloatingActionButton(
+      //     onPressed: () {
+      //       navigatorKey.currentState?.pushNamed('/updatepetDetails', arguments: pet);
+      //     },
+      //     child: Icon(Icons.edit),
+      //   ),
+      // ),
+      bottomNavigationBar: Visibility(
+        visible: pet.petExpireDate.toString() != "null" ? false : true,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.AddButtonColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              minimumSize: const Size(double.infinity, 52),
+            ),
+            onPressed: () {
+              navigatorKey.currentState?.pushNamed('/petWeightupdate', arguments: pet);
+            },
+            icon: const Icon(Icons.monitor_weight, color: Colors.white),
+            label: const Text(
+              "Update Weight",
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),
@@ -1133,7 +1169,7 @@ Widget petstatusTile(String title, dynamic value, IconData icon, VoidCallback on
   return ListTile(
     onTap: onTap,
     leading: CircleAvatar(
-      backgroundColor: done ? AppColors.AddButtonColor : AppColors.CatSilhouter,
+      backgroundColor: done ? AppColors.CatSilhouter : AppColors.AddButtonColor,
       child: Icon(icon, color: Colors.white),
     ),
     title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),

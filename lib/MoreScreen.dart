@@ -555,7 +555,7 @@ class _MorescreenState extends State<Morescreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            isLoggedIn ? "$firstName $lastName" : "Welcome to PashuRaktKosh",
+            isLoggedIn ? "$firstName $lastName" : "Welcome to CFBBI",
             style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           ),
           if (isLoggedIn) Text(email, style: const TextStyle(color: Colors.white70)),

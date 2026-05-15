@@ -3,6 +3,7 @@ import 'package:bb/AnimalCategory/screen/animal_category_screen.dart';
 import 'package:bb/Credential/loginScreen.dart';
 import 'package:bb/Credential/otpScreen.dart';
 import 'package:bb/DonateNow.dart';
+import 'package:bb/DonateNowWithoutLogin.dart';
 import 'package:bb/LeaderBoard.dart';
 import 'package:bb/LeaderBoardPage.dart';
 import 'package:bb/Navigation/navigationScreen.dart';
@@ -91,6 +92,7 @@ void main() async {
         '/BloodDonatePetInfo': (context) => BloodDonatePetInfo(),
         '/Notification': (context) => NotificationApp(),
         '/Donatenow': (context) => Donatenow(),
+        '/Donatenowwithoutlogin': (context) => Donatenowwithoutlogin(),
         '/LeaderboardSection': (context) => LeaderboardScreen(),
       },
       debugShowCheckedModeBanner: false,

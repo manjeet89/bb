@@ -36,6 +36,8 @@ class allapiscreen {
   static const String expiredate =
       "https://pashuraktkosh.lyferp.com/api/pet/update_pet_expire_date";
   static const String donatenow =
+      "https://pashuraktkosh.lyferp.com/api/home/donate_now_pet_id";
+  static const String WithoutLogindonatenow =
       "https://pashuraktkosh.lyferp.com/api/home/donate_now";
 
   static Future<Map<String, String>> headerFunction() async {

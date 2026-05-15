@@ -43,9 +43,9 @@ class _MovingDonateButtonState extends State<MovingDonateButton>
         return Transform.translate(offset: Offset(_animation.value, 0), child: child);
       },
       child: FloatingActionButton.extended(
-        backgroundColor:AppColors.successGreen,
+        backgroundColor:AppColors.AddButtonColor,
         onPressed: widget.onTap,
-        icon:  Icon(Icons.favorite, color: AppColors.errorRed,
+        icon:  Icon(Icons.favorite, color: AppColors.CatSilhouter,
         
         ),
         label: const Text(
