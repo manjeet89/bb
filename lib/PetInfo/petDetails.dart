@@ -559,6 +559,41 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     super.initState();
   }
 
+  bool isPetDead(String? deathDate) {
+    return deathDate != null && deathDate.isNotEmpty && deathDate != "null";
+  }
+
+  Map<String, dynamic> getDonationStatus(String date) {
+    if (date == null || date.isEmpty) {
+      return {
+        "text": "Never Donated, Can Donate Today",
+        "color": AppColors.AddButtonColor, // or Colors.red
+      };
+    } else {
+      final parts = date.split('-');
+
+      DateTime petDate = DateTime(
+        int.parse(parts[0]), // year
+        int.parse(parts[1]), // month
+        int.parse(parts[2]), // day
+      );
+
+      DateTime nextDonationDate = petDate.add(const Duration(days: 90));
+      DateTime today = DateTime.now();
+
+      if (today.isAfter(nextDonationDate) || today.isAtSameMomentAs(nextDonationDate)) {
+        return {"text": "Can donate today", "color": Colors.green};
+      } else {
+        int remainingDays = nextDonationDate.difference(today).inDays;
+
+        return {
+          "text": "Can donate in $remainingDays days",
+          "color": AppColors.CatSilhouter, // or Colors.red
+        };
+      }
+    }
+  }
+
   Future<String> fetchData(String id) async {
     final url = allapiscreen.petdetails.toString();
     final header = await allapiscreen.headerFunction();
@@ -698,6 +733,8 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
     final Petlistmodel pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
     DateTime datemens;
     String formattedDatemens = "";
@@ -728,6 +765,14 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     }
 
     print(formattedDate); // 05-October-2021
+
+    //last blood donate
+    bool isDead = isPetDead(pet.petExpireDate);
+
+    Map<String, dynamic>? donationStatus;
+    if (!isDead) {
+      donationStatus = getDonationStatus(pet.lastDonateDate.toString());
+    }
     return Scaffold(
       backgroundColor: const Color(0xffF4F6FA),
       appBar: const CommonAppBar(),
@@ -932,6 +977,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                   ),
 
                   const SizedBox(height: 16),
+                  // Text(pet.lastDonateDate.toString()),
 
                   /// STATUS SECTION
                   infoCard(
@@ -1005,16 +1051,48 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                             ? navigatorKey.currentState?.pushNamed('/Expiredate', arguments: pet)
                             : null,
                       ),
-                      statusTile(
+                      // donationStatus!["text"] == "Can donate today" ||
+                      //         donationStatus!["text"].toString() ==
+                      //             "Never Donated, Can Donate Today"
+                      //     ? Text(
+                      //         donationStatus != null ? donationStatus["text"] : "No donation info",
+                      //         style: TextStyle(
+                      //           fontSize: 13,
+                      //           fontWeight: FontWeight.w600,
+                      //           color: donationStatus != null
+                      //               ? donationStatus["color"]
+                      //               : Colors.grey,
+                      //         ),
+                      //       )
+                      //     : Text(donationStatus.toString()),
+                      statusTileLastblood(
                         "Last Blood Donation date",
-                        pet.veterinarian,
+                        donationStatus != null ? donationStatus["text"] : "No donation info",
+                        // pet.lastDonateDate.toString(),
                         Icons.bloodtype_sharp,
-                        () => pet.petExpireDate.toString() == "null"
+                        () =>
+                            donationStatus!["text"] == "Can donate today" ||
+                                donationStatus!["text"].toString() ==
+                                    "Never Donated, Can Donate Today"
                             ? navigatorKey.currentState?.pushNamed(
                                 '/BloodDonatePetInfo',
                                 arguments: pet,
                               )
-                            : null,
+                            : scaffoldMessenger.showSnackBar(
+                                SnackBar(
+                                  content: Text('Please wait remaining time'),
+                                  backgroundColor: AppColors.warningOrange, // Red for errors
+                                  behavior: SnackBarBehavior.floating, // Modern floating look
+                                  duration: Duration(seconds: 3),
+                                ),
+                              ),
+
+                        // pet.petExpireDate.toString() == "null"
+                        //     ? navigatorKey.currentState?.pushNamed(
+                        //         '/BloodDonatePetInfo',
+                        //         arguments: pet,
+                        //       )
+                        //     : null,
                       ),
                     ],
                   ),
@@ -1146,8 +1224,32 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
   }
 
   /// 🩺 STATUS TILE
+  Widget statusTileLastblood(String title, dynamic value, IconData icon, VoidCallback onTap) {
+    bool done = value.toString() == "null";
+    print(done.toString() + 'anbfj');
+
+    return ListTile(
+      onTap: onTap,
+      leading: CircleAvatar(
+        backgroundColor: done ? AppColors.successGreen : AppColors.CatSilhouter,
+        child: Icon(icon, color: Colors.white),
+      ),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: Text(
+        value,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          // color: donationStatus != null ? donationStatus["color"] : Colors.grey,
+        ),
+      ),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+    );
+  }
+
   Widget statusTile(String title, dynamic value, IconData icon, VoidCallback onTap) {
     bool done = value.toString() != "null";
+    print(done);
 
     return ListTile(
       onTap: onTap,
@@ -1292,7 +1394,7 @@ class FullScreenImage extends StatelessWidget {
       ),
       body: Center(
         child: imageUrl == "null" || imageUrl.isEmpty
-            ? Image.asset("assest/bblogo.png")
+            ? Image.asset("assest/catdog.jpeg")
             : Image.network("https://pashuraktkosh.lyferp.com/${imageUrl}"),
       ),
     );

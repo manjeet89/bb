@@ -541,7 +541,7 @@ class _UpdatepetdetailsState extends State<Updatepetdetails> {
                       ? () => submit(context, petCategoryId, pet)
                       : null,
                   child: const Text(
-                    "Register Pet",
+                    "Update Pet",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),

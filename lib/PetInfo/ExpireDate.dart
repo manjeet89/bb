@@ -4,6 +4,7 @@ import 'package:bb/PetInfo/petListModel.dart';
 import 'package:bb/utils/app_colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Expiredate extends StatefulWidget {
   const Expiredate({super.key});
@@ -28,12 +29,16 @@ class _ExpiredateState extends State<Expiredate> {
   }
 
   // ================= DATE =================
-  Future<void> pickDate() async {
+  Future<void> pickDate(String string) async {
+
+    DateTime dobDate = DateFormat("yyyy-MM-dd").parse(string);
+
+    print(dobDate); // 2026-04-06 00:00:00.000
     final picked = await showDatePicker(
       context: context,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      initialDate: DateTime.now(),
+      initialDate: dobDate.add(const Duration(days: 1)),
+      firstDate: dobDate.add(const Duration(days: 1)),
+      lastDate: DateTime(2100),
     );
     if (picked != null) {
       dateCtrl.text = "${picked.year}-${picked.month}-${picked.day}";
@@ -68,6 +73,7 @@ class _ExpiredateState extends State<Expiredate> {
   @override
   Widget build(BuildContext context) {
     final pet = ModalRoute.of(context)!.settings.arguments as Petlistmodel;
+    print(pet.petBirthDate);
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F7F9),
@@ -98,7 +104,7 @@ class _ExpiredateState extends State<Expiredate> {
                 title: "Expire date",
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [_label("Date of Passing Away"), _dateField()],
+                  children: [_label("Date of Passing Away"), _dateField(pet.petBirthDate.toString())],
                 ),
               ),
 
@@ -186,13 +192,13 @@ class _ExpiredateState extends State<Expiredate> {
     ),
   );
 
-  Widget _dateField() => Padding(
+  Widget _dateField(String string) => Padding(
     padding: const EdgeInsets.only(bottom: 14),
     child: TextFormField(
       controller: dateCtrl,
       readOnly: true,
       validator: (v) => v!.isEmpty ? "Required" : null,
-      onTap: pickDate,
+      onTap: () => pickDate(string),
       decoration: _decoration(suffix: const Icon(Icons.calendar_today)),
     ),
   );
